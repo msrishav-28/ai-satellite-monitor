@@ -1,0 +1,59 @@
+# Core FastAPI dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Database
+sqlalchemy==2.0.23
+alembic==1.13.1
+psycopg2-binary==2.9.9
+redis==5.0.1
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# HTTP Client
+httpx==0.25.2
+aiohttp==3.9.1
+
+# Data Processing
+numpy==1.24.3
+pandas==2.1.4
+geopandas==0.14.1
+rasterio==1.3.9
+xarray==2023.12.0
+
+# Machine Learning
+scikit-learn==1.3.2
+tensorflow==2.15.0
+torch==2.1.2
+torchvision==0.16.2
+
+# Geospatial
+shapely==2.0.2
+pyproj==3.6.1
+folium==0.15.1
+
+# Satellite Data
+earthengine-api==0.1.384
+sentinelsat==1.2.1
+planetary-computer==0.4.9
+
+# Image Processing
+Pillow==10.1.0
+opencv-python==4.8.1.78
+imageio==2.33.1
+
+# Utilities
+python-dotenv==1.0.0
+celery==5.3.4
+websockets==12.0
+
+# Development
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.11.0
+flake8==6.1.0
