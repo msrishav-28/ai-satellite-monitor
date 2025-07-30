@@ -4,25 +4,66 @@ Integrates with Google Earth Engine, Sentinel Hub, and Planetary Computer
 """
 
 import logging
+import os
 from typing import Dict, Any, Optional, List
+from datetime import datetime, timedelta
 from geojson_pydantic import Polygon
 import numpy as np
+
+# Google Earth Engine imports (conditional)
+try:
+    import ee
+    GEE_AVAILABLE = True
+except ImportError:
+    GEE_AVAILABLE = False
+    logger.warning("Google Earth Engine not available. Install earthengine-api package.")
 
 logger = logging.getLogger(__name__)
 
 
 class SatelliteDataService:
     """Service for fetching satellite data from various sources"""
-    
+
     def __init__(self):
         self.gee_initialized = False
         self.sentinel_hub_client = None
         self.pc_client = None
+
+        # Initialize Google Earth Engine if available
+        if GEE_AVAILABLE:
+            self._initialize_gee()
     
+    def _initialize_gee(self):
+        """Initialize Google Earth Engine authentication"""
+        try:
+            # Check for service account key
+            service_account_key = os.getenv('GEE_SERVICE_ACCOUNT_KEY')
+            project_id = os.getenv('GEE_PROJECT_ID')
+
+            if service_account_key and os.path.exists(service_account_key):
+                # Authenticate with service account
+                credentials = ee.ServiceAccountCredentials(None, service_account_key)
+                ee.Initialize(credentials, project=project_id)
+                self.gee_initialized = True
+                logger.info("Google Earth Engine initialized with service account")
+            else:
+                # Try to authenticate with existing credentials
+                try:
+                    ee.Initialize(project=project_id)
+                    self.gee_initialized = True
+                    logger.info("Google Earth Engine initialized with existing credentials")
+                except Exception:
+                    logger.warning("Google Earth Engine authentication failed. Using mock data.")
+                    self.gee_initialized = False
+
+        except Exception as e:
+            logger.error(f"Failed to initialize Google Earth Engine: {e}")
+            self.gee_initialized = False
+
     async def get_aoi_data(self, aoi: Polygon) -> Dict[str, Any]:
         """
         Get comprehensive satellite data for an Area of Interest
-        
+
         Returns:
         - NDVI (vegetation health)
         - Land Surface Temperature (LST)
@@ -32,11 +73,113 @@ class SatelliteDataService:
         - Soil moisture
         """
         try:
-            # For now, return mock data until real satellite integration is complete
-            return self._get_mock_satellite_data()
-            
+            if self.gee_initialized and GEE_AVAILABLE:
+                return await self._get_gee_satellite_data(aoi)
+            else:
+                logger.info("Using mock satellite data (GEE not available)")
+                return self._get_mock_satellite_data()
+
         except Exception as e:
             logger.error(f"Error fetching satellite data: {e}")
+            return self._get_mock_satellite_data()
+
+    async def _get_gee_satellite_data(self, aoi: Polygon) -> Dict[str, Any]:
+        """Get real satellite data from Google Earth Engine"""
+        try:
+            # Convert AOI to Earth Engine geometry
+            coords = aoi.coordinates[0]
+            ee_geometry = ee.Geometry.Polygon(coords)
+
+            # Get current date and date range
+            end_date = datetime.now()
+            start_date = end_date - timedelta(days=30)
+
+            # Get Sentinel-2 data for NDVI
+            s2_collection = (ee.ImageCollection('COPERNICUS/S2_SR')
+                           .filterBounds(ee_geometry)
+                           .filterDate(start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
+                           .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20)))
+
+            # Get most recent image
+            s2_image = s2_collection.sort('system:time_start', False).first()
+
+            # Calculate NDVI
+            ndvi = s2_image.normalizedDifference(['B8', 'B4']).rename('NDVI')
+
+            # Get MODIS LST data
+            modis_lst = (ee.ImageCollection('MODIS/061/MOD11A1')
+                        .filterBounds(ee_geometry)
+                        .filterDate(start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
+                        .select('LST_Day_1km')
+                        .sort('system:time_start', False)
+                        .first())
+
+            # Get SRTM elevation data
+            srtm = ee.Image('USGS/SRTMGL1_003')
+            elevation = srtm.select('elevation')
+            slope = ee.Terrain.slope(elevation)
+
+            # Get precipitation data (GPM)
+            gpm = (ee.ImageCollection('NASA/GPM_L3/IMERG_V06')
+                  .filterBounds(ee_geometry)
+                  .filterDate(start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
+                  .select('precipitationCal')
+                  .sum())
+
+            # Reduce regions to get mean values
+            ndvi_stats = ndvi.reduceRegion(
+                reducer=ee.Reducer.mean(),
+                geometry=ee_geometry,
+                scale=10,
+                maxPixels=1e9
+            ).getInfo()
+
+            lst_stats = modis_lst.reduceRegion(
+                reducer=ee.Reducer.mean(),
+                geometry=ee_geometry,
+                scale=1000,
+                maxPixels=1e9
+            ).getInfo()
+
+            elevation_stats = elevation.reduceRegion(
+                reducer=ee.Reducer.mean(),
+                geometry=ee_geometry,
+                scale=30,
+                maxPixels=1e9
+            ).getInfo()
+
+            slope_stats = slope.reduceRegion(
+                reducer=ee.Reducer.mean(),
+                geometry=ee_geometry,
+                scale=30,
+                maxPixels=1e9
+            ).getInfo()
+
+            precipitation_stats = gpm.reduceRegion(
+                reducer=ee.Reducer.mean(),
+                geometry=ee_geometry,
+                scale=10000,
+                maxPixels=1e9
+            ).getInfo()
+
+            # Convert LST from Kelvin to Celsius
+            lst_celsius = (lst_stats.get('LST_Day_1km', 0) * 0.02) - 273.15 if lst_stats.get('LST_Day_1km') else 25.0
+
+            return {
+                'ndvi': ndvi_stats.get('NDVI', 0.6),
+                'land_surface_temperature': lst_celsius,
+                'elevation': elevation_stats.get('elevation', 500.0),
+                'slope': slope_stats.get('slope', 10.0),
+                'precipitation_30day': precipitation_stats.get('precipitationCal', 50.0),
+                'data_source': 'Google Earth Engine',
+                'acquisition_date': end_date.strftime('%Y-%m-%d'),
+                'cloud_coverage': 15.0,  # Approximate from filter
+                'data_quality': 'good'
+            }
+
+        except Exception as e:
+            logger.error(f"Error fetching GEE satellite data: {e}")
+            # Fallback to mock data
             return self._get_mock_satellite_data()
     
     async def get_ndvi_timeseries(self, aoi: Polygon, start_date: str, end_date: str) -> List[Dict]:
@@ -44,15 +187,146 @@ class SatelliteDataService:
         Get NDVI time series for vegetation monitoring
         """
         try:
-            # Mock NDVI time series data
-            return [
-                {"date": "2024-01-01", "ndvi": 0.65, "cloud_cover": 10},
-                {"date": "2024-01-15", "ndvi": 0.68, "cloud_cover": 5},
-                {"date": "2024-02-01", "ndvi": 0.72, "cloud_cover": 15},
-                {"date": "2024-02-15", "ndvi": 0.70, "cloud_cover": 8}
-            ]
+            if self.gee_initialized and GEE_AVAILABLE:
+                return await self._get_gee_ndvi_timeseries(aoi, start_date, end_date)
+            else:
+                # Mock NDVI time series data
+                return [
+                    {"date": "2024-01-01", "ndvi": 0.65, "cloud_cover": 10},
+                    {"date": "2024-01-15", "ndvi": 0.68, "cloud_cover": 5},
+                    {"date": "2024-02-01", "ndvi": 0.72, "cloud_cover": 15},
+                    {"date": "2024-02-15", "ndvi": 0.70, "cloud_cover": 8}
+                ]
         except Exception as e:
             logger.error(f"Error fetching NDVI time series: {e}")
+            return []
+
+    async def _get_gee_ndvi_timeseries(self, aoi: Polygon, start_date: str, end_date: str) -> List[Dict]:
+        """Get NDVI time series from Google Earth Engine"""
+        try:
+            # Convert AOI to Earth Engine geometry
+            coords = aoi.coordinates[0]
+            ee_geometry = ee.Geometry.Polygon(coords)
+
+            # Get Sentinel-2 collection
+            s2_collection = (ee.ImageCollection('COPERNICUS/S2_SR')
+                           .filterBounds(ee_geometry)
+                           .filterDate(start_date, end_date)
+                           .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 30)))
+
+            # Function to calculate NDVI and add date
+            def add_ndvi(image):
+                ndvi = image.normalizedDifference(['B8', 'B4']).rename('NDVI')
+                return image.addBands(ndvi).set('date', image.date().format('YYYY-MM-dd'))
+
+            # Map NDVI calculation over collection
+            ndvi_collection = s2_collection.map(add_ndvi)
+
+            # Get time series data
+            def extract_ndvi(image):
+                ndvi_mean = image.select('NDVI').reduceRegion(
+                    reducer=ee.Reducer.mean(),
+                    geometry=ee_geometry,
+                    scale=10,
+                    maxPixels=1e9
+                ).get('NDVI')
+
+                cloud_cover = image.get('CLOUDY_PIXEL_PERCENTAGE')
+                date = image.get('date')
+
+                return ee.Feature(None, {
+                    'date': date,
+                    'ndvi': ndvi_mean,
+                    'cloud_cover': cloud_cover
+                })
+
+            # Extract features
+            ndvi_features = ndvi_collection.map(extract_ndvi)
+
+            # Get the data
+            ndvi_data = ndvi_features.getInfo()
+
+            # Format results
+            results = []
+            for feature in ndvi_data['features']:
+                props = feature['properties']
+                if props['ndvi'] is not None:
+                    results.append({
+                        'date': props['date'],
+                        'ndvi': round(props['ndvi'], 3),
+                        'cloud_cover': props['cloud_cover']
+                    })
+
+            return sorted(results, key=lambda x: x['date'])
+
+        except Exception as e:
+            logger.error(f"Error fetching GEE NDVI time series: {e}")
+            return []
+
+    async def get_satellite_imagery_for_timelapse(self, aoi: Polygon, start_date: str, end_date: str) -> List[Dict]:
+        """
+        Get satellite imagery collection for time-lapse generation
+        """
+        try:
+            if self.gee_initialized and GEE_AVAILABLE:
+                return await self._get_gee_imagery_collection(aoi, start_date, end_date)
+            else:
+                # Mock imagery data
+                return [
+                    {
+                        "date": "2024-01-01",
+                        "image_id": "S2A_MSIL2A_20240101T103321_N0510_R108_T32TQM_20240101T123456",
+                        "cloud_cover": 5.2,
+                        "data_quality": "excellent",
+                        "bands": ["B2", "B3", "B4", "B8"]
+                    },
+                    {
+                        "date": "2024-01-06",
+                        "image_id": "S2B_MSIL2A_20240106T103321_N0510_R108_T32TQM_20240106T123456",
+                        "cloud_cover": 12.8,
+                        "data_quality": "good",
+                        "bands": ["B2", "B3", "B4", "B8"]
+                    }
+                ]
+        except Exception as e:
+            logger.error(f"Error fetching imagery for time-lapse: {e}")
+            return []
+
+    async def _get_gee_imagery_collection(self, aoi: Polygon, start_date: str, end_date: str) -> List[Dict]:
+        """Get satellite imagery collection from Google Earth Engine"""
+        try:
+            # Convert AOI to Earth Engine geometry
+            coords = aoi.coordinates[0]
+            ee_geometry = ee.Geometry.Polygon(coords)
+
+            # Get Sentinel-2 collection
+            s2_collection = (ee.ImageCollection('COPERNICUS/S2_SR')
+                           .filterBounds(ee_geometry)
+                           .filterDate(start_date, end_date)
+                           .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 50))
+                           .sort('system:time_start'))
+
+            # Get collection info
+            collection_info = s2_collection.getInfo()
+
+            results = []
+            for feature in collection_info['features']:
+                props = feature['properties']
+
+                results.append({
+                    'date': datetime.fromtimestamp(props['system:time_start'] / 1000).strftime('%Y-%m-%d'),
+                    'image_id': props['system:index'],
+                    'cloud_cover': props.get('CLOUDY_PIXEL_PERCENTAGE', 0),
+                    'data_quality': 'excellent' if props.get('CLOUDY_PIXEL_PERCENTAGE', 0) < 10 else 'good',
+                    'bands': ['B2', 'B3', 'B4', 'B8', 'B11', 'B12'],
+                    'satellite': 'Sentinel-2',
+                    'processing_level': 'L2A'
+                })
+
+            return results
+
+        except Exception as e:
+            logger.error(f"Error fetching GEE imagery collection: {e}")
             return []
     
     async def get_lst_data(self, aoi: Polygon) -> Dict[str, Any]:

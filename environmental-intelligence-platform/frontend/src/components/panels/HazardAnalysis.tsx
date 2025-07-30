@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GlassPanel } from '../shared/GlassPanel'
 import { RiskGauge } from '../charts/RiskGauge'
+import { useHazardAnalysis } from '../../hooks/useHazardPrediction'
 import { Shield, Flame, Droplet, Mountain, Trees, Sun, Wind } from 'lucide-react'
 
 interface Props {
@@ -20,34 +21,15 @@ const hazardIcons = {
 }
 
 export default function HazardAnalysis({ aoi }: Props) {
-  const [hazardData, setHazardData] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  // Use the hazard analysis hook
+  const { analyzeHazards, data: hazardData, isLoading: loading, error } = useHazardAnalysis()
 
   useEffect(() => {
     if (!aoi) return
 
-    const fetchData = async () => {
-      setLoading(true)
-      try {
-        const response = await fetch('/api/hazard-analysis', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ aoi }),
-        })
-        if (!response.ok) {
-          throw new Error('Failed to fetch hazard data')
-        }
-        const data = await response.json()
-        setHazardData(data)
-      } catch (error) {
-        console.error('Failed to fetch hazard data:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [aoi])
+    // Trigger hazard analysis when AOI changes
+    analyzeHazards(aoi)
+  }, [aoi, analyzeHazards])
 
   return (
     <motion.div

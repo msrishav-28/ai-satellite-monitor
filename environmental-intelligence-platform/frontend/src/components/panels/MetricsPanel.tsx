@@ -6,6 +6,7 @@ import { Sun, Wind, Droplets, Cloud, ShieldAlert } from 'lucide-react'
 import { GlassPanel } from '../shared/GlassPanel'
 import { AQIChart } from '../charts/AQIChart'
 import { TemperatureChart } from '../charts/TemperatureChart'
+import { useEnvironmentalData } from '../../hooks/useEnvironmentalData'
 import * as turf from '@turf/turf'
 
 interface Props {
@@ -13,37 +14,35 @@ interface Props {
 }
 
 export default function MetricsPanel({ aoi }: Props) {
-  const [weatherData, setWeatherData] = useState<any>(null)
-  const [aqiData, setAqiData] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const [coordinates, setCoordinates] = useState<{ lat: number; lon: number } | null>(null)
 
+  // Extract coordinates from AOI
   useEffect(() => {
-    if (!aoi) return
-
-    const fetchData = async () => {
-      setLoading(true)
-      try {
-        // Get the centroid of the AOI
-        const centroid = turf.centroid(aoi)
-        const [lon, lat] = centroid.geometry.coordinates
-
-        const response = await fetch(`/api/environmental-data?lat=${lat}&lon=${lon}`)
-        if (!response.ok) {
-          throw new Error('Failed to fetch data')
-        }
-        const data = await response.json()
-        
-        setWeatherData(data.weather)
-        setAqiData(data.aqi)
-      } catch (error) {
-        console.error('Failed to fetch metrics:', error)
-      } finally {
-        setLoading(false)
-      }
+    if (!aoi) {
+      setCoordinates(null)
+      return
     }
 
-    fetchData()
+    try {
+      // Get the centroid of the AOI
+      const centroid = turf.centroid(aoi)
+      const [lon, lat] = centroid.geometry.coordinates
+      setCoordinates({ lat, lon })
+    } catch (error) {
+      console.error('Failed to extract coordinates from AOI:', error)
+      setCoordinates(null)
+    }
   }, [aoi])
+
+  // Use the environmental data hook
+  const { data: environmentalData, isLoading: loading, error } = useEnvironmentalData({
+    latitude: coordinates?.lat || 0,
+    longitude: coordinates?.lon || 0,
+    enabled: !!coordinates
+  })
+
+  const weatherData = environmentalData?.weather
+  const aqiData = environmentalData?.aqi
 
   return (
     <motion.div

@@ -79,6 +79,31 @@ class HazardModelService:
             # Return mock data if real analysis fails
             return self._get_mock_hazard_analysis()
     
+    async def analyze_landslide_risk(self, aoi: Polygon, satellite_data: Dict = None) -> Dict[str, Any]:
+        """
+        Analyze landslide susceptibility using ML model
+        """
+        try:
+            # Extract features from satellite data and AOI
+            features = await self._extract_landslide_features(aoi, satellite_data)
+
+            # Use ML model for prediction
+            prediction = await self.ml_service.predict_landslide_risk(features)
+
+            return {
+                'risk_score': prediction['risk_score'],
+                'confidence': prediction['confidence'],
+                'contributing_factors': prediction['contributing_factors'],
+                'recommendations': prediction['recommendations'],
+                'stability_factor': prediction.get('stability_factor', 1.5),
+                'trigger_threshold': prediction.get('trigger_threshold', 75.0),
+                'affected_area': prediction.get('affected_area', 2.0)
+            }
+
+        except Exception as e:
+            logger.error(f"Error in landslide analysis: {e}")
+            return self._get_mock_landslide_risk()
+
     async def analyze_wildfire_risk(self, aoi: Polygon, satellite_data: Dict = None) -> WildfireRisk:
         """
         Analyze wildfire ignition and spread risk
@@ -385,3 +410,96 @@ class HazardModelService:
             soil_saturation=85.0,
             trigger_threshold=75.0
         )
+
+    async def _extract_landslide_features(self, aoi: Polygon, satellite_data: Dict = None) -> Dict[str, Any]:
+        """Extract features for landslide susceptibility analysis"""
+        try:
+            # Get AOI centroid for point-based analysis
+            centroid = self._get_aoi_centroid(aoi)
+
+            # Extract topographic features
+            elevation = satellite_data.get('elevation', 500.0) if satellite_data else 500.0
+            slope = satellite_data.get('slope', 15.0) if satellite_data else 15.0
+            aspect = satellite_data.get('aspect', 180.0) if satellite_data else 180.0
+
+            # Extract geological features
+            geology_type = satellite_data.get('geology_type', 'sedimentary') if satellite_data else 'sedimentary'
+
+            # Extract soil features
+            soil_clay_content = satellite_data.get('soil_clay_content', 25.0) if satellite_data else 25.0
+            soil_sand_content = satellite_data.get('soil_sand_content', 35.0) if satellite_data else 35.0
+
+            # Extract land cover
+            land_cover = satellite_data.get('land_cover', 'mixed') if satellite_data else 'mixed'
+
+            # Extract precipitation data
+            precipitation_annual = satellite_data.get('precipitation_annual', 1000.0) if satellite_data else 1000.0
+            precipitation_intensity = satellite_data.get('precipitation_intensity', 50.0) if satellite_data else 50.0
+
+            # Extract vegetation index
+            ndvi = satellite_data.get('ndvi', 0.6) if satellite_data else 0.6
+
+            # Distance features (simplified)
+            distance_to_faults = 10.0  # km
+            distance_to_roads = 2.0    # km
+
+            # Additional topographic features
+            drainage_density = 0.5
+            contributing_area = 100.0  # m²
+            slope_length = 100.0       # m
+            slope_width = 50.0         # m
+
+            features = {
+                'elevation': elevation,
+                'slope': slope,
+                'aspect': aspect,
+                'geology_type': geology_type,
+                'soil_clay_content': soil_clay_content,
+                'soil_sand_content': soil_sand_content,
+                'land_cover': land_cover,
+                'precipitation_annual': precipitation_annual,
+                'precipitation_intensity': precipitation_intensity,
+                'ndvi': ndvi,
+                'distance_to_faults': distance_to_faults,
+                'distance_to_roads': distance_to_roads,
+                'drainage_density': drainage_density,
+                'contributing_area': contributing_area,
+                'slope_length': slope_length,
+                'slope_width': slope_width,
+                'soil_cohesion': 20.0,      # kPa
+                'friction_angle': 30.0,     # degrees
+                'soil_permeability': 10.0,  # mm/hr
+                'max_elevation': elevation + 100,
+                'min_elevation': elevation - 100,
+                'basin_length': 1000.0      # m
+            }
+
+            return features
+
+        except Exception as e:
+            logger.error(f"Error extracting landslide features: {e}")
+            # Return default features
+            return {
+                'elevation': 500.0,
+                'slope': 15.0,
+                'aspect': 180.0,
+                'geology_type': 'sedimentary',
+                'soil_clay_content': 25.0,
+                'soil_sand_content': 35.0,
+                'land_cover': 'mixed',
+                'precipitation_annual': 1000.0,
+                'precipitation_intensity': 50.0,
+                'ndvi': 0.6,
+                'distance_to_faults': 10.0,
+                'distance_to_roads': 2.0,
+                'drainage_density': 0.5,
+                'contributing_area': 100.0,
+                'slope_length': 100.0,
+                'slope_width': 50.0,
+                'soil_cohesion': 20.0,
+                'friction_angle': 30.0,
+                'soil_permeability': 10.0,
+                'max_elevation': 600.0,
+                'min_elevation': 400.0,
+                'basin_length': 1000.0
+            }

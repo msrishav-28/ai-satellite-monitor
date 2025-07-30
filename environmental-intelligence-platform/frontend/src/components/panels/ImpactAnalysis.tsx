@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GlassPanel } from '../shared/GlassPanel'
+import { useImpactAnalysis } from '../../hooks/useImpactAnalysis'
 import { BarChart3, Footprints, PawPrint, Sprout, Droplets } from 'lucide-react'
 
 interface Props {
@@ -10,34 +11,15 @@ interface Props {
 }
 
 export default function ImpactAnalysis({ aoi }: Props) {
-  const [impactData, setImpactData] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  // Use the impact analysis hook
+  const { analyzeImpact, data: impactData, isLoading: loading, error } = useImpactAnalysis()
 
   useEffect(() => {
     if (!aoi) return
 
-    const fetchData = async () => {
-      setLoading(true)
-      try {
-        const response = await fetch('/api/impact-analysis', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ aoi }),
-        })
-        if (!response.ok) {
-          throw new Error('Failed to fetch impact analysis')
-        }
-        const data = await response.json()
-        setImpactData(data)
-      } catch (error) {
-        console.error('Failed to fetch impact analysis:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [aoi])
+    // Analyze impact when AOI changes
+    analyzeImpact(aoi)
+  }, [aoi, analyzeImpact])
 
   return (
     <motion.div

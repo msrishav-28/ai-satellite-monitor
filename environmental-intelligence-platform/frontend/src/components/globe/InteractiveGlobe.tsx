@@ -98,7 +98,7 @@ export default function InteractiveGlobe({ onAOISelect, onLoadingChange }: Props
         {...viewState}
         onMove={evt => setViewState(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/dark-v11"
-        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
         onLoad={handleMapLoad}
         projection={projection}
       >

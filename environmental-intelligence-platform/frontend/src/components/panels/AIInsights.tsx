@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GlassPanel } from '../shared/GlassPanel'
+import { useAIInsights } from '../../hooks/useAIInsights'
 import { Brain, Zap, Search } from 'lucide-react'
 
 interface Props {
@@ -10,34 +11,15 @@ interface Props {
 }
 
 export default function AIInsights({ aoi }: Props) {
-  const [insightsData, setInsightsData] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  // Use the AI insights hook
+  const { generateInsights, data: insightsData, isLoading: loading, error } = useAIInsights()
 
   useEffect(() => {
     if (!aoi) return
 
-    const fetchData = async () => {
-      setLoading(true)
-      try {
-        const response = await fetch('/api/ai-insights', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ aoi }),
-        })
-        if (!response.ok) {
-          throw new Error('Failed to fetch AI insights')
-        }
-        const data = await response.json()
-        setInsightsData(data)
-      } catch (error) {
-        console.error('Failed to fetch AI insights:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [aoi])
+    // Generate AI insights when AOI changes
+    generateInsights(aoi)
+  }, [aoi, generateInsights])
 
   return (
     <motion.div

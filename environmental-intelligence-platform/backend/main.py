@@ -75,6 +75,54 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
+    try:
+        # Check database connection
+        async with engine.begin() as conn:
+            await conn.execute("SELECT 1")
+
+        # Check ML models status
+        from app.ml.model_manager import model_manager
+        model_health = await model_manager.health_check()
+
+        # Check WebSocket status
+        from app.websocket.manager import connection_manager
+        ws_status = {
+            'active_connections': connection_manager.get_connection_count(),
+            'status': 'operational'
+        }
+
+        return {
+            "status": "healthy",
+            "timestamp": "2024-01-01T00:00:00Z",
+            "version": "1.0.0",
+            "components": {
+                "database": "healthy",
+                "ml_models": model_health.get('overall_health', 'unknown'),
+                "websockets": ws_status['status']
+            },
+            "details": {
+                "ml_models": model_health,
+                "websockets": ws_status
+            }
+        }
+
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        return {
+            "status": "unhealthy",
+            "timestamp": "2024-01-01T00:00:00Z",
+            "error": str(e),
+            "components": {
+                "database": "unknown",
+                "ml_models": "unknown",
+                "websockets": "unknown"
+            }
+        }
+
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
     return {
         "status": "healthy",
         "timestamp": "2024-01-01T00:00:00Z"

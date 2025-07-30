@@ -47,6 +47,32 @@ async def generate_timelapse(
         )
 
 
+@router.get("/timelapse/{request_id}/status", response_model=APIResponse)
+async def get_timelapse_status(
+    request_id: str,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Get the status of a time-lapse generation request
+    """
+    try:
+        service = TimelapseService(db)
+        status = await service.get_timelapse_status(request_id)
+
+        return APIResponse(
+            success=True,
+            message="Time-lapse status retrieved successfully",
+            data=status
+        )
+
+    except Exception as e:
+        logger.error(f"Error getting time-lapse status: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get time-lapse status: {str(e)}"
+        )
+
+
 @router.post("/data", response_model=APIResponse)
 async def get_satellite_data(
     request: AOIRequest,

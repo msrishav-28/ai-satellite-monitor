@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google'
+import QueryProvider from '../components/providers/QueryProvider'
 import './globals.css'
 
 const inter = Inter({ 
@@ -32,7 +33,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans bg-dark-primary text-white">{children}</body>
+      <body className="font-sans bg-dark-primary text-white">
+        <QueryProvider>
+          {children}
+        </QueryProvider>
+      </body>
     </html>
   )
 }
