@@ -17,27 +17,54 @@ export default function DashboardPage() {
   const [activePanel, setActivePanel] = useState<string | null>(null)
 
   return (
-    <div className="relative w-full h-full">
-      <InteractiveGlobe 
-        onAOISelect={setSelectedAOI}
-        onLoadingChange={setLoading}
-      />
-      
-      <SearchPanel />
-      <LayerControl />
-      
-      {selectedAOI && (
-        <>
-          <MetricsPanel aoi={selectedAOI} />
-          <HazardAnalysis aoi={selectedAOI} />
-        </>
-      )}
-      
-      {activePanel === 'ai-insights' && <AIInsights />}
-      {activePanel === 'impact' && <ImpactAnalysis aoi={selectedAOI} />}
-      {activePanel === 'time-series' && <TimeSeriesControl aoi={selectedAOI} />}
-      
-      <LoadingOverlay isLoading={loading} />
+    <div className="relative w-full h-full overflow-hidden">
+      {/* Main globe container */}
+      <div className="absolute inset-0">
+        <InteractiveGlobe
+          onAOISelect={setSelectedAOI}
+          onLoadingChange={setLoading}
+        />
+      </div>
+
+      {/* UI Overlay Layer */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="pointer-events-auto">
+          <SearchPanel />
+        </div>
+        <div className="pointer-events-auto">
+          <LayerControl />
+        </div>
+
+        {selectedAOI && (
+          <>
+            <div className="pointer-events-auto">
+              <MetricsPanel aoi={selectedAOI} />
+            </div>
+            <div className="pointer-events-auto">
+              <HazardAnalysis aoi={selectedAOI} />
+            </div>
+          </>
+        )}
+
+        {activePanel === 'ai-insights' && selectedAOI && (
+          <div className="pointer-events-auto">
+            <AIInsights aoi={selectedAOI} />
+          </div>
+        )}
+        {activePanel === 'impact' && (
+          <div className="pointer-events-auto">
+            <ImpactAnalysis aoi={selectedAOI} />
+          </div>
+        )}
+        {activePanel === 'time-series' && (
+          <div className="pointer-events-auto">
+            <TimeSeriesControl aoi={selectedAOI} />
+          </div>
+        )}
+      </div>
+
+      {/* Loading overlay */}
+      <LoadingOverlay isLoading={loading} variant="detailed" />
     </div>
   )
 }

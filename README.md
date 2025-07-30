@@ -23,8 +23,8 @@ This platform provides:
 
 ### Backend (FastAPI + Python)
 - RESTful API with async/await support
-- PostgreSQL database with SQLAlchemy ORM
-- Redis for caching and background tasks
+- SQLite database with SQLAlchemy ORM (zero setup!)
+- In-memory caching and background tasks
 - Integration with satellite data sources
 
 ### Data Sources
@@ -39,8 +39,7 @@ This platform provides:
 ### Prerequisites
 - Node.js 18+ and npm
 - Python 3.9+ and pip
-- PostgreSQL 13+
-- Redis 6+
+- That's it! (No database installation required)
 
 ### Installation
 
@@ -54,14 +53,12 @@ npm run install:backend
 
 2. **Set up environment variables:**
 ```bash
-# Frontend
-cp .env.example .env.local
-# Add your Mapbox token and API keys
+# Run automated setup script
+scripts/setup-env.bat
 
-# Backend
-cd backend
-cp .env.example .env
-# Add your database URL and API keys
+# Edit frontend/.env.local with your Mapbox token
+# Edit backend/.env with your API keys
+# See docs/SIMPLIFIED_SETUP.md for detailed instructions
 ```
 
 3. **Start the development servers:**

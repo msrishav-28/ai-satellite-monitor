@@ -33,10 +33,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans bg-dark-primary text-white">
-        <QueryProvider>
-          {children}
-        </QueryProvider>
+      <body className="font-sans bg-gradient-dark text-text-primary antialiased">
+        <div className="fixed inset-0 bg-gradient-dark" />
+        <div className="relative z-10">
+          <QueryProvider>
+            {children}
+          </QueryProvider>
+        </div>
       </body>
     </html>
   )

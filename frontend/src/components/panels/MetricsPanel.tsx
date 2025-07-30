@@ -46,42 +46,105 @@ export default function MetricsPanel({ aoi }: Props) {
 
   return (
     <motion.div
-      initial={{ x: '100%' }}
-      animate={{ x: 0 }}
-      exit={{ x: '100%' }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="absolute top-20 right-4 w-[400px] h-auto z-10"
+      initial={{ x: '100%', opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: '100%', opacity: 0 }}
+      transition={{
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1]
+      }}
+      className="absolute top-20 right-4 w-[420px] h-auto z-10"
     >
-      <GlassPanel>
-        <div className="p-4">
-          <h3 className="text-lg font-bold mb-4">Environmental Metrics</h3>
+      <GlassPanel variant="elevated" className="overflow-hidden">
+        <div className="p-6">
+          <motion.h3
+            className="text-xl font-bold mb-6 text-gradient flex items-center"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.4 }}
+          >
+            <div className="w-2 h-2 bg-purple-500 rounded-full mr-3 animate-glow-pulse" />
+            Environmental Metrics
+          </motion.h3>
           {loading ? (
-            <div className="text-center p-8">Loading metrics...</div>
-          ) : (
-            <>
-              {/* Weather Data */}
-              <div className="mb-4">
-                <h4 className="font-semibold mb-2 flex items-center"><Sun className="mr-2" /> Weather</h4>
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <p><strong>Temp:</strong> {weatherData?.temperature}°C</p>
-                  <p><strong>Feels Like:</strong> {weatherData?.apparentTemperature}°C</p>
-                  <p><strong>Humidity:</strong> {weatherData?.humidity}%</p>
-                  <p><strong>Wind:</strong> {weatherData?.windSpeed} km/h {weatherData?.windDirection}</p>
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-6 h-6 loading-skeleton rounded" />
+                  <div className="loading-skeleton h-5 w-20" />
                 </div>
-                <div className="mt-2">
-                  <TemperatureChart data={weatherData?.forecast} />
+                <div className="grid grid-cols-2 gap-3">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="loading-skeleton h-8 rounded-lg" />
+                  ))}
                 </div>
+                <div className="loading-skeleton h-24 rounded-lg" />
               </div>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-6 h-6 loading-skeleton rounded" />
+                  <div className="loading-skeleton h-5 w-24" />
+                </div>
+                <div className="loading-skeleton h-20 rounded-lg" />
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-8">
+              {/* Weather Data */}
+              <motion.div
+                className="space-y-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.4 }}
+              >
+                <h4 className="font-semibold text-lg mb-4 flex items-center text-text-primary">
+                  <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mr-3">
+                    <Sun className="w-4 h-4 text-white" />
+                  </div>
+                  Weather Conditions
+                </h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="glass-panel p-4 rounded-xl">
+                    <div className="text-xs text-text-tertiary mb-1">Temperature</div>
+                    <div className="text-lg font-semibold text-text-primary">{weatherData?.temperature}°C</div>
+                    <div className="text-xs text-text-secondary">Feels like {weatherData?.apparentTemperature}°C</div>
+                  </div>
+                  <div className="glass-panel p-4 rounded-xl">
+                    <div className="text-xs text-text-tertiary mb-1">Humidity</div>
+                    <div className="text-lg font-semibold text-text-primary">{weatherData?.humidity}%</div>
+                  </div>
+                  <div className="glass-panel p-4 rounded-xl col-span-2">
+                    <div className="text-xs text-text-tertiary mb-1">Wind</div>
+                    <div className="text-lg font-semibold text-text-primary">
+                      {weatherData?.windSpeed} km/h {weatherData?.windDirection}
+                    </div>
+                  </div>
+                </div>
+                <div className="glass-panel p-4 rounded-xl">
+                  <TemperatureChart data={[]} />
+                </div>
+              </motion.div>
 
               {/* AQI Data */}
-              <div>
-                <h4 className="font-semibold mb-2 flex items-center"><ShieldAlert className="mr-2" /> Air Quality (AQI)</h4>
-                <div className="text-sm mb-2">
-                  <p><strong>Overall AQI:</strong> {aqiData?.value}</p>
+              <motion.div
+                className="space-y-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.4 }}
+              >
+                <h4 className="font-semibold text-lg mb-4 flex items-center text-text-primary">
+                  <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-3">
+                    <ShieldAlert className="w-4 h-4 text-white" />
+                  </div>
+                  Air Quality Index
+                </h4>
+                <div className="glass-panel p-4 rounded-xl">
+                  <div className="text-xs text-text-tertiary mb-1">Overall AQI</div>
+                  <div className="text-2xl font-bold text-text-primary mb-2">{aqiData?.value}</div>
+                  <AQIChart data={aqiData?.pollutants || []} />
                 </div>
-                <AQIChart data={aqiData?.pollutants} />
-              </div>
-            </>
+              </motion.div>
+            </div>
           )}
         </div>
       </GlassPanel>

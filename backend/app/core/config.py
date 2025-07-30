@@ -22,11 +22,12 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     ALLOWED_HOSTS: List[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
     
-    # Database
-    DATABASE_URL: str = "postgresql://user:password@localhost:5432/env_intel"
-    
-    # Redis
-    REDIS_URL: str = "redis://localhost:6379"
+    # Database (SQLite for simplicity)
+    DATABASE_URL: str = "sqlite:///./env_intel.db"
+
+    # Cache settings (in-memory instead of Redis)
+    ENABLE_CACHING: bool = True
+    CACHE_TTL: int = 300  # 5 minutes
     
     # External APIs
     OPENWEATHER_API_KEY: Optional[str] = None
@@ -52,9 +53,9 @@ class Settings(BaseSettings):
     MODEL_DIR: str = "models"
     ENABLE_GPU: bool = False
     
-    # Celery (for background tasks)
-    CELERY_BROKER_URL: str = "redis://localhost:6379/0"
-    CELERY_RESULT_BACKEND: str = "redis://localhost:6379/0"
+    # Background tasks (in-memory instead of Celery)
+    ENABLE_BACKGROUND_TASKS: bool = True
+    BACKGROUND_TASK_INTERVAL: int = 60  # seconds
     
     class Config:
         env_file = ".env"

@@ -4,6 +4,7 @@ WebSocket endpoints for real-time data streaming
 
 import asyncio
 import logging
+from datetime import datetime
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -53,7 +54,7 @@ async def websocket_endpoint(
                 # Send ping to check if connection is still alive
                 await connection_manager.send_personal_message({
                     'type': 'ping_request',
-                    'timestamp': '2024-01-01T00:00:00Z'
+                    'timestamp': datetime.utcnow().isoformat() + 'Z'
                 }, connection_id)
                 
     except WebSocketDisconnect:
@@ -219,7 +220,7 @@ async def monitor_timelapse_progress(request_id: str, connection_id: str, db: As
                 'request_id': request_id,
                 'stage': stage_name,
                 'progress': progress,
-                'timestamp': '2024-01-01T00:00:00Z'
+                'timestamp': datetime.utcnow().isoformat() + 'Z'
             }, connection_id)
             
             # Simulate processing time
@@ -261,7 +262,7 @@ async def websocket_status():
                 for subscription_type in connection_manager.subscriptions.keys()
             },
             'status': 'operational' if connection_manager.get_connection_count() > 0 else 'idle',
-            'timestamp': '2024-01-01T00:00:00Z'
+            'timestamp': datetime.utcnow().isoformat() + 'Z'
         }
 
         return {

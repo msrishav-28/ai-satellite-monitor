@@ -49,22 +49,22 @@ export default function ImpactAnalysis({ aoi }: Props) {
               {/* Biodiversity Impact */}
               <div className="p-4 bg-black/20 rounded-lg">
                 <h4 className="font-semibold mb-2 flex items-center"><PawPrint className="mr-2" /> Biodiversity</h4>
-                <p className="text-sm"><strong>Species Affected:</strong> {impactData?.biodiversity.speciesAffected}</p>
-                <p className="text-sm"><strong>Habitat Loss:</strong> {impactData?.biodiversity.habitatLoss} km²</p>
+                <p className="text-sm"><strong>Species Affected:</strong> {impactData?.biodiversity.species_affected}</p>
+                <p className="text-sm"><strong>Habitat Loss:</strong> {impactData?.biodiversity.habitat_loss} km²</p>
               </div>
 
               {/* Agricultural Yield */}
               <div className="p-4 bg-black/20 rounded-lg">
                 <h4 className="font-semibold mb-2 flex items-center"><Sprout className="mr-2" /> Agriculture</h4>
-                <p className="text-sm"><strong>Yield Prediction:</strong> {impactData?.agriculture.yieldPrediction}</p>
-                <p className="text-sm"><strong>Soil Moisture:</strong> {impactData?.agriculture.soilMoisture}</p>
+                <p className="text-sm"><strong>Yield Prediction:</strong> {impactData?.agriculture.yield_prediction}</p>
+                <p className="text-sm"><strong>Soil Moisture:</strong> {impactData?.agriculture.soil_moisture}</p>
               </div>
 
               {/* Water Resources */}
               <div className="p-4 bg-black/20 rounded-lg">
                 <h4 className="font-semibold mb-2 flex items-center"><Droplets className="mr-2" /> Water Resources</h4>
-                <p className="text-sm"><strong>Surface Water:</strong> {impactData?.water.surfaceWaterChange}%</p>
-                <p className="text-sm"><strong>Snowpack:</strong> {impactData?.water.snowpackLevel}</p>
+                <p className="text-sm"><strong>Surface Water:</strong> {impactData?.water.surface_water_change}%</p>
+                <p className="text-sm"><strong>Snowpack:</strong> {impactData?.water.snowpack_level}</p>
               </div>
             </div>
           )}

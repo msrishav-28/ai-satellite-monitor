@@ -3,7 +3,7 @@ Main API router for v1 endpoints
 """
 
 from fastapi import APIRouter
-from app.api.v1.endpoints import environmental, hazards, ai_insights, impact, satellite
+from app.api.v1.endpoints import environmental, hazards, ai_insights, impact, satellite, map_layers
 from app.websocket import endpoints as websocket_endpoints
 
 api_router = APIRouter()
@@ -37,6 +37,11 @@ api_router.include_router(
     satellite.router,
     prefix="/satellite",
     tags=["satellite"]
+)
+
+api_router.include_router(
+    map_layers.router,
+    tags=["map-layers"]
 )
 
 # Include WebSocket endpoints

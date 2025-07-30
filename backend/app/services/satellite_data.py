@@ -10,6 +10,8 @@ from datetime import datetime, timedelta
 from geojson_pydantic import Polygon
 import numpy as np
 
+logger = logging.getLogger(__name__)
+
 # Google Earth Engine imports (conditional)
 try:
     import ee
@@ -17,8 +19,6 @@ try:
 except ImportError:
     GEE_AVAILABLE = False
     logger.warning("Google Earth Engine not available. Install earthengine-api package.")
-
-logger = logging.getLogger(__name__)
 
 
 class SatelliteDataService:
