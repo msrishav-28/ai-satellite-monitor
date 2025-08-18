@@ -1,185 +1,112 @@
-# API Keys & Configuration Setup Guide
+# API Keys & Environment Setup (Simplified / Mock-First)
 
-This guide provides step-by-step instructions for obtaining and configuring all required API keys for the Environmental Intelligence Platform.
+The platform runs out-of-the-box using **mock data** (no keys required). Add keys incrementally to unlock live sources. This document lists only what you truly need now, plus optional upgrades.
 
-## 🔑 Required API Keys
+## 🔑 Essentials (Enable Visual + Basic Live Data)
+| Priority | What | Why | Required Where |
+|----------|------|-----|----------------|
+| 1 | Mapbox Access Token | Map / globe tiles | `frontend/.env.local` (public) |
+| 2 | OpenWeatherMap API Key | Live weather metrics | `backend/.env` |
+| 3 | WAQI API Token | Live air quality (AQI) | `backend/.env` |
 
-### Essential APIs (Required for Core Functionality)
+Without these, the UI still loads; weather & AQI use structured mock values.
 
-#### 1. Mapbox Access Token
-**Purpose**: 3D globe visualization and map rendering
-**Cost**: Free tier available (50,000 map loads/month)
+## 🌐 Optional (Satellite & Advanced)
+| Option | Purpose | When to Add | Env Vars |
+|--------|---------|------------|----------|
+| Google Earth Engine (Service Account) | Real NDVI / LST / precipitation / DEM | When you want real satellite stats | `GEE_SERVICE_ACCOUNT_KEY`, `GEE_PROJECT_ID` |
+| Sentinel Hub | High-control Sentinel-2 processing | Later (not implemented yet) | `SENTINEL_HUB_CLIENT_ID`, `SENTINEL_HUB_CLIENT_SECRET` |
+| Planetary Computer | Additional catalog / STAC | Later | `PC_SUBSCRIPTION_KEY` |
 
-**Setup Steps:**
-1. Visit [Mapbox](https://www.mapbox.com/)
-2. Create account and verify email
-3. Go to Account → Access Tokens
-4. Create new token with these scopes:
-   - `styles:read`
-   - `fonts:read` 
-   - `datasets:read`
-   - `vision:read`
-5. Copy token to `.env.local`: `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=pk.your_token_here`
-
-#### 2. OpenWeatherMap API Key
-**Purpose**: Real-time weather data
-**Cost**: Free tier (1,000 calls/day)
-
-**Setup Steps:**
-1. Visit [OpenWeatherMap](https://openweathermap.org/api)
-2. Sign up for free account
-3. Go to API Keys section
-4. Copy default API key
-5. Add to `backend/.env`: `OPENWEATHER_API_KEY=your_api_key_here`
-
-#### 3. World Air Quality Index (WAQI) API Token
-**Purpose**: Real-time air quality data
-**Cost**: Free tier (1,000 requests/day)
-
-**Setup Steps:**
-1. Visit [WAQI API](https://aqicn.org/api/)
-2. Request API token (usually instant approval)
-3. Add to `backend/.env`: `WAQI_API_KEY=your_token_here`
-
-### Advanced APIs (Optional but Recommended)
-
-#### 4. Google Earth Engine Service Account
-**Purpose**: Satellite imagery and geospatial analysis
-**Cost**: Free for research/non-commercial use
-
-**Setup Steps:**
-1. Visit [Google Earth Engine](https://earthengine.google.com/)
-2. Sign up and request access (may take 1-2 days)
-3. Create Google Cloud Project
-4. Enable Earth Engine API
-5. Create Service Account:
-   - Go to IAM & Admin → Service Accounts
-   - Create new service account
-   - Download JSON key file
-6. Configure in `backend/.env`:
-   ```
-   GEE_SERVICE_ACCOUNT_KEY=/path/to/service-account-key.json
-   GEE_PROJECT_ID=your-gcp-project-id
-   ```
-
-#### 5. Sentinel Hub API
-**Purpose**: High-resolution satellite imagery
-**Cost**: Free tier (1,000 processing units/month)
-
-**Setup Steps:**
-1. Visit [Sentinel Hub](https://www.sentinel-hub.com/)
-2. Create account
-3. Go to Dashboard → Configuration Utility
-4. Create new configuration
-5. Note Client ID and Client Secret
-6. Add to `backend/.env`:
-   ```
-   SENTINEL_HUB_CLIENT_ID=your_client_id
-   SENTINEL_HUB_CLIENT_SECRET=your_client_secret
-   ```
-
-#### 6. Microsoft Planetary Computer
-**Purpose**: Additional satellite data sources
-**Cost**: Free with registration
-
-**Setup Steps:**
-1. Visit [Planetary Computer](https://planetarycomputer.microsoft.com/)
-2. Request access
-3. Get subscription key from dashboard
-4. Add to `backend/.env`: `PC_SUBSCRIPTION_KEY=your_subscription_key`
-
-## 🔧 Configuration Files
-
-### Backend Environment (.env)
-Create `backend/.env` from `backend/.env.example`:
-
-```bash
-# Application Settings
+## ⚙️ Backend Environment (Default SQLite, No Redis Needed)
+Create `backend/.env` (or copy example) with at minimum:
+```env
 DEBUG=True
-HOST=0.0.0.0
-PORT=8000
-SECRET_KEY=your-secret-key-change-in-production
+SECRET_KEY=change-me
 
-# Database
-DATABASE_URL=postgresql://user:password@localhost:5432/env_intel
+# SQLite zero-config database (auto-created)
+DATABASE_URL=sqlite:///./env_intel.db
 
-# Redis
-REDIS_URL=redis://localhost:6379
+# API Keys (add as you go; omit to stay in mock mode)
+OPENWEATHER_API_KEY=
+WAQI_API_KEY=
+GEE_SERVICE_ACCOUNT_KEY=
+GEE_PROJECT_ID=
 
-# External APIs
-OPENWEATHER_API_KEY=your_openweather_api_key
-WAQI_API_KEY=your_waqi_api_key
-
-# Google Earth Engine
-GEE_SERVICE_ACCOUNT_KEY=path/to/service-account-key.json
-GEE_PROJECT_ID=your-gee-project-id
-
-# Sentinel Hub
-SENTINEL_HUB_CLIENT_ID=your_sentinel_hub_client_id
-SENTINEL_HUB_CLIENT_SECRET=your_sentinel_hub_client_secret
-
-# Planetary Computer
-PC_SUBSCRIPTION_KEY=your_pc_subscription_key
+# Feature flags (force mocks even if keys present)
+FORCE_MOCK_WEATHER=false
+FORCE_MOCK_AQI=false
+FORCE_MOCK_SATELLITE=true    # keep true until you set GEE keys
+FORCE_MOCK_MODELS=true
+ALLOW_GEE_USER_AUTH=false    # set true only if using user auth instead of service account
 ```
 
-### Frontend Environment (.env.local)
-Create `frontend/.env.local` from `frontend/.env.example`:
-
-```bash
-# Mapbox Configuration
-NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=pk.your_mapbox_token_here
-
-# API Configuration
+## 🖥️ Frontend Environment (`frontend/.env.local`)
+```env
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=pk.your_token_here
 NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXT_PUBLIC_WS_URL=ws://localhost:8000
-
-# Feature Flags
-NEXT_PUBLIC_ENABLE_ANALYTICS=true
-NEXT_PUBLIC_ENABLE_WEBSOCKETS=true
-NEXT_PUBLIC_ENABLE_REAL_TIME_UPDATES=true
 ```
 
-## 🚀 Quick Start Priority
+## 🚀 Enabling Each Live Source
+Weather:
+```env
+OPENWEATHER_API_KEY=your_key
+FORCE_MOCK_WEATHER=false
+```
+Air Quality:
+```env
+WAQI_API_KEY=your_token
+FORCE_MOCK_AQI=false
+```
+Satellite (GEE service account):
+```env
+GEE_SERVICE_ACCOUNT_KEY=/abs/path/service-account.json
+GEE_PROJECT_ID=your_project
+FORCE_MOCK_SATELLITE=false
+```
+Models (when real models added):
+```env
+FORCE_MOCK_MODELS=false
+```
 
-**Minimum viable setup (for basic functionality):**
-1. Mapbox Access Token (frontend)
-2. OpenWeatherMap API Key (backend)
+Restart backend after changes. Check status:
+`GET /api/v1/data-sources/health` – shows `live` vs `forced_mock` per source.
 
-**Recommended setup (for full features):**
-1. All above APIs
-2. Google Earth Engine (for satellite data)
-3. WAQI API (for air quality)
+## 🔐 Security Basics
+1. Do NOT commit `.env` files.
+2. Use separate keys for dev/prod.
+3. Rotate credentials periodically.
+4. For production, move secrets to a manager (AWS/GCP/Azure secret services).
 
-**Production setup:**
-1. All APIs configured
-2. Proper database setup (PostgreSQL)
-3. Redis for caching
-4. Environment-specific secrets
-
-## 🔒 Security Best Practices
-
-1. **Never commit API keys to version control**
-2. **Use environment variables for all secrets**
-3. **Rotate API keys regularly**
-4. **Monitor API usage and set up alerts**
-5. **Use different keys for development/production**
-
-## 📊 API Usage Monitoring
-
-Most APIs provide usage dashboards:
-- **Mapbox**: Account → Usage
-- **OpenWeatherMap**: Dashboard → Statistics
-- **Google Earth Engine**: Cloud Console → APIs & Services
-- **Sentinel Hub**: Dashboard → Statistics
+## 🧪 Quick Verification Steps
+| Step | Check |
+|------|-------|
+| 1 | Start backend: it should not crash with empty keys. |
+| 2 | Frontend loads globe (Mapbox token working). |
+| 3 | `/api/v1/data-sources/health` shows weather/aqi `live: false` until keys added. |
+| 4 | Add weather key → health shows `live: true` for weather. |
+| 5 | Add AQI key → air quality panel updates with new values. |
 
 ## 🆘 Troubleshooting
+| Symptom | Likely Cause | Fix |
+|---------|--------------|-----|
+| Map tiles blank | Missing/invalid Mapbox token | Verify token starts with `pk.` |
+| Weather still mock | Flag still true OR key not reloaded | Set `FORCE_MOCK_WEATHER=false`, restart backend |
+| Satellite always mock | GEE keys missing OR `FORCE_MOCK_SATELLITE=true` | Provide key + set flag false |
+| GEE init failure | Service account not added to EE | Share service account email in Earth Engine UI |
 
-### Common Issues:
-1. **"Invalid API key"**: Check key format and permissions
-2. **"Quota exceeded"**: Monitor usage limits
-3. **"Access denied"**: Verify account approval status
-4. **"Network timeout"**: Check firewall/proxy settings
+## 🗃️ Optional Upgrade Path
+| Component | Default | Production Upgrade |
+|----------|---------|--------------------|
+| Database | SQLite | PostgreSQL (update `DATABASE_URL`) |
+| Cache | In-memory | Redis (introduce new settings & client) |
+| Secrets | Flat `.env` | Cloud secret manager |
 
-### Testing API Keys:
-Use the platform's health check endpoint: `GET /health`
-This will verify all configured APIs are working correctly.
+These are **not required** to evaluate or extend the platform initially.
+
+## 📊 Monitoring API Usage (When Live Enabled)
+Check provider dashboards periodically (Mapbox, OpenWeatherMap, WAQI, Google Cloud). Add alert thresholds before scaling traffic.
+
+---
+Need deeper satellite setup? See `docs/DATA_SOURCES.md` for Earth Engine workflow.

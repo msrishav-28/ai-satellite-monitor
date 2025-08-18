@@ -1,100 +1,122 @@
 # Environmental Intelligence Platform
 
-A comprehensive AI-powered platform for real-time environmental analysis and multi-hazard prediction using satellite imagery, machine learning models, and live APIs. Built for ISRO and NASA collaboration.
+AI‑assisted geospatial monitoring and multi‑hazard risk assessment platform with a **mock‑first, live‑upgrade** design. Ships working dashboards immediately (using deterministic mock data) and progressively unlocks real data sources (weather, air quality, satellite, models) as you add API keys.
 
-## 🌍 Platform Overview
+> Goal: Fast demo & development experience today; smooth path to production‑grade, live geospatial intelligence tomorrow.
 
-This platform provides:
+## 🌍 Key User Value
+| Capability | What Users See | Utility |
+|------------|----------------|---------|
+| Live / Mock Weather & AQI | Current conditions & air quality index | Situational awareness & health risk context |
+| Multi‑Hazard Risk Scores | Wildfire / Flood / Landslide metrics + factors | Prioritize monitoring & mitigation |
+| Vegetation & Environmental Metrics | NDVI, LST, precipitation, moisture (mock or GEE) | Assess stress, fuel conditions, terrain risk |
+| Timelapse Imagery (scaffold) | Chronological scene list for AOI | Detect change (burn, deforestation, flood extent) |
+| Real‑Time Feed (WebSocket) | Streaming environmental & hazard updates | Live dashboard / alerting |
+| Priority Hazards Summary | Top risks + overall composite | Rapid command briefing |
+| Source Health Panel | Live vs mock status per data source | Trust & diagnostics |
 
-- **Interactive 3D Globe Interface** with AOI drawing tools
-- **Real-Time Environmental Metrics** (weather, AQI, satellite data)
-- **Multi-Hazard AI Prediction Models** (wildfire, flood, landslide, etc.)
-- **Advanced Analytics** (anomaly detection, causal inference)
-- **Impact Analysis** (carbon emissions, biodiversity, agriculture)
-- **Time-lapse Generation** from satellite imagery
+## 🧱 Architecture Snapshot
 
-## 🏗️ Architecture
+Frontend (Next.js + TypeScript)
+* Mapbox globe / map (AOI selection, overlays)
+* Zustand for state stores (data + map)
+* Hooks per domain (`useHazardPrediction`, `useEnvironmentalData`, etc.)
+* WebSocket client for push updates
 
-### Frontend (Next.js 14 + TypeScript)
-- Interactive 3D globe using Mapbox GL
-- Real-time data visualization with Recharts
-- Responsive UI with glassmorphism design
-- State management with Zustand
+Backend (FastAPI)
+* Layered modules: API routers → services → core (config/cache/background) → ML & satellite helpers
+* SQLite (default) + in‑memory cache for zero‑setup dev; can swap to Postgres / Redis later
+* Background task manager for scheduled refresh / future ingestion
+* Feature flags to force mocks even when credentials exist
 
-### Backend (FastAPI + Python)
-- RESTful API with async/await support
-- SQLite database with SQLAlchemy ORM (zero setup!)
-- In-memory caching and background tasks
-- Integration with satellite data sources
+Data Source Modes (see `docs/DATA_SOURCES.md`)
+* Weather: OpenWeatherMap (live) or structured mock
+* Air Quality: WAQI (live) or mock
+* Satellite: Google Earth Engine (Sentinel‑2, MODIS, GPM, SRTM) OR synthetic dataset
+* Models: Currently heuristic / synthetic; real models pluggable via `model_manager`
 
-### Data Sources
-- **Weather**: OpenWeatherMap API
-- **Air Quality**: World Air Quality Index API
-- **Satellite Imagery**: Google Earth Engine, Sentinel Hub
-- **Elevation Data**: SRTM, ASTER GDEM
-- **Land Cover**: ESA WorldCover, MODIS
+## 🔁 Mock‑First Philosophy
+The platform **never breaks** if external APIs fail or keys are missing:
+* Each service returns schema‑stable mock objects
+* Flags: `FORCE_MOCK_WEATHER`, `FORCE_MOCK_AQI`, `FORCE_MOCK_SATELLITE`, `FORCE_MOCK_MODELS`
+* Health endpoint: `/api/v1/data-sources/health` reports configured vs live vs forced mock
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Dev)
+Prerequisites: Node.js 18+, Python 3.11+, (optional) earthengine-api
 
-### Prerequisites
-- Node.js 18+ and npm
-- Python 3.9+ and pip
-- That's it! (No database installation required)
-
-### Installation
-
-1. **Clone and install dependencies:**
 ```bash
-git clone <repository-url>
-cd environmental-intelligence-platform
-npm install
-npm run install:backend
+git clone <repo-url>
+cd ai-satellite-monitor
+./scripts/setup-dev.sh         # installs frontend & backend deps
+./scripts/start-dev.sh         # starts backend:8000 + frontend:3000
 ```
+Open http://localhost:3000 (frontend) and http://localhost:8000/docs (API docs).
 
-2. **Set up environment variables:**
-```bash
-# Run automated setup script
-scripts/setup-env.bat
+Add API keys later by editing `backend/.env` & `frontend/.env.local` (see below / DATA_SOURCES doc).
 
-# Edit frontend/.env.local with your Mapbox token
-# Edit backend/.env with your API keys
-# See docs/SIMPLIFIED_SETUP.md for detailed instructions
+## 🔑 Enable Live Data
+Set these (at minimum) and restart backend:
+```env
+OPENWEATHER_API_KEY=...
+WAQI_API_KEY=...
+FORCE_MOCK_WEATHER=false
+FORCE_MOCK_AQI=false
 ```
-
-3. **Start the development servers:**
-```bash
-# Start both frontend and backend
-npm run dev:full
-
-# Or start individually
-npm run dev              # Frontend only (port 3000)
-npm run dev:backend      # Backend only (port 8000)
+Optional satellite (service account):
+```env
+GEE_SERVICE_ACCOUNT_KEY=/abs/path/key.json
+GEE_PROJECT_ID=your-project
+FORCE_MOCK_SATELLITE=false
 ```
+Models (later): `FORCE_MOCK_MODELS=false`
 
-## 📊 Current Implementation Status
+Verify: `GET /api/v1/data-sources/health` → fields show `live: true` where enabled.
 
-### ✅ Completed Features
-- **Interactive 3D Globe**: Mapbox-powered globe with AOI drawing capabilities
-- **Real-time Environmental Data**: Weather, AQI, and satellite data integration
-- **Advanced ML Models**: Wildfire, flood, and landslide prediction with ensemble methods
-- **AI-Powered Analytics**: Anomaly detection, causal inference, and impact analysis
-- **Time-lapse Generation**: Satellite imagery processing with change detection
-- **Real-time Streaming**: WebSocket-based data streaming and alerts
-- **Complete Backend API**: FastAPI with PostgreSQL and Redis
-- **Production-Ready Frontend**: Next.js with TypeScript and Tailwind CSS
-- **Google Earth Engine Integration**: Real satellite data processing
-- **Comprehensive Documentation**: API docs, deployment guides, and architecture
+Full details: `docs/DATA_SOURCES.md` & `docs/API_KEYS_SETUP.md`.
 
-### 🎯 Production Ready
-- **Zero Critical Issues**: All components fully implemented and tested
-- **End-to-End Functionality**: Complete data flow from satellite to visualization
-- **Scalable Architecture**: Microservices-ready with proper separation of concerns
-- **Security Hardened**: Environment-based configuration and input validation
-- **Performance Optimized**: Caching, async processing, and efficient data handling
+## 📂 Important Directories
+| Path | Purpose |
+|------|---------|
+| `backend/app/services/` | Weather, AQI, satellite, hazard model orchestration |
+| `backend/app/ml/` | Model wrappers / (future) real inference |
+| `backend/app/core/` | Config, cache, logging, background tasks |
+| `backend/app/api/v1/` | Versioned API routers |
+| `frontend/src/hooks/` | Domain‑specific data hooks |
+| `frontend/src/store/` | Zustand state stores |
+| `docs/` | Architecture, data sources, deployment guides |
 
-### 📋 Next Steps
-1. **Satellite Data Integration**: Connect to real satellite APIs
-2. **ML Model Development**: Train and deploy actual hazard prediction models
-3. **Real-time Streaming**: Implement WebSocket connections
-4. **Authentication**: Add user management and API security
-5. **Deployment**: Set up production infrastructure
+## 🧪 Testing (Planned)
+Baseline tests for services & mock/live parity are a priority roadmap item (not yet included). Suggested structure: `backend/tests/` with fixtures for forcing mock flags.
+
+## 🛣️ Roadmap Highlights
+Short Term:
+* Land cover histogram (ESA WorldCover) live
+* SMAP soil moisture integration
+* Fire hotspots (VIIRS) counts
+* Exposure analytics (population intersect)
+* Auth & user roles
+
+Medium Term:
+* Real ML model deployment (versioned)
+* Persistent risk time series
+* Change detection / burn severity indices
+* Improved timelapse rendering pipeline
+
+## 🩺 Health & Ops
+* App health: `GET /health`
+* Data source status: `GET /api/v1/data-sources/health`
+* Logs: `backend/logs/app.log`
+
+## ⚖️ License / Attribution
+See `LICENSE`. External data sources governed by their respective terms (OpenWeatherMap, WAQI, Google Earth Engine dataset licenses, etc.).
+
+## 🤝 Contributing
+See `docs/CONTRIBUTING.md` for branching, commit style, and adding new data sources.
+
+## ❓ FAQ (Quick)
+**Why am I seeing stable numbers?** You’re in mock mode—add keys & disable FORCE_MOCK flags.
+**Do I need Postgres/Redis?** Not for dev; upgrade for production scale.
+**Can I enable only weather live?** Yes—set weather key & leave others mocked.
+
+---
+For detailed system design see `docs/ARCHITECTURE.md`.
