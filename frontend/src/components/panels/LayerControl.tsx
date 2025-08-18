@@ -15,6 +15,8 @@ const layers = [
   { id: 'cyclone', name: 'Cyclone Intensity', icon: '🌀', color: 'bg-purple-500/20' },
   { id: 'air-quality', name: 'Air Quality (AQI)', icon: '💨', color: 'bg-indigo-500/20' },
   { id: 'infrared', name: 'Infrared Heatmap', icon: '🌡️', color: 'bg-amber-500/20' },
+  { id: 'arcgis-air-quality', name: 'ArcGIS AQI', icon: '🗺️', color: 'bg-teal-500/20' },
+  { id: 'google-airview', name: 'Google AirView', icon: '📡', color: 'bg-cyan-500/20' },
 ]
 
 export default function LayerControl() {

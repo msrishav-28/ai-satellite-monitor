@@ -41,7 +41,17 @@ export default function InteractiveGlobe({ onAOISelect, onLoadingChange }: Props
     const fetchLayerData = async (layerId: string) => {
       onLoadingChange(true)
       try {
-        const response = await fetch(`/api/map-layer?id=${layerId}`)
+        let url = ''
+        const isArcGISLayer = layerId === 'arcgis-air-quality'
+        const isAirViewLayer = layerId === 'google-airview'
+        if (isArcGISLayer) {
+          url = '/api/air-quality/arcgis'
+        } else if (isAirViewLayer) {
+          url = '/api/air-quality/airview'
+        } else {
+          url = `/api/map-layer?id=${layerId}`
+        }
+        const response = await fetch(url)
         if (!response.ok) {
           throw new Error(`Failed to fetch data for layer: ${layerId}`)
         }
@@ -53,7 +63,6 @@ export default function InteractiveGlobe({ onAOISelect, onLoadingChange }: Props
         onLoadingChange(false)
       }
     }
-
     activeLayers.forEach((layerId: string) => {
       if (!layerData[layerId]) {
         fetchLayerData(layerId)
@@ -113,26 +122,58 @@ export default function InteractiveGlobe({ onAOISelect, onLoadingChange }: Props
               type="geojson"
               data={layerData[layerId]}
             >
-              <Layer
-                id={`${layerId}-layer`}
-                type="heatmap" // This could be dynamic based on layer type
-                paint={{
-                  'heatmap-intensity': 1,
-                  'heatmap-color': [
-                    'interpolate',
-                    ['linear'],
-                    ['heatmap-density'],
-                    0, 'rgba(33,102,172,0)',
-                    0.2, 'rgb(103,169,207)',
-                    0.4, 'rgb(209,229,240)',
-                    0.6, 'rgb(253,219,199)',
-                    0.8, 'rgb(239,138,98)',
-                    1, 'rgb(178,24,43)'
-                  ],
-                  'heatmap-radius': 30,
-                  'heatmap-opacity': 0.7
-                }}
-              />
+              {layerId === 'arcgis-air-quality' && (
+                <Layer
+                  id={`${layerId}-layer`}
+                  type="circle"
+                  paint={{
+                    'circle-radius': 6,
+                    'circle-color': [
+                      'interpolate', ['linear'], ['get', 'AQI'],
+                      0, '#00E400', 50, '#FFFF00', 100, '#FF7E00',
+                      150, '#FF0000', 200, '#8F3F97', 300, '#7E0023'
+                    ],
+                    'circle-opacity': 0.8,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#ffffff'
+                  }}
+                />
+              )}
+              {layerId === 'google-airview' && (
+                <Layer
+                  id={`${layerId}-layer`}
+                  type="heatmap"
+                  paint={{
+                    'heatmap-weight': ['interpolate', ['linear'], ['get', 'aqi'], 0, 0, 150, 1],
+                    'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
+                    'heatmap-color': [
+                      'interpolate', ['linear'], ['heatmap-density'],
+                      0, 'rgba(33,102,172,0)', 0.2, 'rgb(103,169,207)',
+                      0.4, 'rgb(209,229,240)', 0.6, 'rgb(253,219,199)',
+                      0.8, 'rgb(239,138,98)', 1, 'rgb(178,24,43)'
+                    ],
+                    'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 2, 9, 20],
+                    'heatmap-opacity': 0.7
+                  }}
+                />
+              )}
+              {layerId !== 'arcgis-air-quality' && layerId !== 'google-airview' && (
+                <Layer
+                  id={`${layerId}-layer`}
+                  type="heatmap"
+                  paint={{
+                    'heatmap-intensity': 1,
+                    'heatmap-color': [
+                      'interpolate', ['linear'], ['heatmap-density'],
+                      0, 'rgba(33,102,172,0)', 0.2, 'rgb(103,169,207)',
+                      0.4, 'rgb(209,229,240)', 0.6, 'rgb(253,219,199)',
+                      0.8, 'rgb(239,138,98)', 1, 'rgb(178,24,43)'
+                    ],
+                    'heatmap-radius': 30,
+                    'heatmap-opacity': 0.7
+                  }}
+                />
+              )}
             </Source>
           )
         ))}
