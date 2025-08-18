@@ -3,7 +3,7 @@ Main API router for v1 endpoints
 """
 
 from fastapi import APIRouter
-from app.api.v1.endpoints import environmental, hazards, ai_insights, impact, satellite, map_layers, air_quality
+from app.api.v1.endpoints import environmental, hazards, ai_insights, impact, satellite, map_layers, air_quality, data_sources
 from app.websocket import endpoints as websocket_endpoints
 
 api_router = APIRouter()
@@ -48,6 +48,12 @@ api_router.include_router(
     air_quality.router,
     prefix="/air-quality",
     tags=["air-quality"]
+)
+
+api_router.include_router(
+    data_sources.router,
+    prefix="/data-sources",
+    tags=["data-sources"]
 )
 
 # Include WebSocket endpoints

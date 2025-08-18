@@ -9,6 +9,7 @@ import numpy as np
 from typing import Dict, Any, List
 
 from app.ml.model_manager import model_manager
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +46,8 @@ class MLModelService:
         - slope: Terrain slope
         - fuel_load: Vegetation fuel load
         """
+        if settings.FORCE_MOCK_MODELS:
+            return self._get_default_wildfire_prediction()
         try:
             # Use the model manager for prediction
             prediction = await self.model_manager.predict_wildfire_risk(features)
@@ -66,6 +69,8 @@ class MLModelService:
         - soil_moisture: Soil moisture content
         - drainage_density: Drainage network density
         """
+        if settings.FORCE_MOCK_MODELS:
+            return self._get_default_flood_prediction()
         try:
             # Use the model manager for prediction
             prediction = await self.model_manager.predict_flood_risk(features)
@@ -87,6 +92,8 @@ class MLModelService:
         - soil_clay_content: Clay content in soil
         - precipitation_annual: Annual precipitation
         """
+        if settings.FORCE_MOCK_MODELS:
+            return self._get_default_landslide_prediction()
         try:
             # Use the model manager for prediction
             prediction = await self.model_manager.predict_landslide_risk(features)
@@ -100,6 +107,8 @@ class MLModelService:
         """
         Run all hazard prediction models and return comprehensive analysis
         """
+        if settings.FORCE_MOCK_MODELS:
+            return self._get_default_multi_hazard_prediction()
         try:
             # Use the model manager for multi-hazard prediction
             prediction = await self.model_manager.predict_all_hazards(features)

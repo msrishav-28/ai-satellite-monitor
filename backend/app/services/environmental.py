@@ -48,7 +48,7 @@ class EnvironmentalService:
         """
         Fetch weather data from OpenWeatherMap API
         """
-        if not settings.OPENWEATHER_API_KEY:
+    if settings.FORCE_MOCK_WEATHER or not settings.OPENWEATHER_API_KEY:
             logger.warning("OpenWeatherMap API key not configured, using mock data")
             return self._get_mock_weather_data()
         
@@ -84,7 +84,7 @@ class EnvironmentalService:
         """
         Fetch AQI data from World Air Quality Index API
         """
-        if not settings.WAQI_API_KEY:
+    if settings.FORCE_MOCK_AQI or not settings.WAQI_API_KEY:
             logger.warning("WAQI API key not configured, using mock data")
             return self._get_mock_aqi_data()
         

@@ -33,6 +33,13 @@ class Settings(BaseSettings):
     OPENWEATHER_API_KEY: Optional[str] = None
     WAQI_API_KEY: Optional[str] = None
     MAPBOX_ACCESS_TOKEN: Optional[str] = None
+
+    # Source control / feature flags (allow forcing mock responses even if creds exist)
+    FORCE_MOCK_WEATHER: bool = False
+    FORCE_MOCK_AQI: bool = False
+    FORCE_MOCK_SATELLITE: bool = False
+    FORCE_MOCK_MODELS: bool = True  # Default to mock model predictions until real models integrated
+    ALLOW_GEE_USER_AUTH: bool = False  # If False, require service account vars for GEE
     
     # Google Earth Engine
     GEE_SERVICE_ACCOUNT_KEY: Optional[str] = None

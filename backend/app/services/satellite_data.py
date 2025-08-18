@@ -20,6 +20,8 @@ except ImportError:
     GEE_AVAILABLE = False
     logger.warning("Google Earth Engine not available. Install earthengine-api package.")
 
+from app.core.config import settings
+
 
 class SatelliteDataService:
     """Service for fetching satellite data from various sources"""
@@ -30,7 +32,7 @@ class SatelliteDataService:
         self.pc_client = None
 
         # Initialize Google Earth Engine if available
-        if GEE_AVAILABLE:
+        if GEE_AVAILABLE and not settings.FORCE_MOCK_SATELLITE:
             self._initialize_gee()
     
     def _initialize_gee(self):
@@ -40,13 +42,14 @@ class SatelliteDataService:
             service_account_key = os.getenv('GEE_SERVICE_ACCOUNT_KEY')
             project_id = os.getenv('GEE_PROJECT_ID')
 
+            # Enforce service account unless user auth explicitly allowed
             if service_account_key and os.path.exists(service_account_key):
                 # Authenticate with service account
                 credentials = ee.ServiceAccountCredentials(None, service_account_key)
                 ee.Initialize(credentials, project=project_id)
                 self.gee_initialized = True
                 logger.info("Google Earth Engine initialized with service account")
-            else:
+            elif settings.ALLOW_GEE_USER_AUTH and not settings.FORCE_MOCK_SATELLITE:
                 # Try to authenticate with existing credentials
                 try:
                     ee.Initialize(project=project_id)
@@ -55,6 +58,9 @@ class SatelliteDataService:
                 except Exception:
                     logger.warning("Google Earth Engine authentication failed. Using mock data.")
                     self.gee_initialized = False
+            else:
+                logger.info("GEE service account key not provided (and user auth disabled); using mock satellite data.")
+                self.gee_initialized = False
 
         except Exception as e:
             logger.error(f"Failed to initialize Google Earth Engine: {e}")
@@ -73,7 +79,7 @@ class SatelliteDataService:
         - Soil moisture
         """
         try:
-            if self.gee_initialized and GEE_AVAILABLE:
+            if not settings.FORCE_MOCK_SATELLITE and self.gee_initialized and GEE_AVAILABLE:
                 return await self._get_gee_satellite_data(aoi)
             else:
                 logger.info("Using mock satellite data (GEE not available)")
@@ -187,7 +193,7 @@ class SatelliteDataService:
         Get NDVI time series for vegetation monitoring
         """
         try:
-            if self.gee_initialized and GEE_AVAILABLE:
+            if not settings.FORCE_MOCK_SATELLITE and self.gee_initialized and GEE_AVAILABLE:
                 return await self._get_gee_ndvi_timeseries(aoi, start_date, end_date)
             else:
                 # Mock NDVI time series data
@@ -268,7 +274,7 @@ class SatelliteDataService:
         Get satellite imagery collection for time-lapse generation
         """
         try:
-            if self.gee_initialized and GEE_AVAILABLE:
+            if not settings.FORCE_MOCK_SATELLITE and self.gee_initialized and GEE_AVAILABLE:
                 return await self._get_gee_imagery_collection(aoi, start_date, end_date)
             else:
                 # Mock imagery data
