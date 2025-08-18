@@ -1,4 +1,4 @@
-# Python 3.12 environment (updated). Original 3.11-only pins (TF 2.15, torch 2.1, sklearn 1.3, rasterio 1.3.9) upgraded for 3.12 support.
+# Python 3.11 environment (validated). For Python 3.12+, upgrade tensorflow, torch, scikit-learn, rasterio, potentially arcgis.
 # Core FastAPI dependencies
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
@@ -22,22 +22,21 @@ httpx==0.25.2
 aiohttp==3.9.1
 
 # Data Processing
-numpy==1.26.4
+numpy==1.26.4  # Compatible with TF 2.15 / Torch 2.1 on Python 3.11
 pandas==2.1.4
-geopandas==0.14.4
-rasterio==1.4.2
+geopandas==0.14.1
+rasterio==1.3.9
 xarray==2023.12.0
 
 # External Data Sources
-arcgis==2.4.1.3
+arcgis==2.4.1.3  # Works on Python 3.11 (3.12 requires broader upgrades)
 google-cloud-bigquery==3.17.2
 
 # Machine Learning
-scikit-learn==1.5.1
-tensorflow==2.18.0
-torch==2.4.0
-torchvision==0.19.0
-scipy==1.13.1
+scikit-learn==1.3.2
+tensorflow==2.15.0
+torch==2.1.2
+torchvision==0.16.2
 
 # Geospatial
 shapely==2.0.2
@@ -62,10 +61,9 @@ python-dotenv==1.0.0
 # celery==5.3.4  # Removed: using in-memory background tasks
 websockets==12.0
 
-# Build tools & helpers
+# Build tools (kept to ensure any sdists build cleanly)
 setuptools>=68.0.0
 wheel
-typing-extensions>=4.9.0
 
 # Development
 pytest==7.4.3
