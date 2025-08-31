@@ -1340,3 +1340,36 @@ CREATE TABLE hazard_alerts (
 2025-08-31 17:43:32,392 - app.core.background_tasks - INFO - Background task manager stopped
 2025-08-31 17:43:32,392 - app.core.cache - INFO - In-memory cache stopped
 2025-08-31 17:43:32,392 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 17:44:09,609 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 17:44:09,639 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 17:44:09,643 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 17:44:09,643 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 17:44:09,643 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:44:09,647 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 17:44:09,647 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:44:09,647 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 17:44:09,647 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:44:09,647 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 17:44:09,647 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:44:09,647 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 17:44:09,647 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:44:09,651 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 17:44:09,651 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:44:09,651 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 17:44:09,651 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:44:09,651 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 17:44:09,651 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:44:09,651 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 17:44:09,655 - main - INFO - Database tables created successfully
+2025-08-31 17:44:09,655 - app.core.cache - INFO - In-memory cache started
+2025-08-31 17:44:09,655 - main - INFO - Cache system initialized
+2025-08-31 17:44:09,655 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 17:44:09,655 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 17:44:09,655 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 17:44:09,655 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 17:44:09,655 - main - INFO - Background task manager initialized
+2025-08-31 17:44:09,876 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:44:09,926 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:44:09,975 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:44:10,022 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:46:05,673 - app.services.satellite_data - INFO - Google Earth Engine initialized with ServiceAccountCredentials from JSON

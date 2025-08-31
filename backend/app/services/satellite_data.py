@@ -41,7 +41,8 @@ class SatelliteDataService:
         try:
             # Prefer explicit ServiceAccountCredentials when a service account JSON is present
             project_id = settings.GEE_PROJECT_ID or os.getenv('GEE_PROJECT_ID')
-            adc_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+            # Support both settings and environment for ADC path
+            adc_path = settings.GOOGLE_APPLICATION_CREDENTIALS or os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
             direct_key = settings.GEE_CREDENTIALS_FILE or os.getenv('GEE_CREDENTIALS_FILE')
 
             # Back-compat: explicit service account (email + key path)
