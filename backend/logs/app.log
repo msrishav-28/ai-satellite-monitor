@@ -1256,3 +1256,87 @@ CREATE TABLE hazard_alerts (
 2025-08-31 17:29:20,640 - app.core.background_tasks - INFO - Background task manager stopped
 2025-08-31 17:29:20,640 - app.core.cache - INFO - In-memory cache stopped
 2025-08-31 17:29:20,640 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 17:33:44,959 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:33:45,017 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:33:45,095 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:33:45,150 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:38:45,342 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:38:45,410 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:38:45,488 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:38:45,535 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:41:30,426 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 17:41:30,446 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 17:41:30,450 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 17:41:30,450 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 17:41:30,450 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:41:30,452 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 17:41:30,452 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:41:30,453 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 17:41:30,453 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:41:30,454 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 17:41:30,454 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:41:30,455 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 17:41:30,455 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:41:30,456 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 17:41:30,456 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:41:30,457 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 17:41:30,457 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:41:30,458 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 17:41:30,458 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:41:30,460 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 17:41:30,460 - main - INFO - Database tables created successfully
+2025-08-31 17:41:30,460 - app.core.cache - INFO - In-memory cache started
+2025-08-31 17:41:30,461 - main - INFO - Cache system initialized
+2025-08-31 17:41:30,461 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 17:41:30,461 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 17:41:30,461 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 17:41:30,461 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 17:41:30,461 - main - INFO - Background task manager initialized
+2025-08-31 17:41:30,792 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:41:30,874 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:41:30,926 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:41:30,989 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:41:43,893 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 17:41:43,893 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 17:41:43,893 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 17:41:43,893 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 17:41:43,893 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 17:41:43,893 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 17:43:06,572 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 17:43:06,592 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 17:43:06,595 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 17:43:06,596 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 17:43:06,596 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:43:06,598 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 17:43:06,598 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:43:06,599 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 17:43:06,599 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:43:06,600 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 17:43:06,600 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:43:06,601 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 17:43:06,601 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:43:06,602 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 17:43:06,602 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:43:06,604 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 17:43:06,604 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:43:06,605 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 17:43:06,605 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:43:06,606 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 17:43:06,607 - main - INFO - Database tables created successfully
+2025-08-31 17:43:06,607 - app.core.cache - INFO - In-memory cache started
+2025-08-31 17:43:06,607 - main - INFO - Cache system initialized
+2025-08-31 17:43:06,607 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 17:43:06,607 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 17:43:06,608 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 17:43:06,608 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 17:43:06,608 - main - INFO - Background task manager initialized
+2025-08-31 17:43:06,856 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:43:06,929 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:43:06,979 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:43:07,030 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:43:32,392 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 17:43:32,392 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 17:43:32,392 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 17:43:32,392 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 17:43:32,392 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 17:43:32,392 - main - INFO - Shutting down Environmental Intelligence Platform Backend
