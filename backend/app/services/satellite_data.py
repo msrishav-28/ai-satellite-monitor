@@ -39,7 +39,7 @@ class SatelliteDataService:
     def _initialize_gee(self):
         """Initialize Google Earth Engine authentication"""
         try:
-            # Prefer Application Default Credentials (ADC) via GOOGLE_APPLICATION_CREDENTIALS or workload identity
+            # Prefer explicit ServiceAccountCredentials when a service account JSON is present
             project_id = settings.GEE_PROJECT_ID or os.getenv('GEE_PROJECT_ID')
             adc_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
             direct_key = settings.GEE_CREDENTIALS_FILE or os.getenv('GEE_CREDENTIALS_FILE')
@@ -48,55 +48,73 @@ class SatelliteDataService:
             sa_email = settings.GEE_SERVICE_ACCOUNT_EMAIL or os.getenv('GEE_SERVICE_ACCOUNT_EMAIL')
             sa_key_path = settings.GEE_SERVICE_ACCOUNT_KEY or os.getenv('GEE_SERVICE_ACCOUNT_KEY')
 
+            # Helper to init with SA JSON file by deriving client_email
+            def _init_with_sa_json(json_path: str) -> bool:
+                try:
+                    with open(json_path, 'r', encoding='utf-8') as f:
+                        sa_info = json.load(f)
+                    sa_email_guess = sa_info.get('client_email')
+                    if not sa_email_guess:
+                        logger.warning("Service account JSON missing client_email; cannot initialize Earth Engine")
+                        return False
+                    credentials = ee.ServiceAccountCredentials(sa_email_guess, json_path)
+                    ee.Initialize(credentials, project=project_id)
+                    logger.info("Google Earth Engine initialized with ServiceAccountCredentials from JSON")
+                    return True
+                except Exception as e:
+                    logger.warning(f"Failed to initialize Earth Engine with ServiceAccountCredentials from JSON: {e}")
+                    return False
+
+            # 1) If GEE_CREDENTIALS_FILE provided, try SA-first
             if direct_key and os.path.exists(direct_key):
                 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = direct_key
-                ee.Initialize(project=project_id)
-                self.gee_initialized = True
-                logger.info("Google Earth Engine initialized via ADC using GEE_CREDENTIALS_FILE")
-                return
+                if _init_with_sa_json(direct_key):
+                    self.gee_initialized = True
+                    return
+                # Fallback to ADC with the same file
+                try:
+                    ee.Initialize(project=project_id)
+                    self.gee_initialized = True
+                    logger.info("Google Earth Engine initialized via ADC using GEE_CREDENTIALS_FILE")
+                    return
+                except Exception as adc_from_direct_err:
+                    logger.warning(f"ADC init failed using GEE_CREDENTIALS_FILE: {adc_from_direct_err}")
 
+            # 2) If GOOGLE_APPLICATION_CREDENTIALS set, try SA-first then ADC
             if adc_path and os.path.exists(adc_path):
-                # First try pure ADC initialize
+                if _init_with_sa_json(adc_path):
+                    self.gee_initialized = True
+                    return
                 try:
                     ee.Initialize(project=project_id)
                     self.gee_initialized = True
                     logger.info("Google Earth Engine initialized via ADC using GOOGLE_APPLICATION_CREDENTIALS")
                     return
                 except Exception as adc_err:
-                    logger.warning(f"ADC initialization failed, attempting explicit SA creds from JSON: {adc_err}")
-                    # Many environments require explicit EE scope; try building ServiceAccountCredentials
-                    try:
-                        with open(adc_path, 'r', encoding='utf-8') as f:
-                            sa_info = json.load(f)
-                        sa_email_guess = sa_info.get('client_email')
-                        if sa_email_guess:
-                            credentials = ee.ServiceAccountCredentials(sa_email_guess, adc_path)
-                            ee.Initialize(credentials, project=project_id)
-                            self.gee_initialized = True
-                            logger.info("Google Earth Engine initialized with ServiceAccountCredentials derived from GOOGLE_APPLICATION_CREDENTIALS JSON")
-                            return
-                        else:
-                            logger.warning("No client_email found in GOOGLE_APPLICATION_CREDENTIALS JSON; cannot build ServiceAccountCredentials")
-                    except Exception as sa_from_adc_err:
-                        logger.warning(f"Failed to initialize using ServiceAccountCredentials from GOOGLE_APPLICATION_CREDENTIALS JSON: {sa_from_adc_err}")
+                    logger.warning(f"ADC initialization failed: {adc_err}")
 
+            # 3) Explicit SA email + key path (legacy)
             if sa_key_path and os.path.exists(sa_key_path) and sa_email:
-                credentials = ee.ServiceAccountCredentials(sa_email, sa_key_path)
-                ee.Initialize(credentials, project=project_id)
-                self.gee_initialized = True
-                logger.info("Google Earth Engine initialized with explicit service account credentials")
-                return
+                try:
+                    credentials = ee.ServiceAccountCredentials(sa_email, sa_key_path)
+                    ee.Initialize(credentials, project=project_id)
+                    self.gee_initialized = True
+                    logger.info("Google Earth Engine initialized with explicit service account credentials")
+                    return
+                except Exception as sa_explicit_err:
+                    logger.warning(f"Explicit SA initialization failed: {sa_explicit_err}")
 
+            # 4) Optional: try user auth if allowed
             if settings.ALLOW_GEE_USER_AUTH and not settings.FORCE_MOCK_SATELLITE:
                 try:
                     ee.Initialize(project=project_id)
                     self.gee_initialized = True
                     logger.info("Google Earth Engine initialized with existing user credentials")
                     return
-                except Exception:
-                    logger.warning("GEE user authentication failed; falling back to mock data")
+                except Exception as user_auth_err:
+                    logger.warning(f"GEE user authentication failed: {user_auth_err}")
 
-            logger.info("No GEE credentials available (and user auth disabled or failed); using mock data")
+            logger.info("GEE not initialized (no valid credentials or auth disabled); will use mock data")
             self.gee_initialized = False
 
         except Exception as e:
