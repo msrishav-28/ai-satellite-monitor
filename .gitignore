@@ -27,6 +27,7 @@ yarn-error.log*
 # Local env files
 .env*.local
 .env
+gee-service-account.json
 
 # Vercel
 .vercel
@@ -34,3 +35,26 @@ yarn-error.log*
 # Typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+*.egg
+
+# Python envs
+.venv/
+venv/
+env/
+
+# Databases & logs
+*.sqlite
+*.db
+backend/env_intel.db
+backend/logs/
+
+# Backend secrets
+backend/secrets/

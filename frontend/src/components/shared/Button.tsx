@@ -47,7 +47,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     lg: 'w-5 h-5'
   }
 
-  const MotionComponent = animate ? motion.button : 'button'
+  const MotionComponent = (animate ? motion.button : 'button') as any
   const motionProps = animate ? {
     whileHover: { scale: 1.02 },
     whileTap: { scale: 0.98 },
@@ -68,7 +68,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
       className={buttonClasses}
       disabled={disabled || loading}
       {...motionProps}
-      {...props}
+      // Spread known safe button props, avoid framer-motion type conflicts
+      {...(props as any)}
     >
       {/* Shimmer effect for primary and danger variants */}
       {(variant === 'primary' || variant === 'danger') && (

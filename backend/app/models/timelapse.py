@@ -3,7 +3,7 @@ Database models for timelapse generation and management
 """
 
 from sqlalchemy import Column, Integer, Float, String, DateTime, JSON, Boolean, Text
-from sqlalchemy.dialects.postgresql import UUID
+from app.core.database import GUID
 from datetime import datetime
 import uuid
 
@@ -14,7 +14,7 @@ class TimelapseRequest(Base):
     """Model for storing timelapse generation requests"""
     __tablename__ = "timelapse_requests"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)  # GeoJSON polygon
     
     # Time range
@@ -49,8 +49,8 @@ class TimelapseMetadata(Base):
     """Model for storing detailed timelapse metadata"""
     __tablename__ = "timelapse_metadata"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    request_id = Column(UUID(as_uuid=True), nullable=False)  # Reference to TimelapseRequest
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    request_id = Column(GUID(), nullable=False)  # Reference to TimelapseRequest
     
     # Video specifications
     frame_count = Column(Integer)
@@ -90,8 +90,8 @@ class TimelapseDownload(Base):
     """Model for tracking timelapse downloads"""
     __tablename__ = "timelapse_downloads"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    request_id = Column(UUID(as_uuid=True), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    request_id = Column(GUID(), nullable=False)
     
     # Download details
     file_type = Column(String(10))          # mp4, gif, webm
@@ -115,7 +115,7 @@ class SatelliteImagery(Base):
     """Model for storing satellite imagery metadata used in timelapses"""
     __tablename__ = "satellite_imagery"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     
     # Image identification
     image_id = Column(String(100), unique=True, nullable=False)
@@ -156,8 +156,8 @@ class ProcessingQueue(Base):
     """Model for managing timelapse processing queue"""
     __tablename__ = "processing_queue"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    request_id = Column(UUID(as_uuid=True), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    request_id = Column(GUID(), nullable=False)
     
     # Queue management
     queue_position = Column(Integer)

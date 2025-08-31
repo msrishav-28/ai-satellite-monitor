@@ -4,9 +4,10 @@ import React from 'react';
 interface AnimatedCardProps {
   children: React.ReactNode;
   className?: string;
-  initial?: object;
-  animate?: object;
-  transition?: object;
+  // Use 'any' to avoid strict Target/Variant types mismatch from framer-motion
+  initial?: any;
+  animate?: any;
+  transition?: any;
 }
 
 export const AnimatedCard: React.FC<AnimatedCardProps> = ({

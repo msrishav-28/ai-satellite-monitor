@@ -13,12 +13,14 @@ import {
   Download,
   Settings,
   Menu,
-  X
+  X,
+  Cloud,
 } from 'lucide-react'
 import clsx from 'clsx'
 
 const navItems = [
   { icon: Globe, label: 'Interactive Map', href: '/dashboard' },
+  { icon: Cloud, label: 'Environmental', href: '/dashboard/environmental' },
   { icon: Brain, label: 'AI Insights', href: '/dashboard/analysis' },
   { icon: BarChart3, label: 'Impact Analysis', href: '/dashboard/reports' },
   { icon: Satellite, label: 'Satellite View', href: '/dashboard/satellite' },

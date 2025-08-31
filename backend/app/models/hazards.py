@@ -3,7 +3,7 @@ Database models for hazard analysis and predictions
 """
 
 from sqlalchemy import Column, Integer, Float, String, DateTime, JSON, Boolean, Text, Enum
-from sqlalchemy.dialects.postgresql import UUID
+from app.core.database import GUID
 from datetime import datetime
 import uuid
 import enum
@@ -37,7 +37,7 @@ class HazardAnalysis(Base):
     """Model for storing hazard analysis results"""
     __tablename__ = "hazard_analysis"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)  # GeoJSON polygon
     
     # Overall analysis
@@ -66,8 +66,8 @@ class WildfireRisk(Base):
     """Model for detailed wildfire risk analysis"""
     __tablename__ = "wildfire_risk"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    analysis_id = Column(UUID(as_uuid=True), nullable=False)  # Reference to HazardAnalysis
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    analysis_id = Column(GUID(), nullable=False)  # Reference to HazardAnalysis
     
     risk_score = Column(Float, nullable=False)
     risk_level = Column(Enum(RiskLevel), nullable=False)
@@ -99,8 +99,8 @@ class FloodRisk(Base):
     """Model for detailed flood risk analysis"""
     __tablename__ = "flood_risk"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    analysis_id = Column(UUID(as_uuid=True), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    analysis_id = Column(GUID(), nullable=False)
     
     risk_score = Column(Float, nullable=False)
     risk_level = Column(Enum(RiskLevel), nullable=False)
@@ -132,8 +132,8 @@ class LandslideRisk(Base):
     """Model for detailed landslide risk analysis"""
     __tablename__ = "landslide_risk"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    analysis_id = Column(UUID(as_uuid=True), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    analysis_id = Column(GUID(), nullable=False)
     
     risk_score = Column(Float, nullable=False)
     risk_level = Column(Enum(RiskLevel), nullable=False)
@@ -164,7 +164,7 @@ class HazardAlert(Base):
     """Model for storing hazard alerts and warnings"""
     __tablename__ = "hazard_alerts"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     hazard_type = Column(Enum(HazardType), nullable=False)
     risk_level = Column(Enum(RiskLevel), nullable=False)
     

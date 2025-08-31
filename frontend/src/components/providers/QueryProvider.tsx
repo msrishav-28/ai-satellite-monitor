@@ -2,11 +2,13 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 
-// Conditionally import devtools only in development
-const ReactQueryDevtools = process.env.NODE_ENV === 'development'
-  ? require('@tanstack/react-query-devtools').ReactQueryDevtools
-  : () => null
+// Dynamically import devtools only on the client and only in development
+const ReactQueryDevtools = dynamic(
+  () => import('@tanstack/react-query-devtools').then(m => m.ReactQueryDevtools),
+  { ssr: false }
+)
 
 export default function QueryProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -25,7 +27,9 @@ export default function QueryProvider({ children }: { children: React.ReactNode 
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {process.env.NODE_ENV === 'development' ? (
+        <ReactQueryDevtools initialIsOpen={false} />
+      ) : null}
     </QueryClientProvider>
   )
 }

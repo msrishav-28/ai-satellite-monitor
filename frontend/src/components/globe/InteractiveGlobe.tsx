@@ -41,22 +41,24 @@ export default function InteractiveGlobe({ onAOISelect, onLoadingChange }: Props
     const fetchLayerData = async (layerId: string) => {
       onLoadingChange(true)
       try {
+        const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
         let url = ''
         const isArcGISLayer = layerId === 'arcgis-air-quality'
         const isAirViewLayer = layerId === 'google-airview'
-        if (isArcGISLayer) {
-          url = '/api/air-quality/arcgis'
-        } else if (isAirViewLayer) {
-          url = '/api/air-quality/airview'
-        } else {
-          url = `/api/map-layer?id=${layerId}`
+        // Skip fetching for disabled premium layers (backend returns 404)
+        if (isArcGISLayer || isAirViewLayer) {
+          onLoadingChange(false)
+          return
         }
+        url = `${apiBase}/api/v1/map-layer?id=${layerId}`
         const response = await fetch(url)
         if (!response.ok) {
           throw new Error(`Failed to fetch data for layer: ${layerId}`)
         }
         const data = await response.json()
-        setLayerData((prev) => ({ ...prev, [layerId]: data }))
+        // For general map layers, the backend wraps GeoJSON in { success, message, data }
+        const geojson = (!isArcGISLayer && !isAirViewLayer && data && data.data) ? data.data : data
+        setLayerData((prev) => ({ ...prev, [layerId]: geojson }))
       } catch (error) {
         console.error(error)
       } finally {

@@ -3,7 +3,7 @@ Database models for impact analysis
 """
 
 from sqlalchemy import Column, Integer, Float, String, DateTime, JSON, Boolean, Text
-from sqlalchemy.dialects.postgresql import UUID
+from app.core.database import GUID
 from datetime import datetime
 import uuid
 
@@ -14,7 +14,7 @@ class ImpactAnalysis(Base):
     """Model for storing comprehensive impact analysis results"""
     __tablename__ = "impact_analysis"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)  # GeoJSON polygon
     
     # Overall assessment
@@ -71,7 +71,7 @@ class CarbonAnalysis(Base):
     """Model for detailed carbon impact analysis"""
     __tablename__ = "carbon_analysis"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)
     
     # Total carbon impact
@@ -118,7 +118,7 @@ class BiodiversityImpact(Base):
     """Model for biodiversity impact assessment"""
     __tablename__ = "biodiversity_impact"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)
     
     # Species impact
@@ -158,7 +158,7 @@ class AgricultureImpact(Base):
     """Model for agricultural impact assessment"""
     __tablename__ = "agriculture_impact"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)
     
     # Yield impact
@@ -197,7 +197,7 @@ class WaterResourceImpact(Base):
     """Model for water resource impact assessment"""
     __tablename__ = "water_resource_impact"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)
     
     # Surface water impact

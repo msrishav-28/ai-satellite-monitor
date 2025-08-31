@@ -3,7 +3,7 @@ Database models for environmental data
 """
 
 from sqlalchemy import Column, Integer, Float, String, DateTime, JSON, Boolean, Text
-from sqlalchemy.dialects.postgresql import UUID
+from app.core.database import GUID
 from datetime import datetime
 import uuid
 
@@ -14,7 +14,7 @@ class EnvironmentalData(Base):
     """Model for storing environmental metrics data"""
     __tablename__ = "environmental_data"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     latitude = Column(Float, nullable=False, index=True)
     longitude = Column(Float, nullable=False, index=True)
     
@@ -45,7 +45,7 @@ class SatelliteData(Base):
     """Model for storing satellite imagery data and indices"""
     __tablename__ = "satellite_data"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)  # GeoJSON polygon
     
     # Vegetation indices
@@ -104,7 +104,7 @@ class WeatherHistory(Base):
     """Model for storing historical weather data"""
     __tablename__ = "weather_history"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     latitude = Column(Float, nullable=False, index=True)
     longitude = Column(Float, nullable=False, index=True)
     

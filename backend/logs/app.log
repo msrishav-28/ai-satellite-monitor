@@ -1,1 +1,1258 @@
 2025-07-31 01:22:50,048 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:45:17,463 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:45:17,484 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:45:17,493 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:45:17,494 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:45:17,494 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,497 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("environmental_data")
+2025-08-31 16:45:17,497 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,499 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:45:17,499 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,500 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("satellite_data")
+2025-08-31 16:45:17,500 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,500 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:45:17,501 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,501 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("weather_history")
+2025-08-31 16:45:17,501 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,502 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:45:17,502 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,503 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_analysis")
+2025-08-31 16:45:17,503 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,504 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:45:17,504 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,505 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("wildfire_risk")
+2025-08-31 16:45:17,505 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,506 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:45:17,506 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,507 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("flood_risk")
+2025-08-31 16:45:17,507 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,508 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:45:17,508 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,510 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("landslide_risk")
+2025-08-31 16:45:17,510 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,510 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:45:17,511 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,512 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_alerts")
+2025-08-31 16:45:17,512 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:45:17,515 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-08-31 16:55:20,058 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:55:20,080 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:55:20,083 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:55:20,084 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:55:20,084 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,085 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("environmental_data")
+2025-08-31 16:55:20,085 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,086 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:55:20,086 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,087 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("satellite_data")
+2025-08-31 16:55:20,087 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,088 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:55:20,088 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,090 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("weather_history")
+2025-08-31 16:55:20,090 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,091 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:55:20,091 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,092 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_analysis")
+2025-08-31 16:55:20,092 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,093 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:55:20,093 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,094 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("wildfire_risk")
+2025-08-31 16:55:20,094 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,094 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:55:20,094 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,095 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("flood_risk")
+2025-08-31 16:55:20,095 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,096 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:55:20,096 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,097 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("landslide_risk")
+2025-08-31 16:55:20,097 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,098 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:55:20,098 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,099 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_alerts")
+2025-08-31 16:55:20,099 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:20,101 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-08-31 16:55:40,162 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:55:40,182 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:55:40,185 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:55:40,186 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:55:40,186 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,188 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("environmental_data")
+2025-08-31 16:55:40,188 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,189 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:55:40,189 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,190 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("satellite_data")
+2025-08-31 16:55:40,190 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,191 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:55:40,191 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,192 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("weather_history")
+2025-08-31 16:55:40,192 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,193 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:55:40,193 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,194 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_analysis")
+2025-08-31 16:55:40,194 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,195 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:55:40,195 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,196 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("wildfire_risk")
+2025-08-31 16:55:40,196 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,197 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:55:40,197 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,198 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("flood_risk")
+2025-08-31 16:55:40,198 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,199 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:55:40,199 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,200 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("landslide_risk")
+2025-08-31 16:55:40,200 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,200 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:55:40,200 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,201 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_alerts")
+2025-08-31 16:55:40,201 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:55:40,203 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-08-31 16:56:54,752 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:56:54,752 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:56:54,774 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:56:54,774 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:56:54,777 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:56:54,777 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:56:54,778 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:56:54,778 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:56:54,778 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,778 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,779 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("environmental_data")
+2025-08-31 16:56:54,790 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,791 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:56:54,791 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,792 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("satellite_data")
+2025-08-31 16:56:54,792 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,793 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:56:54,793 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,794 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("weather_history")
+2025-08-31 16:56:54,794 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,795 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:56:54,795 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("environmental_data")
+2025-08-31 16:56:54,796 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,796 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,796 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_analysis")
+2025-08-31 16:56:54,796 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:56:54,796 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,797 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,797 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:56:54,797 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("satellite_data")
+2025-08-31 16:56:54,797 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,798 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,798 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("wildfire_risk")
+2025-08-31 16:56:54,798 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:56:54,798 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,798 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,799 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:56:54,799 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("weather_history")
+2025-08-31 16:56:54,799 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,799 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,800 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("flood_risk")
+2025-08-31 16:56:54,800 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:56:54,800 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,802 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:56:54,802 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,802 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_analysis")
+2025-08-31 16:56:54,802 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,803 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("landslide_risk")
+2025-08-31 16:56:54,803 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,803 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:56:54,803 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,804 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:56:54,804 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,804 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("wildfire_risk")
+2025-08-31 16:56:54,804 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,805 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_alerts")
+2025-08-31 16:56:54,805 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:56:54,805 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,805 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,806 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("flood_risk")
+2025-08-31 16:56:54,806 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,806 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-08-31 16:56:54,808 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:56:54,808 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,809 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("landslide_risk")
+2025-08-31 16:56:54,809 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,810 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:56:54,810 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,811 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_alerts")
+2025-08-31 16:56:54,811 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:56:54,813 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-08-31 16:57:04,927 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:57:04,927 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:57:04,952 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:57:04,952 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:57:04,955 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:57:04,955 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:57:04,956 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:57:04,956 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,956 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:57:04,956 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,958 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("environmental_data")
+2025-08-31 16:57:04,958 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,958 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("environmental_data")
+2025-08-31 16:57:04,958 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,958 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:57:04,958 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:57:04,960 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,960 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,960 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("satellite_data")
+2025-08-31 16:57:04,960 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("satellite_data")
+2025-08-31 16:57:04,960 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,960 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,962 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:57:04,962 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:57:04,962 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,962 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,962 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("weather_history")
+2025-08-31 16:57:04,962 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("weather_history")
+2025-08-31 16:57:04,962 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,962 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,964 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:57:04,964 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:57:04,964 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,964 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,966 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_analysis")
+2025-08-31 16:57:04,966 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_analysis")
+2025-08-31 16:57:04,966 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,966 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,967 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:57:04,967 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:57:04,967 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,967 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,968 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("wildfire_risk")
+2025-08-31 16:57:04,968 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("wildfire_risk")
+2025-08-31 16:57:04,968 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,969 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,970 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:57:04,970 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:57:04,970 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,970 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,971 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("flood_risk")
+2025-08-31 16:57:04,971 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("flood_risk")
+2025-08-31 16:57:04,971 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,971 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,971 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:57:04,972 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,972 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,973 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("landslide_risk")
+2025-08-31 16:57:04,973 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("landslide_risk")
+2025-08-31 16:57:04,973 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,973 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,973 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:57:04,974 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:57:04,974 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,974 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,974 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_alerts")
+2025-08-31 16:57:04,974 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_alerts")
+2025-08-31 16:57:04,974 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,975 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:04,976 - sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE environmental_data (
+	id CHAR(36) NOT NULL, 
+	latitude FLOAT NOT NULL, 
+	longitude FLOAT NOT NULL, 
+	temperature FLOAT, 
+	apparent_temperature FLOAT, 
+	humidity INTEGER, 
+	wind_speed FLOAT, 
+	wind_direction INTEGER, 
+	pressure FLOAT, 
+	visibility FLOAT, 
+	weather_description VARCHAR(100), 
+	aqi_value INTEGER, 
+	aqi_category VARCHAR(50), 
+	aqi_source VARCHAR(50), 
+	pollutants JSON, 
+	data_source VARCHAR(100), 
+	timestamp DATETIME, 
+	created_at DATETIME, 
+	updated_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+2025-08-31 16:57:04,990 - sqlalchemy.engine.Engine - INFO - [no key 0.01293s] ()
+2025-08-31 16:57:04,990 - sqlalchemy.engine.Engine - INFO - [no key 0.01291s] ()
+2025-08-31 16:57:04,995 - sqlalchemy.engine.Engine - INFO - CREATE INDEX ix_environmental_data_timestamp ON environmental_data (timestamp)
+2025-08-31 16:57:04,996 - sqlalchemy.engine.Engine - INFO - [no key 0.00036s] ()
+2025-08-31 16:57:04,999 - sqlalchemy.engine.Engine - INFO - CREATE INDEX ix_environmental_data_longitude ON environmental_data (longitude)
+2025-08-31 16:57:04,999 - sqlalchemy.engine.Engine - INFO - [no key 0.00026s] ()
+2025-08-31 16:57:05,003 - sqlalchemy.engine.Engine - INFO - CREATE INDEX ix_environmental_data_latitude ON environmental_data (latitude)
+2025-08-31 16:57:05,003 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-08-31 16:57:05,003 - sqlalchemy.engine.Engine - INFO - [no key 0.00038s] ()
+2025-08-31 16:57:05,006 - sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE satellite_data (
+	id CHAR(36) NOT NULL, 
+	aoi_geometry JSON NOT NULL, 
+	ndvi FLOAT, 
+	evi FLOAT, 
+	savi FLOAT, 
+	land_surface_temperature FLOAT, 
+	temperature_anomaly FLOAT, 
+	precipitation FLOAT, 
+	precipitation_anomaly FLOAT, 
+	elevation FLOAT, 
+	slope FLOAT, 
+	aspect FLOAT, 
+	land_cover VARCHAR(50), 
+	forest_percentage FLOAT, 
+	urban_percentage FLOAT, 
+	soil_moisture FLOAT, 
+	soil_type VARCHAR(50), 
+	road_distance FLOAT, 
+	settlement_distance FLOAT, 
+	fault_distance FLOAT, 
+	fuel_load FLOAT, 
+	fuel_moisture FLOAT, 
+	drainage_density FLOAT, 
+	river_distance FLOAT, 
+	cloud_cover FLOAT, 
+	data_quality VARCHAR(20), 
+	acquisition_date DATETIME, 
+	data_source VARCHAR(100), 
+	processing_level VARCHAR(20), 
+	created_at DATETIME, 
+	updated_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+2025-08-31 16:57:05,007 - sqlalchemy.engine.Engine - INFO - [no key 0.00090s] ()
+2025-08-31 16:57:05,011 - sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE weather_history (
+	id CHAR(36) NOT NULL, 
+	latitude FLOAT NOT NULL, 
+	longitude FLOAT NOT NULL, 
+	temperature FLOAT, 
+	humidity INTEGER, 
+	wind_speed FLOAT, 
+	wind_direction INTEGER, 
+	pressure FLOAT, 
+	precipitation FLOAT, 
+	timestamp DATETIME NOT NULL, 
+	data_source VARCHAR(100), 
+	created_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+2025-08-31 16:57:05,011 - sqlalchemy.engine.Engine - INFO - [no key 0.00065s] ()
+2025-08-31 16:57:05,015 - sqlalchemy.engine.Engine - INFO - CREATE INDEX ix_weather_history_latitude ON weather_history (latitude)
+2025-08-31 16:57:05,015 - sqlalchemy.engine.Engine - INFO - [no key 0.00032s] ()
+2025-08-31 16:57:05,018 - sqlalchemy.engine.Engine - INFO - CREATE INDEX ix_weather_history_longitude ON weather_history (longitude)
+2025-08-31 16:57:05,019 - sqlalchemy.engine.Engine - INFO - [no key 0.00045s] ()
+2025-08-31 16:57:05,022 - sqlalchemy.engine.Engine - INFO - CREATE INDEX ix_weather_history_timestamp ON weather_history (timestamp)
+2025-08-31 16:57:05,023 - sqlalchemy.engine.Engine - INFO - [no key 0.00035s] ()
+2025-08-31 16:57:05,026 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-08-31 16:57:24,076 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:57:24,078 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:57:24,099 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:57:24,099 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:57:24,103 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:57:24,103 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:57:24,104 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:57:24,104 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:57:24,105 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,105 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,117 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:57:24,117 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,117 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,119 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:57:24,119 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:57:24,119 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,119 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,120 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:57:24,120 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:57:24,120 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,120 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,121 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_analysis")
+2025-08-31 16:57:24,121 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_analysis")
+2025-08-31 16:57:24,121 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,121 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,121 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:57:24,121 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:57:24,123 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,123 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,123 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("wildfire_risk")
+2025-08-31 16:57:24,123 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("wildfire_risk")
+2025-08-31 16:57:24,123 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,123 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,124 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:57:24,124 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:57:24,124 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,124 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,125 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("flood_risk")
+2025-08-31 16:57:24,125 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("flood_risk")
+2025-08-31 16:57:24,125 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,125 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,126 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:57:24,126 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:57:24,128 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,128 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,128 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("landslide_risk")
+2025-08-31 16:57:24,128 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("landslide_risk")
+2025-08-31 16:57:24,128 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,128 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,130 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:57:24,130 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:57:24,130 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,130 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,131 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_alerts")
+2025-08-31 16:57:24,131 - sqlalchemy.engine.Engine - INFO - PRAGMA temp.table_info("hazard_alerts")
+2025-08-31 16:57:24,131 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,131 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:24,133 - sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE hazard_analysis (
+	id CHAR(36) NOT NULL, 
+	aoi_geometry JSON NOT NULL, 
+	overall_risk_score FLOAT NOT NULL, 
+	priority_hazards JSON, 
+	wildfire_risk_score FLOAT, 
+	flood_risk_score FLOAT, 
+	landslide_risk_score FLOAT, 
+	deforestation_risk_score FLOAT, 
+	heatwave_risk_score FLOAT, 
+	cyclone_risk_score FLOAT, 
+	model_version VARCHAR(20), 
+	confidence_score FLOAT, 
+	analysis_timestamp DATETIME, 
+	created_at DATETIME, 
+	updated_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+2025-08-31 16:57:24,133 - sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE hazard_analysis (
+	id CHAR(36) NOT NULL, 
+	aoi_geometry JSON NOT NULL, 
+	overall_risk_score FLOAT NOT NULL, 
+	priority_hazards JSON, 
+	wildfire_risk_score FLOAT, 
+	flood_risk_score FLOAT, 
+	landslide_risk_score FLOAT, 
+	deforestation_risk_score FLOAT, 
+	heatwave_risk_score FLOAT, 
+	cyclone_risk_score FLOAT, 
+	model_version VARCHAR(20), 
+	confidence_score FLOAT, 
+	analysis_timestamp DATETIME, 
+	created_at DATETIME, 
+	updated_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+2025-08-31 16:57:24,134 - sqlalchemy.engine.Engine - INFO - [no key 0.00073s] ()
+2025-08-31 16:57:24,134 - sqlalchemy.engine.Engine - INFO - [no key 0.00067s] ()
+2025-08-31 16:57:24,138 - sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE wildfire_risk (
+	id CHAR(36) NOT NULL, 
+	analysis_id CHAR(36) NOT NULL, 
+	risk_score FLOAT NOT NULL, 
+	risk_level VARCHAR(8) NOT NULL, 
+	trend VARCHAR(6) NOT NULL, 
+	confidence FLOAT NOT NULL, 
+	ignition_probability FLOAT, 
+	spread_rate FLOAT, 
+	fuel_moisture FLOAT, 
+	fire_weather_index FLOAT, 
+	factors JSON, 
+	recommendations JSON, 
+	land_surface_temperature FLOAT, 
+	vegetation_index FLOAT, 
+	wind_speed FLOAT, 
+	humidity FLOAT, 
+	slope FLOAT, 
+	fuel_load FLOAT, 
+	created_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+2025-08-31 16:57:24,139 - sqlalchemy.engine.Engine - INFO - [no key 0.00071s] ()
+2025-08-31 16:57:24,139 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-08-31 16:57:24,143 - sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE flood_risk (
+	id CHAR(36) NOT NULL, 
+	analysis_id CHAR(36) NOT NULL, 
+	risk_score FLOAT NOT NULL, 
+	risk_level VARCHAR(8) NOT NULL, 
+	trend VARCHAR(6) NOT NULL, 
+	confidence FLOAT NOT NULL, 
+	return_period INTEGER, 
+	max_depth FLOAT, 
+	affected_area FLOAT, 
+	drainage_capacity FLOAT, 
+	factors JSON, 
+	recommendations JSON, 
+	precipitation FLOAT, 
+	elevation FLOAT, 
+	slope FLOAT, 
+	land_cover VARCHAR(50), 
+	soil_moisture FLOAT, 
+	drainage_density FLOAT, 
+	created_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+2025-08-31 16:57:24,144 - sqlalchemy.engine.Engine - INFO - [no key 0.00082s] ()
+2025-08-31 16:57:24,148 - sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE landslide_risk (
+	id CHAR(36) NOT NULL, 
+	analysis_id CHAR(36) NOT NULL, 
+	risk_score FLOAT NOT NULL, 
+	risk_level VARCHAR(8) NOT NULL, 
+	trend VARCHAR(6) NOT NULL, 
+	confidence FLOAT NOT NULL, 
+	slope_stability FLOAT, 
+	soil_saturation FLOAT, 
+	trigger_threshold FLOAT, 
+	factors JSON, 
+	recommendations JSON, 
+	slope_angle FLOAT, 
+	soil_type VARCHAR(50), 
+	land_cover VARCHAR(50), 
+	precipitation FLOAT, 
+	fault_distance FLOAT, 
+	road_distance FLOAT, 
+	created_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+2025-08-31 16:57:24,148 - sqlalchemy.engine.Engine - INFO - [no key 0.00077s] ()
+2025-08-31 16:57:24,153 - sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE hazard_alerts (
+	id CHAR(36) NOT NULL, 
+	hazard_type VARCHAR(13) NOT NULL, 
+	risk_level VARCHAR(8) NOT NULL, 
+	title VARCHAR(200) NOT NULL, 
+	description TEXT, 
+	location_name VARCHAR(200), 
+	aoi_geometry JSON, 
+	issued_at DATETIME, 
+	valid_until DATETIME, 
+	is_active BOOLEAN, 
+	severity VARCHAR(20), 
+	urgency VARCHAR(20), 
+	created_at DATETIME, 
+	updated_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+2025-08-31 16:57:24,155 - sqlalchemy.engine.Engine - INFO - [no key 0.00069s] ()
+2025-08-31 16:57:24,157 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:57:24,158 - main - INFO - Database tables created successfully
+2025-08-31 16:57:24,158 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:57:24,158 - main - INFO - Cache system initialized
+2025-08-31 16:57:24,159 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:57:24,159 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:57:24,159 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:57:24,159 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:57:24,159 - main - INFO - Background task manager initialized
+2025-08-31 16:57:24,393 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:24,480 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:24,574 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:24,625 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:27,086 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 16:57:27,086 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 16:57:27,086 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 16:57:27,086 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:57:27,086 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:57:27,086 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:57:30,407 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:57:30,434 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:57:30,437 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:57:30,438 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:57:30,438 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:30,439 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:57:30,439 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:30,441 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:57:30,441 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:30,442 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:57:30,442 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:30,443 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:57:30,443 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:30,445 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:57:30,445 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:30,445 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:57:30,446 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:30,446 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:57:30,447 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:30,448 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:57:30,448 - main - INFO - Database tables created successfully
+2025-08-31 16:57:30,450 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:57:30,450 - main - INFO - Cache system initialized
+2025-08-31 16:57:30,450 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:57:30,450 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:57:30,450 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:57:30,450 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:57:30,450 - main - INFO - Background task manager initialized
+2025-08-31 16:57:30,713 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:30,792 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:30,840 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:30,917 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:30,983 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:57:31,004 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:57:31,009 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:57:31,009 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:57:31,009 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:31,011 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:57:31,011 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:31,012 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:57:31,012 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:31,013 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:57:31,013 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:31,014 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:57:31,014 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:31,015 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:57:31,015 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:31,016 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:57:31,016 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:31,017 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:57:31,017 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:31,019 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:57:31,019 - main - INFO - Database tables created successfully
+2025-08-31 16:57:31,019 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:57:31,020 - main - INFO - Cache system initialized
+2025-08-31 16:57:31,020 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:57:31,020 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:57:31,020 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:57:31,020 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:57:31,020 - main - INFO - Background task manager initialized
+2025-08-31 16:57:31,286 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:31,358 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:31,438 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:31,493 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:39,963 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 16:57:39,963 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 16:57:39,964 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 16:57:39,964 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 16:57:39,964 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 16:57:39,964 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:57:39,964 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:57:39,964 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:57:39,964 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:57:39,964 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:57:39,964 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:57:43,867 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:57:43,867 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:57:43,888 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:57:43,889 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:57:43,892 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:57:43,892 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:57:43,892 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,893 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:57:43,893 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:57:43,893 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,894 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:57:43,894 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,894 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:57:43,894 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,896 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:57:43,896 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,896 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:57:43,897 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,897 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:57:43,897 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,897 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:57:43,898 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:57:43,898 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,898 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,899 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:57:43,899 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:57:43,899 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,899 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,900 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:57:43,900 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:57:43,901 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,901 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,901 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:57:43,901 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:57:43,902 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,902 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,903 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:57:43,903 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:43,903 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:57:43,904 - main - INFO - Database tables created successfully
+2025-08-31 16:57:43,904 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:57:43,905 - main - INFO - Cache system initialized
+2025-08-31 16:57:43,905 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:57:43,905 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:57:43,905 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:57:43,905 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:57:43,905 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:57:43,905 - main - INFO - Background task manager initialized
+2025-08-31 16:57:43,905 - main - INFO - Database tables created successfully
+2025-08-31 16:57:43,906 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:57:43,906 - main - INFO - Cache system initialized
+2025-08-31 16:57:43,906 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:57:43,906 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:57:43,906 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:57:43,906 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:57:43,907 - main - INFO - Background task manager initialized
+2025-08-31 16:57:44,109 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:44,111 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:44,169 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:44,171 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:44,224 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:44,227 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:44,306 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:46,607 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 16:57:46,608 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 16:57:46,608 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 16:57:46,609 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:57:46,609 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:57:46,609 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:57:46,638 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 16:57:46,638 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 16:57:46,638 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 16:57:46,638 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:57:46,640 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:57:46,640 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:57:50,412 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:57:50,412 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:57:50,434 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:57:50,435 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:57:50,437 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:57:50,437 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:57:50,437 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:57:50,437 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,438 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:57:50,438 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,440 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:57:50,440 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:57:50,440 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,440 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,441 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:57:50,441 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:57:50,441 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,441 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,442 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:57:50,442 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:57:50,442 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,442 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,443 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:57:50,443 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:57:50,444 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,444 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,445 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:57:50,445 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:57:50,445 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,445 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,446 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:57:50,446 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:57:50,446 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,446 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,446 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:57:50,446 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,446 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:57:50,449 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:57:50,449 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:57:50,449 - main - INFO - Database tables created successfully
+2025-08-31 16:57:50,449 - main - INFO - Database tables created successfully
+2025-08-31 16:57:50,449 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:57:50,449 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:57:50,449 - main - INFO - Cache system initialized
+2025-08-31 16:57:50,449 - main - INFO - Cache system initialized
+2025-08-31 16:57:50,451 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:57:50,451 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:57:50,451 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:57:50,451 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:57:50,451 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:57:50,451 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:57:50,451 - main - INFO - Background task manager initialized
+2025-08-31 16:57:50,451 - main - INFO - Background task manager initialized
+2025-08-31 16:57:50,680 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:50,745 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:50,805 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:50,876 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:50,880 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:57:57,835 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 16:57:57,836 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 16:57:57,836 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 16:57:57,836 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:57:57,836 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:57:57,837 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:57:57,946 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 16:57:57,946 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 16:57:57,947 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 16:57:57,947 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:57:57,947 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:57:57,947 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:58:01,660 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:58:01,685 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:58:01,689 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:58:01,689 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:58:01,689 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,691 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:58:01,691 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,692 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:58:01,692 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,693 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:58:01,694 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,695 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:58:01,695 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,696 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:58:01,696 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,696 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:58:01,696 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,698 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:58:01,698 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,698 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:58:01,700 - main - INFO - Database tables created successfully
+2025-08-31 16:58:01,700 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:58:01,700 - main - INFO - Cache system initialized
+2025-08-31 16:58:01,700 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:58:01,700 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:58:01,701 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:58:01,701 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:58:01,701 - main - INFO - Background task manager initialized
+2025-08-31 16:58:01,745 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:58:01,767 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:58:01,769 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:58:01,769 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:58:01,769 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,769 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:58:01,769 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,774 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:58:01,774 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,775 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:58:01,775 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,776 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:58:01,777 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,777 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:58:01,777 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,779 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:58:01,779 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,780 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:58:01,780 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:01,781 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:58:01,781 - main - INFO - Database tables created successfully
+2025-08-31 16:58:01,781 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:58:01,781 - main - INFO - Cache system initialized
+2025-08-31 16:58:01,781 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:58:01,781 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:58:01,781 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:58:01,781 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:58:01,781 - main - INFO - Background task manager initialized
+2025-08-31 16:58:01,942 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:01,993 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:02,002 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:02,050 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:02,050 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:02,117 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:02,119 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:02,193 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:08,510 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 16:58:08,511 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 16:58:08,511 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 16:58:08,511 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:58:08,511 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:58:08,511 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:58:08,542 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 16:58:08,542 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 16:58:08,543 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 16:58:08,543 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:58:08,543 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:58:08,543 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:58:12,314 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:58:12,322 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:58:12,335 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:58:12,339 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:58:12,339 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:58:12,339 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,341 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:58:12,341 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,342 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:58:12,342 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,343 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:58:12,343 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,344 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:58:12,344 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,345 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:58:12,345 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:58:12,345 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,346 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:58:12,347 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,347 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:58:12,348 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,349 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:58:12,349 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:58:12,349 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:58:12,350 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,350 - main - INFO - Database tables created successfully
+2025-08-31 16:58:12,350 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:58:12,351 - main - INFO - Cache system initialized
+2025-08-31 16:58:12,351 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:58:12,351 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:58:12,351 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:58:12,351 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:58:12,351 - main - INFO - Background task manager initialized
+2025-08-31 16:58:12,351 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:58:12,352 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,352 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:58:12,353 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,353 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:58:12,354 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,354 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:58:12,354 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,355 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:58:12,355 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,357 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:58:12,357 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,358 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:58:12,359 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:12,360 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:58:12,361 - main - INFO - Database tables created successfully
+2025-08-31 16:58:12,361 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:58:12,361 - main - INFO - Cache system initialized
+2025-08-31 16:58:12,361 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:58:12,361 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:58:12,362 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:58:12,362 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:58:12,362 - main - INFO - Background task manager initialized
+2025-08-31 16:58:12,557 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:12,559 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:12,623 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:12,706 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:12,782 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:12,786 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:22,390 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:58:22,413 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:58:22,416 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:58:22,416 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:58:22,417 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:22,418 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:58:22,418 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:22,419 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:58:22,420 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:22,420 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:58:22,420 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:22,421 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:58:22,421 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:22,422 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:58:22,422 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:22,423 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:58:22,423 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:22,424 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:58:22,424 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:58:22,426 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:58:22,426 - main - INFO - Database tables created successfully
+2025-08-31 16:58:22,426 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:58:22,426 - main - INFO - Cache system initialized
+2025-08-31 16:58:22,426 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:58:22,426 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:58:22,428 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:58:22,428 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:58:22,428 - main - INFO - Background task manager initialized
+2025-08-31 16:58:22,681 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:22,749 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:22,838 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:22,917 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:58:35,342 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 16:58:35,343 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 16:58:35,343 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 16:58:35,343 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:58:35,343 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:58:35,343 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:59:01,576 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:59:01,596 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:59:01,599 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:59:01,600 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:59:01,600 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:01,601 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:59:01,601 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:01,602 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:59:01,602 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:01,603 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:59:01,604 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:01,604 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:59:01,606 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:01,606 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:59:01,606 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:01,607 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:59:01,607 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:01,608 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:59:01,608 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:01,610 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:59:01,610 - main - INFO - Database tables created successfully
+2025-08-31 16:59:01,611 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:59:01,611 - main - INFO - Cache system initialized
+2025-08-31 16:59:01,611 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:59:01,611 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:59:01,611 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:59:01,611 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:59:01,611 - main - INFO - Background task manager initialized
+2025-08-31 16:59:01,922 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:59:01,987 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:59:02,037 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:59:02,116 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:59:12,530 - app.services.satellite_data - INFO - No GEE credentials available (and user auth disabled or failed); using mock data
+2025-08-31 16:59:45,783 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 16:59:45,783 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 16:59:45,783 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 16:59:45,783 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 16:59:45,785 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:59:45,785 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:59:45,785 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 16:59:45,785 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:59:45,785 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 16:59:45,785 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:59:45,785 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:59:45,785 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 16:59:50,058 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:59:50,058 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:59:50,070 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 16:59:50,080 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:59:50,080 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:59:50,084 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:59:50,085 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:59:50,085 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:59:50,085 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,085 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,086 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:59:50,087 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:59:50,087 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,087 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,088 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:59:50,088 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:59:50,088 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,088 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,089 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:59:50,089 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:59:50,089 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,089 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,090 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:59:50,090 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:59:50,090 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,092 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:59:50,092 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:59:50,093 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,093 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,094 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:59:50,094 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:59:50,094 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,094 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,095 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:59:50,095 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:59:50,095 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,095 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,096 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 16:59:50,097 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:59:50,097 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:59:50,097 - main - INFO - Database tables created successfully
+2025-08-31 16:59:50,097 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:59:50,097 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:59:50,098 - main - INFO - Cache system initialized
+2025-08-31 16:59:50,098 - main - INFO - Cache system initialized
+2025-08-31 16:59:50,098 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:59:50,098 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:59:50,098 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:59:50,098 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:59:50,098 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:59:50,098 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:59:50,098 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:59:50,098 - main - INFO - Background task manager initialized
+2025-08-31 16:59:50,098 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:59:50,099 - main - INFO - Background task manager initialized
+2025-08-31 16:59:50,099 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 16:59:50,101 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 16:59:50,101 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,103 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 16:59:50,103 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,104 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 16:59:50,105 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,105 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 16:59:50,106 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,106 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 16:59:50,107 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,107 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 16:59:50,108 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,110 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 16:59:50,111 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,112 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 16:59:50,112 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 16:59:50,114 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 16:59:50,114 - main - INFO - Database tables created successfully
+2025-08-31 16:59:50,114 - app.core.cache - INFO - In-memory cache started
+2025-08-31 16:59:50,115 - main - INFO - Cache system initialized
+2025-08-31 16:59:50,115 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 16:59:50,115 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 16:59:50,115 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 16:59:50,115 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 16:59:50,115 - main - INFO - Background task manager initialized
+2025-08-31 16:59:50,374 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:59:50,431 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:59:50,515 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:59:50,518 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:59:50,519 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:59:50,566 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 16:59:50,572 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:04:50,801 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:04:50,806 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:04:50,807 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:04:50,855 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:04:50,862 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:04:50,905 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:04:50,905 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:04:50,911 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:04:50,961 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:04:50,961 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:04:50,963 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:09:51,162 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:09:51,165 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:09:51,168 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:09:51,219 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:09:51,268 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:09:51,269 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:09:51,270 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:09:51,327 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:09:51,330 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:15:16,216 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 17:15:16,248 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 17:15:16,252 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 17:15:16,253 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 17:15:16,253 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:15:16,254 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 17:15:16,254 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:15:16,256 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 17:15:16,256 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:15:16,256 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 17:15:16,257 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:15:16,258 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 17:15:16,258 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:15:16,259 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 17:15:16,259 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:15:16,260 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 17:15:16,260 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:15:16,261 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 17:15:16,261 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:15:16,262 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 17:15:16,263 - main - INFO - Database tables created successfully
+2025-08-31 17:15:16,263 - app.core.cache - INFO - In-memory cache started
+2025-08-31 17:15:16,263 - main - INFO - Cache system initialized
+2025-08-31 17:15:16,263 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 17:15:16,263 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 17:15:16,264 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 17:15:16,264 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 17:15:16,264 - main - INFO - Background task manager initialized
+2025-08-31 17:15:16,282 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 17:15:16,283 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 17:15:16,283 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 17:15:16,283 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 17:15:16,283 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 17:15:16,284 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 17:18:08,155 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 17:18:08,176 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 17:18:08,179 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 17:18:08,180 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 17:18:08,180 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:18:08,182 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 17:18:08,182 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:18:08,183 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 17:18:08,183 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:18:08,184 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 17:18:08,184 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:18:08,185 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 17:18:08,185 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:18:08,186 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 17:18:08,186 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:18:08,187 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 17:18:08,187 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:18:08,188 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 17:18:08,188 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:18:08,189 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 17:18:08,190 - main - INFO - Database tables created successfully
+2025-08-31 17:18:08,190 - app.core.cache - INFO - In-memory cache started
+2025-08-31 17:18:08,190 - main - INFO - Cache system initialized
+2025-08-31 17:18:08,190 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 17:18:08,190 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 17:18:08,191 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 17:18:08,191 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 17:18:08,191 - main - INFO - Background task manager initialized
+2025-08-31 17:18:08,416 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:18:08,467 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:18:08,522 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:18:08,573 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:21:36,490 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 17:21:36,491 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 17:21:36,491 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 17:21:36,491 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 17:21:36,491 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 17:21:36,491 - main - INFO - Shutting down Environmental Intelligence Platform Backend
+2025-08-31 17:23:43,762 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 17:23:43,796 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 17:23:43,800 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 17:23:43,801 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 17:23:43,801 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:23:43,802 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 17:23:43,802 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:23:43,803 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 17:23:43,804 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:23:43,805 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 17:23:43,805 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:23:43,805 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 17:23:43,806 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:23:43,806 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 17:23:43,806 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:23:43,807 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 17:23:43,807 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:23:43,808 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 17:23:43,808 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:23:43,809 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 17:23:43,811 - main - INFO - Database tables created successfully
+2025-08-31 17:23:43,811 - app.core.cache - INFO - In-memory cache started
+2025-08-31 17:23:43,811 - main - INFO - Cache system initialized
+2025-08-31 17:23:43,811 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 17:23:43,812 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 17:23:43,812 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 17:23:43,812 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 17:23:43,812 - main - INFO - Background task manager initialized
+2025-08-31 17:23:44,091 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:23:44,173 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:23:44,266 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:23:44,337 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:26:42,916 - app.services.satellite_data - ERROR - Failed to initialize Google Earth Engine: ('invalid_scope: Invalid OAuth scope or ID token audience provided.', {'error': 'invalid_scope', 'error_description': 'Invalid OAuth scope or ID token audience provided.'})
+2025-08-31 17:28:44,544 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:28:44,608 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:28:44,658 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:28:44,723 - app.services.environmental - WARNING - WAQI API key not configured, using mock data
+2025-08-31 17:29:20,582 - app.core.logging - INFO - Logging configured successfully
+2025-08-31 17:29:20,597 - main - INFO - Starting Environmental Intelligence Platform Backend
+2025-08-31 17:29:20,613 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-08-31 17:29:20,614 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("environmental_data")
+2025-08-31 17:29:20,614 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:29:20,614 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("satellite_data")
+2025-08-31 17:29:20,614 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:29:20,615 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("weather_history")
+2025-08-31 17:29:20,616 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:29:20,616 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_analysis")
+2025-08-31 17:29:20,616 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:29:20,616 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("wildfire_risk")
+2025-08-31 17:29:20,616 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:29:20,616 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("flood_risk")
+2025-08-31 17:29:20,616 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:29:20,616 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("landslide_risk")
+2025-08-31 17:29:20,616 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:29:20,616 - sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("hazard_alerts")
+2025-08-31 17:29:20,621 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2025-08-31 17:29:20,622 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-08-31 17:29:20,622 - main - INFO - Database tables created successfully
+2025-08-31 17:29:20,622 - app.core.cache - INFO - In-memory cache started
+2025-08-31 17:29:20,622 - main - INFO - Cache system initialized
+2025-08-31 17:29:20,623 - app.core.background_tasks - INFO - Background task manager started
+2025-08-31 17:29:20,623 - app.core.background_tasks - INFO - Added periodic task 'environmental_data_refresh' with 300s interval
+2025-08-31 17:29:20,623 - app.core.background_tasks - INFO - Added periodic task 'model_health_check' with 600s interval
+2025-08-31 17:29:20,623 - app.core.background_tasks - INFO - Added periodic task 'cleanup_old_data' with 3600s interval
+2025-08-31 17:29:20,623 - main - INFO - Background task manager initialized
+2025-08-31 17:29:20,640 - app.core.background_tasks - INFO - Periodic task 'environmental_data_refresh' cancelled
+2025-08-31 17:29:20,640 - app.core.background_tasks - INFO - Periodic task 'model_health_check' cancelled
+2025-08-31 17:29:20,640 - app.core.background_tasks - INFO - Periodic task 'cleanup_old_data' cancelled
+2025-08-31 17:29:20,640 - app.core.background_tasks - INFO - Background task manager stopped
+2025-08-31 17:29:20,640 - app.core.cache - INFO - In-memory cache stopped
+2025-08-31 17:29:20,640 - main - INFO - Shutting down Environmental Intelligence Platform Backend

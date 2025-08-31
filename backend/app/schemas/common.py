@@ -3,7 +3,7 @@ Common Pydantic schemas for the Environmental Intelligence Platform
 """
 
 from pydantic import BaseModel, Field
-from typing import List, Dict, Any, Optional, Union
+from typing import List, Dict, Any, Optional, Union, Literal
 from datetime import datetime
 from geojson_pydantic import Polygon, Point
 
@@ -68,3 +68,25 @@ class ErrorResponse(BaseModel):
     error: str = Field(..., description="Error message")
     details: Optional[Dict[str, Any]] = Field(None, description="Additional error details")
     timestamp: datetime = Field(default_factory=datetime.utcnow, description="Error timestamp")
+
+
+class EnhancedAQIRequest(BaseModel):
+    """Request payload for enhanced AQI endpoint"""
+    lat: float = Field(..., ge=-90, le=90)
+    lon: float = Field(..., ge=-180, le=180)
+    include_baseline: bool = Field(default=True)
+    sources: List[str] = Field(default_factory=lambda: ["all"], description="Specific sources or 'all'")
+
+
+class EnhancedAQIData(BaseModel):
+    """Response shape for enhanced fused AQI data"""
+    timestamp: datetime
+    location: Dict[str, float]
+    data_quality: Literal['high', 'mixed', 'standard']
+    sources_used: List[str]
+    measurements: Dict[str, Any]
+
+
+class LocationRequest(BaseModel):
+    lat: float = Field(..., ge=-90, le=90)
+    lon: float = Field(..., ge=-180, le=180)

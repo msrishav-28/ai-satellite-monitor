@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     OPENWEATHER_API_KEY: Optional[str] = None
     WAQI_API_KEY: Optional[str] = None
     MAPBOX_ACCESS_TOKEN: Optional[str] = None
+    OPENWEATHER_BASE_URL: str = "https://api.openweathermap.org/data/2.5"
+    FORCE_MOCK_AIR_QUALITY: bool = True
+    WEATHER_CACHE_TTL: int = 600  # seconds
 
     # Source control / feature flags (allow forcing mock responses even if creds exist)
     FORCE_MOCK_WEATHER: bool = False
@@ -42,8 +45,15 @@ class Settings(BaseSettings):
     ALLOW_GEE_USER_AUTH: bool = False  # If False, require service account vars for GEE
     
     # Google Earth Engine
-    GEE_SERVICE_ACCOUNT_KEY: Optional[str] = None
+    # Prefer Application Default Credentials (ADC) via GOOGLE_APPLICATION_CREDENTIALS env var.
+    # Optionally, provide a direct path to the service account key JSON via GEE_CREDENTIALS_FILE.
+    # The older pair (GEE_SERVICE_ACCOUNT_EMAIL/GEE_SERVICE_ACCOUNT_KEY) remains for backward compatibility,
+    # but is not required when ADC is configured.
     GEE_PROJECT_ID: Optional[str] = None
+    GEE_CREDENTIALS_FILE: Optional[str] = None
+    GOOGLE_APPLICATION_CREDENTIALS: Optional[str] = None
+    GEE_SERVICE_ACCOUNT_EMAIL: Optional[str] = None  # deprecated in favor of ADC
+    GEE_SERVICE_ACCOUNT_KEY: Optional[str] = None    # deprecated in favor of ADC
     
     # Sentinel Hub
     SENTINEL_HUB_CLIENT_ID: Optional[str] = None
@@ -63,6 +73,25 @@ class Settings(BaseSettings):
     # Background tasks (in-memory instead of Celery)
     ENABLE_BACKGROUND_TASKS: bool = True
     BACKGROUND_TASK_INTERVAL: int = 60  # seconds
+
+    # Enhanced Air Quality (optional premium integrations)
+    IQAIR_API_KEY: Optional[str] = None
+    BREEZOMETER_API_KEY: Optional[str] = None
+    AIRVIEW_DATA_PATH: str = "data/airview_hackathon_data.csv"
+    # Disable paid/premium providers by default (keep code paths but don't use them)
+    ENABLE_ARCGIS: bool = False
+    ENABLE_AIRVIEW: bool = False
+    ENABLE_PREMIUM_AQI: bool = False
+
+    # Force mock flags for new services
+    FORCE_MOCK_IQAIR: bool = True
+    FORCE_MOCK_BREEZOMETER: bool = True
+    FORCE_MOCK_ENHANCED_AQI: bool = True
+
+    # Fusion priority order for AQI sources
+    AQI_FUSION_PRIORITY: List[str] = [
+        "baseline", "breezometer", "iqair", "waqi", "openweather"
+    ]
     
     class Config:
         env_file = ".env"

@@ -3,7 +3,10 @@ Database configuration and session management
 """
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from typing import AsyncGenerator
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.types import TypeDecorator, CHAR
+import uuid
 from sqlalchemy import MetaData
 from app.core.config import settings
 import logging
@@ -60,7 +63,37 @@ class Base(DeclarativeBase):
     metadata = metadata
 
 
-async def get_db() -> AsyncSession:
+class GUID(TypeDecorator):
+    """
+    Platform-independent GUID/UUID type.
+    Uses PostgreSQL's UUID type, otherwise stores as CHAR(36) for SQLite.
+    """
+    impl = CHAR
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == 'postgresql':
+            from sqlalchemy.dialects.postgresql import UUID as PG_UUID
+            return dialect.type_descriptor(PG_UUID(as_uuid=True))
+        return dialect.type_descriptor(CHAR(36))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        if dialect.name == 'postgresql':
+            return value if isinstance(value, uuid.UUID) else uuid.UUID(str(value))
+        # SQLite: store as string
+        if isinstance(value, uuid.UUID):
+            return str(value)
+        return str(uuid.UUID(str(value)))
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        return value if isinstance(value, uuid.UUID) else uuid.UUID(str(value))
+
+
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
     Dependency to get database session
     """
