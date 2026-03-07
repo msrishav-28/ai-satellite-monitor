@@ -3,7 +3,7 @@ Database models for AI analytics and insights
 """
 
 from sqlalchemy import Column, Integer, Float, String, DateTime, JSON, Boolean, Text
-from sqlalchemy.dialects.postgresql import UUID
+from app.core.database import GUID
 from datetime import datetime
 import uuid
 
@@ -14,7 +14,7 @@ class AIInsight(Base):
     """Model for storing AI-generated insights"""
     __tablename__ = "ai_insights"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)  # GeoJSON polygon
     
     # Insight details
@@ -32,7 +32,7 @@ class AIInsight(Base):
     detected_at = Column(DateTime, default=datetime.utcnow)
     
     # Additional data
-    metadata = Column(JSON)  # Additional insight-specific data
+    metadata_json = Column("metadata", JSON)  # Additional insight-specific data
     
     # Status
     is_active = Column(Boolean, default=True)
@@ -46,7 +46,7 @@ class AnomalyDetection(Base):
     """Model for storing anomaly detection results"""
     __tablename__ = "anomaly_detection"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)
     
     # Detection summary
@@ -74,7 +74,7 @@ class CausalAnalysis(Base):
     """Model for storing causal inference analysis results"""
     __tablename__ = "causal_analysis"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)
     
     # Analysis details
@@ -107,7 +107,7 @@ class DataFusionStatus(Base):
     """Model for tracking radar-optical data fusion status"""
     __tablename__ = "data_fusion_status"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)
     
     # Fusion status
@@ -136,7 +136,7 @@ class ModelPrediction(Base):
     """Model for storing ML model predictions"""
     __tablename__ = "model_predictions"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     aoi_geometry = Column(JSON, nullable=False)
     
     # Prediction details

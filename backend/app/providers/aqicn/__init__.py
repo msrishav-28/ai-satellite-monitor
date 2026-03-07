@@ -1,0 +1,1 @@
+"""AQICN provider adapter."""

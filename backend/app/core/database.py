@@ -1,6 +1,4 @@
-"""
-Database configuration and session management
-"""
+"""Database configuration and session management."""
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from typing import AsyncGenerator
@@ -13,6 +11,26 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def get_async_database_url() -> str:
+    """Return the configured database URL in async-driver form."""
+    if settings.DATABASE_URL.startswith("sqlite:///"):
+        return settings.DATABASE_URL.replace("sqlite:///", "sqlite+aiosqlite:///")
+    if settings.DATABASE_URL.startswith("postgresql://"):
+        return settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
+    return settings.DATABASE_URL
+
+
+def get_sync_database_url() -> str:
+    """Return the configured database URL in sync-driver form for Alembic."""
+    if settings.DATABASE_URL.startswith("sqlite+aiosqlite:///"):
+        return settings.DATABASE_URL.replace("sqlite+aiosqlite:///", "sqlite:///", 1)
+    if settings.DATABASE_URL.startswith("postgresql+asyncpg://"):
+        return settings.DATABASE_URL.replace("postgresql+asyncpg://", "postgresql://", 1)
+    return settings.DATABASE_URL
+
+
+database_url = get_async_database_url()
+
 # Handle different database types
 if settings.DATABASE_URL.startswith("sqlite"):
     # Convert SQLite URL to async format and ensure directory exists
@@ -22,7 +40,6 @@ if settings.DATABASE_URL.startswith("sqlite"):
     if db_dir and not os.path.exists(db_dir):
         os.makedirs(db_dir)
 
-    database_url = settings.DATABASE_URL.replace("sqlite:///", "sqlite+aiosqlite:///")
     # Create async engine for SQLite
     engine = create_async_engine(
         database_url,
@@ -30,8 +47,6 @@ if settings.DATABASE_URL.startswith("sqlite"):
         connect_args={"check_same_thread": False}
     )
 elif settings.DATABASE_URL.startswith("postgresql"):
-    # Convert PostgreSQL URL to async version
-    database_url = settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
     # Create async engine for PostgreSQL
     engine = create_async_engine(
         database_url,
@@ -108,11 +123,16 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
             await session.close()
 
 
-async def init_db():
-    """Initialize database tables"""
-    # Import all models to ensure they are registered with Base
-    from app.models import environmental, hazards, analytics, impact, timelapse
+def import_model_modules():
+    """Import model modules so Alembic can discover metadata."""
+    from app.models import analytics, environmental, hazards, impact, timelapse
 
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    logger.info("Database initialized successfully")
+    logger.info(
+        "Database model metadata initialized",
+        extra={"models": [analytics, environmental, hazards, impact, timelapse]},
+    )
+
+
+async def init_db():
+    """Backward-compatible alias for metadata import."""
+    import_model_modules()
