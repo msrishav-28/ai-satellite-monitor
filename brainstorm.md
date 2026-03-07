@@ -1,3 +1,6 @@
+> [!WARNING]
+> This document contains historical brainstorming notes from an earlier iteration of the project (which was built on Flask). The current architecture has been migrated to **FastAPI** and **Next.js**. The architectural proposals and code snippets here (like Flask routes and `wildfire_service.py`) are outdated. Use this document only for historical context on the GEE concepts and NASA datasets.
+
 Perfect! Your project has a solid foundation with multiple hazard services already implemented. Now let me guide you on implementing **polygon-based Area of Interest (AOI) analysis** using Google Earth Engine (GEE) and NASA datasets for comprehensive environmental monitoring.
 
 ## Implementation Architecture for Polygon-Based AOI Analysis

@@ -47,21 +47,34 @@ Make sure you have the following installed on your system:
         ```
     -   Copy the frontend `.env.local.example` to `.env.local`:
         ```bash
-        cp frontend/.env.example frontend/.env.local
+        cp space/.env.example space/.env.local
         ```
 
     After copying, you'll need to edit these files to add your own API keys and configuration (e.g., Mapbox access token).
 
 3.  **Install dependencies:**
 
-    This project uses `npm` for the root and frontend, and `pip` for the backend.
-
+    **Frontend (`space/`):**
     ```bash
-    # Install root, frontend and backend dependencies
-    npm install
+    cd space
+    npm install --legacy-peer-deps
+    cd ..
     ```
-    The `postinstall` script should handle installing dependencies for both the `frontend` and `backend` directories.
 
+    **Backend:**
+    It is recommended to use a Python virtual environment for the backend dependencies.
+    ```bash
+    cd backend
+    python -m venv venv
+    
+    # On Windows:
+    .\venv\Scripts\activate
+    # On macOS/Linux:
+    source venv/bin/activate
+    
+    pip install -r requirements.txt
+    cd ..
+    ```
 4.  **Run the development servers:**
 
     You can start both the frontend and backend servers concurrently using the provided script.
@@ -101,7 +114,7 @@ Make sure you have the following installed on your system:
 │   ├── app/         # Core application logic
 │   ├── .env.example
 │   └── requirements.txt
-├── frontend/        # Next.js frontend application
+├── space/           # Next.js 15 cinematic frontend (single source of truth)
 │   ├── src/
 │   ├── public/
 │   ├── .env.example
