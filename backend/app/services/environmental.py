@@ -7,11 +7,13 @@ import httpx
 import asyncio
 import logging
 from datetime import datetime
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.exceptions import ExternalAPIError, ImproperlyConfigured
+from app.providers.aqicn.client import AQICNClient
+from app.providers.openweather.client import OpenWeatherClient
 from app.schemas.common import EnvironmentalMetrics, WeatherData, AQIData, CoordinatePoint
 
 logger = logging.getLogger(__name__)
@@ -23,6 +25,8 @@ class EnvironmentalService:
     def __init__(self, db: AsyncSession):
         self.db = db
         self.http_client = httpx.AsyncClient(timeout=30.0)
+        self.weather_client = OpenWeatherClient(api_key=settings.OPENWEATHER_API_KEY, base_url=settings.OPENWEATHER_BASE_URL)
+        self.aqi_client = AQICNClient(api_key=settings.WAQI_API_KEY)
 
     async def get_environmental_data(self, lat: float, lon: float) -> EnvironmentalMetrics:
         """Get combined environmental data (weather + AQI) for a location."""
@@ -47,13 +51,7 @@ class EnvironmentalService:
             raise ImproperlyConfigured("OPENWEATHER_API_KEY")
 
         try:
-            url = "https://api.openweathermap.org/data/2.5/weather"
-            params = {
-                "lat": lat,
-                "lon": lon,
-                "appid": settings.OPENWEATHER_API_KEY,
-                "units": "metric",
-            }
+            url, params = self.weather_client.build_request("weather", lat, lon)
             response = await self.http_client.get(url, params=params)
             response.raise_for_status()
             data = response.json()
@@ -79,8 +77,7 @@ class EnvironmentalService:
             raise ImproperlyConfigured("WAQI_API_KEY")
 
         try:
-            url = f"https://api.waqi.info/feed/geo:{lat};{lon}/"
-            params = {"token": settings.WAQI_API_KEY}
+            url, params = self.aqi_client.build_geo_request(lat, lon)
             response = await self.http_client.get(url, params=params)
             response.raise_for_status()
             data = response.json()

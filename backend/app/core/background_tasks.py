@@ -124,7 +124,7 @@ async def schedule_data_refresh():
     task_manager.add_periodic_task(
         "environmental_data_refresh",
         refresh_environmental_data,
-        300  # 5 minutes
+        600  # 10 minutes
     )
     
     task_manager.add_periodic_task(
@@ -165,14 +165,14 @@ async def refresh_environmental_data():
                     weather_data = await service.get_weather_data(
                         location['lat'], location['lon']
                     )
-                    await cache.set(weather_key, weather_data, 300)
+                    await cache.set(weather_key, weather_data, 600)
                     
                     # Refresh AQI data
                     aqi_key = f"aqi:{location['lat']}:{location['lon']}"
                     aqi_data = await service.get_aqi_data(
                         location['lat'], location['lon']
                     )
-                    await cache.set(aqi_key, aqi_data, 300)
+                    await cache.set(aqi_key, aqi_data, 600)
                     
                 except Exception as e:
                     logger.error(f"Error refreshing data for {location['name']}: {e}")

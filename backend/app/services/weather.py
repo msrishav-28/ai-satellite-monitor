@@ -11,15 +11,18 @@ from datetime import datetime
 from app.core.config import settings
 from app.core.cache import cache
 from app.core.exceptions import ExternalAPIError, ImproperlyConfigured
+from app.providers.openweather.client import OpenWeatherClient
 
 logger = logging.getLogger(__name__)
 
 
 class WeatherService:
     def __init__(self):
-        self.api_key = settings.OPENWEATHER_API_KEY
-        self.base_url = settings.OPENWEATHER_BASE_URL
-        self.enabled = bool(self.api_key)
+        self.client = OpenWeatherClient(
+            api_key=settings.OPENWEATHER_API_KEY,
+            base_url=settings.OPENWEATHER_BASE_URL,
+        )
+        self.enabled = self.client.enabled
         self.cache_ttl = settings.WEATHER_CACHE_TTL
 
     async def get_current_weather(self, lat: float, lon: float) -> Dict[str, Any]:
@@ -33,8 +36,7 @@ class WeatherService:
 
         try:
             async with aiohttp.ClientSession() as session:
-                url = f"{self.base_url}/weather"
-                params = {"lat": lat, "lon": lon, "appid": self.api_key, "units": "metric"}
+                url, params = self.client.build_request("weather", lat, lon)
                 async with session.get(url, params=params) as resp:
                     if resp.status == 200:
                         data = await resp.json()
@@ -52,8 +54,7 @@ class WeatherService:
             raise ImproperlyConfigured("OPENWEATHER_API_KEY")
         try:
             async with aiohttp.ClientSession() as session:
-                url = f"{self.base_url}/forecast"
-                params = {"lat": lat, "lon": lon, "appid": self.api_key, "units": "metric", "cnt": days * 8}
+                url, params = self.client.build_request("forecast", lat, lon, cnt=days * 8)
                 async with session.get(url, params=params) as resp:
                     if resp.status == 200:
                         data = await resp.json()

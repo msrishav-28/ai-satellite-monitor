@@ -4,7 +4,6 @@ FastAPI backend for real-time environmental analysis and hazard prediction
 """
 
 from fastapi import FastAPI, Request
-from sqlalchemy import text
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import uvicorn
@@ -12,12 +11,11 @@ from contextlib import asynccontextmanager
 import logging
 
 from app.core.config import settings
-from app.core.database import engine, Base
-from app.core.cache import cache
-from app.core.background_tasks import task_manager, schedule_data_refresh
 from app.api.v1.api import api_router
+from app.core.bootstrap import shutdown_runtime, startup_runtime
 from app.core.logging import setup_logging
 from app.core.exceptions import GEEDataUnavailableError, ExternalAPIError, MLModelError
+from app.core.health import build_dependencies_health, build_live_health, build_ready_health
 
 # Setup logging
 setup_logging()
@@ -27,38 +25,9 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan events"""
-    logger.info("Starting Environmental Intelligence Platform Backend")
-
-    # Create database tables
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    logger.info("Database tables created successfully")
-
-    # Start cache
-    await cache.start()
-    logger.info("Cache system initialized")
-
-    # Initialize ML models (auto-trains from synthetic data if .pkl absent)
-    try:
-        from app.ml.model_manager import ModelManager
-        _mm = ModelManager(model_dir=settings.MODEL_DIR)
-        await _mm.initialize_models()
-        app.state.model_manager = _mm
-        logger.info("ML models initialized")
-    except Exception as e:
-        logger.error(f"ML model initialization failed: {e}")
-
-    # Start background tasks
-    await task_manager.start()
-    await schedule_data_refresh()
-    logger.info("Background task manager initialized")
-
+    await startup_runtime(app)
     yield
-
-    # Shutdown
-    await task_manager.stop()
-    await cache.stop()
-    logger.info("Shutting down Environmental Intelligence Platform Backend")
+    await shutdown_runtime()
 
 
 # Create FastAPI application
@@ -133,64 +102,26 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
-    try:
-        from datetime import datetime
+    """Backward-compatible readiness health endpoint."""
+    return await build_ready_health(app)
 
-        # Check database connection
-        async with engine.begin() as conn:
-            await conn.execute(text("SELECT 1"))
 
-        # Check ML models status
-        # ML model status
-        mm = getattr(app.state, "model_manager", None)
-        model_status = mm.get_status() if mm else {"models_loaded": {}, "note": "not yet initialized"}
+@app.get("/health/live")
+async def health_live():
+    """Liveness health endpoint."""
+    return await build_live_health()
 
-        # Check WebSocket status
-        from app.websocket.manager import connection_manager
-        ws_status = {
-            'active_connections': connection_manager.get_connection_count(),
-            'status': 'operational'
-        }
 
-        # Check cache status
-        cache_status = cache.get_stats()
+@app.get("/health/ready")
+async def health_ready():
+    """Readiness health endpoint."""
+    return await build_ready_health(app)
 
-        # Check background tasks
-        bg_tasks_status = task_manager.get_task_status()
 
-        return {
-            "status": "healthy",
-            "timestamp": datetime.utcnow().isoformat() + "Z",
-            "version": "1.0.0",
-            "components": {
-                "database": "healthy",
-                "ml_models": "ready" if mm and all(model_status["models_loaded"].values()) else "initializing",
-                "websockets": ws_status["status"],
-                "cache": "healthy" if cache_status.get("cache_enabled") else "disabled",
-                "background_tasks": "healthy" if task_manager.running else "stopped",
-            },
-            "details": {
-                "ml_models": model_status,
-                "websockets": ws_status,
-                "cache": cache_status,
-                "background_tasks": bg_tasks_status,
-            },
-        }
-
-    except Exception as e:
-        from datetime import datetime
-        logger.error(f"Health check failed: {e}")
-        return {
-            "status": "unhealthy",
-            "timestamp": datetime.utcnow().isoformat() + "Z",
-            "error": str(e),
-            "components": {
-                "database": "unknown",
-                "ml_models": "unknown",
-                "websockets": "unknown"
-            }
-        }
+@app.get("/health/dependencies")
+async def health_dependencies():
+    """Dependency health endpoint."""
+    return await build_dependencies_health(app)
 
 
 if __name__ == "__main__":
