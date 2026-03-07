@@ -34,15 +34,8 @@ class Settings(BaseSettings):
     WAQI_API_KEY: Optional[str] = None
     MAPBOX_ACCESS_TOKEN: Optional[str] = None
     OPENWEATHER_BASE_URL: str = "https://api.openweathermap.org/data/2.5"
-    FORCE_MOCK_AIR_QUALITY: bool = True
     WEATHER_CACHE_TTL: int = 600  # seconds
-
-    # Source control / feature flags (allow forcing mock responses even if creds exist)
-    FORCE_MOCK_WEATHER: bool = False
-    FORCE_MOCK_AQI: bool = False
-    FORCE_MOCK_SATELLITE: bool = False
-    FORCE_MOCK_MODELS: bool = True  # Default to mock model predictions until real models integrated
-    ALLOW_GEE_USER_AUTH: bool = False  # If False, require service account vars for GEE
+    ALLOW_GEE_USER_AUTH: bool = False  # If True, allow ee.Authenticate() user-prompt flow
     
     # Google Earth Engine
     # Prefer Application Default Credentials (ADC) via GOOGLE_APPLICATION_CREDENTIALS env var.
@@ -66,9 +59,17 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "uploads"
     MAX_FILE_SIZE: int = 100 * 1024 * 1024  # 100MB
     
-    # ML Models
+    # AI Narration (set OPENAI_API_KEY to enable live LLM responses)
+    OPENAI_API_KEY: Optional[str] = None
+
+    # ML Models — auto-trained from synthetic data on startup if .pkl absent
     MODEL_DIR: str = "models"
     ENABLE_GPU: bool = False
+    STARTUP_TRAIN_MODELS: bool = True  # False to skip auto-training (use only if pkls exist)
+
+    # NASA APIs (optional enrichment)
+    FIRMS_API_KEY: Optional[str] = None         # https://firms.modaps.eosdis.nasa.gov/api/
+    NASA_EARTHDATA_TOKEN: Optional[str] = None  # https://urs.earthdata.nasa.gov/
     
     # Background tasks (in-memory instead of Celery)
     ENABLE_BACKGROUND_TASKS: bool = True
@@ -83,10 +84,7 @@ class Settings(BaseSettings):
     ENABLE_AIRVIEW: bool = False
     ENABLE_PREMIUM_AQI: bool = False
 
-    # Force mock flags for new services
-    FORCE_MOCK_IQAIR: bool = True
-    FORCE_MOCK_BREEZOMETER: bool = True
-    FORCE_MOCK_ENHANCED_AQI: bool = True
+
 
     # Fusion priority order for AQI sources
     AQI_FUSION_PRIORITY: List[str] = [

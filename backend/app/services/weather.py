@@ -1,4 +1,6 @@
-"""OpenWeatherMap-backed weather service with mock-first design and caching."""
+"""OpenWeatherMap-backed weather service — no mock fallbacks.
+Raises ExternalAPIError if API key is missing or API calls fail.
+"""
 from __future__ import annotations
 
 import aiohttp
@@ -8,6 +10,7 @@ from datetime import datetime
 
 from app.core.config import settings
 from app.core.cache import cache
+from app.core.exceptions import ExternalAPIError, ImproperlyConfigured
 
 logger = logging.getLogger(__name__)
 
@@ -16,12 +19,12 @@ class WeatherService:
     def __init__(self):
         self.api_key = settings.OPENWEATHER_API_KEY
         self.base_url = settings.OPENWEATHER_BASE_URL
-        self.enabled = not settings.FORCE_MOCK_WEATHER and bool(self.api_key)
+        self.enabled = bool(self.api_key)
         self.cache_ttl = settings.WEATHER_CACHE_TTL
 
     async def get_current_weather(self, lat: float, lon: float) -> Dict[str, Any]:
         if not self.enabled:
-            return self._mock_weather_data(lat, lon)
+            raise ImproperlyConfigured("OPENWEATHER_API_KEY")
 
         cache_key = f"weather:current:{lat:.4f}:{lon:.4f}"
         cached = await cache.get(cache_key)
@@ -38,15 +41,15 @@ class WeatherService:
                         processed = self._format_weather_data(data)
                         await cache.set(cache_key, processed, ttl=self.cache_ttl)
                         return processed
-                    logger.warning(f"OpenWeather weather failed: HTTP {resp.status}")
-                    return self._mock_weather_data(lat, lon)
+                    raise ExternalAPIError("OpenWeatherMap", resp.status, await resp.text())
+        except ExternalAPIError:
+            raise
         except Exception as e:
-            logger.error(f"OpenWeather API error: {e}")
-            return self._mock_weather_data(lat, lon)
+            raise ExternalAPIError("OpenWeatherMap", detail=str(e))
 
     async def get_weather_forecast(self, lat: float, lon: float, days: int = 5) -> Dict[str, Any]:
         if not self.enabled:
-            return self._mock_forecast_data(lat, lon, days)
+            raise ImproperlyConfigured("OPENWEATHER_API_KEY")
         try:
             async with aiohttp.ClientSession() as session:
                 url = f"{self.base_url}/forecast"
@@ -55,11 +58,11 @@ class WeatherService:
                     if resp.status == 200:
                         data = await resp.json()
                         return self._format_forecast_data(data)
-                    logger.warning(f"OpenWeather forecast failed: HTTP {resp.status}")
-                    return self._mock_forecast_data(lat, lon, days)
+                    raise ExternalAPIError("OpenWeatherMap", resp.status, await resp.text())
+        except ExternalAPIError:
+            raise
         except Exception as e:
-            logger.error(f"OpenWeather forecast error: {e}")
-            return self._mock_forecast_data(lat, lon, days)
+            raise ExternalAPIError("OpenWeatherMap", detail=str(e))
 
     def _format_weather_data(self, raw: Dict[str, Any]) -> Dict[str, Any]:
         return {
@@ -97,34 +100,3 @@ class WeatherService:
                 "description": (it.get("weather") or [{}])[0].get("description"),
             })
         return {"forecast": out, "source": "openweathermap"}
-
-    def _mock_weather_data(self, lat: float, lon: float) -> Dict[str, Any]:
-        return {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
-            "location": {"lat": lat, "lon": lon, "city": "Mock City"},
-            "current": {
-                "temperature": 22.5,
-                "feels_like": 24.0,
-                "humidity": 65,
-                "pressure": 1013,
-                "wind_speed": 3.2,
-                "wind_direction": 180,
-                "visibility": 10000,
-                "description": "partly cloudy",
-                "icon": "02d",
-            },
-            "source": "mock",
-            "data_quality": "simulated",
-        }
-
-    def _mock_forecast_data(self, lat: float, lon: float, days: int) -> Dict[str, Any]:
-        out = []
-        for i in range(days * 8):
-            out.append({
-                "timestamp": i * 10800,  # 3-hour steps
-                "temperature": 20 + (i % 5),
-                "humidity": 60 + (i % 10),
-                "wind_speed": 2 + (i % 3),
-                "description": "partly cloudy",
-            })
-        return {"forecast": out, "source": "mock"}

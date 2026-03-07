@@ -76,34 +76,8 @@ class HazardModelService:
             
         except Exception as e:
             logger.error(f"Error in hazard analysis: {e}")
-            # Return mock data if real analysis fails
-            return self._get_mock_hazard_analysis()
+            raise
     
-    async def analyze_landslide_risk(self, aoi: Polygon, satellite_data: Dict = None) -> Dict[str, Any]:
-        """
-        Analyze landslide susceptibility using ML model
-        """
-        try:
-            # Extract features from satellite data and AOI
-            features = await self._extract_landslide_features(aoi, satellite_data)
-
-            # Use ML model for prediction
-            prediction = await self.ml_service.predict_landslide_risk(features)
-
-            return {
-                'risk_score': prediction['risk_score'],
-                'confidence': prediction['confidence'],
-                'contributing_factors': prediction['contributing_factors'],
-                'recommendations': prediction['recommendations'],
-                'stability_factor': prediction.get('stability_factor', 1.5),
-                'trigger_threshold': prediction.get('trigger_threshold', 75.0),
-                'affected_area': prediction.get('affected_area', 2.0)
-            }
-
-        except Exception as e:
-            logger.error(f"Error in landslide analysis: {e}")
-            return self._get_mock_landslide_risk()
-
     async def analyze_wildfire_risk(self, aoi: Polygon, satellite_data: Dict = None) -> WildfireRisk:
         """
         Analyze wildfire ignition and spread risk
@@ -149,7 +123,7 @@ class HazardModelService:
             
         except Exception as e:
             logger.error(f"Error in wildfire analysis: {e}")
-            return self._get_mock_wildfire_risk()
+            raise
     
     async def analyze_flood_risk(self, aoi: Polygon, satellite_data: Dict = None) -> FloodRisk:
         """
@@ -193,7 +167,7 @@ class HazardModelService:
             
         except Exception as e:
             logger.error(f"Error in flood analysis: {e}")
-            return self._get_mock_flood_risk()
+            raise
     
     async def analyze_landslide_risk(self, aoi: Polygon, satellite_data: Dict = None) -> LandslideRisk:
         """
@@ -236,7 +210,7 @@ class HazardModelService:
             
         except Exception as e:
             logger.error(f"Error in landslide analysis: {e}")
-            return self._get_mock_landslide_risk()
+            raise
     
     def _get_risk_level(self, risk_score: float) -> RiskLevel:
         """Convert risk score to risk level"""
@@ -265,151 +239,277 @@ class HazardModelService:
         return priority[:3]  # Return top 3 priority hazards
 
     async def analyze_deforestation_risk(self, aoi: Polygon, satellite_data: Dict = None) -> DeforestationRisk:
-        """Mock deforestation risk analysis"""
-        return DeforestationRisk(
-            hazard_type=HazardType.DEFORESTATION,
-            risk_score=30.0,
-            risk_level=RiskLevel.MODERATE,
-            trend=TrendDirection.UP,
-            confidence=85.0,
-            factors=["Road proximity", "Agricultural expansion"],
-            recommendations=["Monitor forest boundaries", "Strengthen protection"],
-            clearing_probability=0.15,
-            road_proximity=2.5,
-            protection_status="Partially Protected"
-        )
+        """
+        Deforestation risk computed from:
+        - Hansen GFC: recent forest loss rate since 2020
+        - NDVI trend: current vs baseline
+        - VIIRS nightlights: road/settlement proximity proxy
+        - ESA WorldCover: forest/non-forest fraction
+        """
+        try:
+            if satellite_data is None:
+                satellite_data = await self.satellite_service.get_aoi_data(aoi)
+
+            # Pull extended data for Hansen GFC + VIIRS
+            from app.core.exceptions import GEEDataUnavailableError
+            hansen_data: Dict = {}
+            viirs_data:  Dict = {}
+            try:
+                hansen_data = await self.satellite_service.get_hansen_forest_change(aoi)
+            except (GEEDataUnavailableError, Exception) as e:
+                logger.warning(f"Hansen GFC unavailable: {e}")
+            try:
+                viirs_data = await self.satellite_service.get_viirs_nightlights(aoi)
+            except (GEEDataUnavailableError, Exception) as e:
+                logger.warning(f"VIIRS nightlights unavailable: {e}")
+
+            # --- Derived metrics ---
+            forest_pct       = satellite_data.get("forest_percentage", 50.0)
+            ndvi             = satellite_data.get("ndvi", 0.6)
+            loss_ha_recent   = hansen_data.get("forest_loss_ha_since_2020", 0.0)
+            loss_ha_total    = hansen_data.get("forest_loss_ha_total", 0.0)
+            treecover_2000   = hansen_data.get("tree_cover_2000_pct", forest_pct)
+            radiance         = viirs_data.get("avg_radiance_nw", 1.0)
+            settle_class     = viirs_data.get("settlement_classification", "rural")
+
+            # Clearing probability: recent loss as fraction of original cover
+            orig_forest_ha   = max(treecover_2000, 1.0)
+            clearing_prob    = min(1.0, loss_ha_recent / (orig_forest_ha * 100 + 1))
+
+            # Road proximity proxy from VIIRS radiance (higher = closer to roads)
+            road_proximity_km = max(0.5, 10.0 / max(radiance, 0.01) * 0.5)
+
+            # Risk score (0-100)
+            # Base: how much forest cover remains vs original
+            cover_loss_risk  = min(100, max(0, (treecover_2000 - forest_pct) * 2))
+            # Recent clearing rate amplifier
+            clearing_risk    = min(100, clearing_prob * 500)  # 0.2 = 100
+            # NDVI vegetation stress
+            ndvi_risk        = min(100, max(0, (0.7 - ndvi) * 200))
+            # Settlement pressure
+            settle_risk      = {"urban": 80, "peri-urban": 50, "rural": 20, "remote": 5}.get(settle_class, 20)
+
+            risk_score = min(100, (
+                cover_loss_risk * 0.35 +
+                clearing_risk  * 0.30 +
+                ndvi_risk      * 0.20 +
+                settle_risk    * 0.15
+            ))
+
+            factors = []
+            if cover_loss_risk > 40: factors.append(f"Forest cover reduced from {treecover_2000:.0f}% to {forest_pct:.0f}%")
+            if clearing_risk   > 30: factors.append(f"{loss_ha_recent:.0f} ha lost since 2020")
+            if ndvi_risk       > 30: factors.append("Vegetation stress detected (low NDVI)")
+            if settle_risk     > 40: factors.append(f"{settle_class.title()} development pressure")
+            if not factors: factors = ["Low deforestation pressure observed"]
+
+            recs = []
+            if risk_score > 70: recs = ["Immediate forest monitoring programme", "Engage law enforcement for illegal clearing", "Community boundary demarcation"]
+            elif risk_score > 40: recs = ["Enhanced NDVI monitoring", "Review land-use permits", "Establish buffer zones"]
+            else: recs = ["Routine satellite monitoring", "Community forest stewardship"]
+
+            return DeforestationRisk(
+                hazard_type=HazardType.DEFORESTATION,
+                risk_score=round(risk_score, 1),
+                risk_level=self._get_risk_level(risk_score),
+                trend=TrendDirection.UP if clearing_risk > 20 else TrendDirection.STABLE,
+                confidence=80.0 if hansen_data else 65.0,
+                factors=factors,
+                recommendations=recs,
+                clearing_probability=round(clearing_prob, 4),
+                road_proximity=round(road_proximity_km, 2),
+                protection_status=("Protected" if forest_pct > 70 else "Partially Protected" if forest_pct > 40 else "Unprotected")
+            )
+        except Exception as e:
+            logger.error(f"Deforestation analysis error: {e}")
+            raise
 
     async def analyze_heatwave_risk(self, aoi: Polygon, satellite_data: Dict = None) -> HeatwaveRisk:
-        """Mock heatwave risk analysis"""
-        return HeatwaveRisk(
-            hazard_type=HazardType.HEATWAVE,
-            risk_score=85.0,
-            risk_level=RiskLevel.EXTREME,
-            trend=TrendDirection.UP,
-            confidence=90.0,
-            factors=["High temperatures", "Low humidity", "Urban heat island"],
-            recommendations=["Heat warning system", "Cooling centers"],
-            max_temperature=42.0,
-            duration_days=5,
-            heat_index=48.0
-        )
+        """
+        Heatwave risk computed from:
+        - MODIS LST: max temperature, 30-day hot-day count
+        - ERA5: air temperature, wind speed (stagnation factor)
+        - ESA WorldCover: urban heat island amplification
+        - NWS Heat Index formula applied to LST + humidity
+        """
+        try:
+            if satellite_data is None:
+                satellite_data = await self.satellite_service.get_aoi_data(aoi)
+
+            from app.core.exceptions import GEEDataUnavailableError
+            era5_data: Dict = {}
+            try:
+                era5_data = await self.satellite_service.get_era5_wind(aoi)
+            except (GEEDataUnavailableError, Exception) as e:
+                logger.warning(f"ERA5 unavailable for heatwave: {e}")
+
+            # --- Extract key variables ---
+            lst_mean   = satellite_data.get("land_surface_temperature", 28.0)
+            lst_max    = satellite_data.get("lst_max", lst_mean + 5.0)
+            humidity   = satellite_data.get("humidity", satellite_data.get("relative_humidity", 55.0))
+            urban_pct  = satellite_data.get("urban_percentage", 15.0)
+            wind_spd   = era5_data.get("wind_speed_ms", satellite_data.get("wind_speed", 3.0))
+            t_max_era5 = era5_data.get("air_temp_max_c", lst_max - 5.0)  # ERA5 2m < LST
+
+            # NWS Steadman Heat Index (°C) — Rothfusz regression
+            T  = lst_max  # °C (LST as surface proxy)
+            RH = humidity
+            HI = (-8.78469475556 +
+                   1.61139411  * T +
+                   2.33854883889 * RH +
+                  -0.14611605 * T * RH +
+                  -0.012308094 * T**2 +
+                  -0.0164248277778 * RH**2 +
+                   0.002211732 * T**2 * RH +
+                   0.00072546 * T * RH**2 +
+                  -0.000003582 * T**2 * RH**2)
+            heat_index = round(float(HI), 1)
+
+            # Urban heat island adds 2-8°C to surface temps
+            uhi_offset    = (urban_pct / 100.0) * 6.0  # up to +6°C for fully urban
+            effective_tmax = round(lst_max + uhi_offset, 1)
+
+            # Duration: number of days LST > 35°C in 30-day window (proxy via anomaly)
+            lst_anomaly = satellite_data.get("temperature_anomaly", 0.0)
+            hot_day_count = max(0, int((effective_tmax - 33.0) * 2)) if effective_tmax > 33 else 0
+
+            # Low wind → heat accumulates → stagnation penalty
+            stagnation_risk = min(30, max(0, (5 - wind_spd) * 6))
+
+            # Composite risk score
+            temp_risk  = min(100, max(0, (effective_tmax - 30) * 5))
+            hi_risk    = min(100, max(0, (heat_index - 35) * 4))
+            risk_score = min(100, temp_risk * 0.50 + hi_risk * 0.30 + stagnation_risk * 0.20)
+
+            factors = []
+            if effective_tmax > 38: factors.append(f"Extreme surface temp {effective_tmax:.1f}°C (UHI adjusted)")
+            if heat_index     > 40: factors.append(f"Dangerous heat index {heat_index:.1f}°C")
+            if humidity       > 70: factors.append("High humidity amplifying heat stress")
+            if wind_spd       < 2:  factors.append("Atmospheric stagnation — poor heat dispersion")
+            if urban_pct      > 40: factors.append("Urban heat island effect")
+            if not factors:         factors = ["Moderate thermal conditions"]
+
+            recs = []
+            if risk_score > 75: recs = ["Issue heat emergency alert", "Open cooling centres", "Restrict outdoor labour in peak hours", "Increase emergency medical standby"]
+            elif risk_score > 50: recs = ["Public heat advisory", "Monitor vulnerable populations", "Increase water availability"]
+            else: recs = ["Routine heat monitoring", "Standard public health advisory"]
+
+            return HeatwaveRisk(
+                hazard_type=HazardType.HEATWAVE,
+                risk_score=round(risk_score, 1),
+                risk_level=self._get_risk_level(risk_score),
+                trend=TrendDirection.UP if lst_anomaly > 2 else TrendDirection.STABLE,
+                confidence=85.0 if era5_data else 70.0,
+                factors=factors,
+                recommendations=recs,
+                max_temperature=effective_tmax,
+                duration_days=hot_day_count,
+                heat_index=heat_index,
+            )
+        except Exception as e:
+            logger.error(f"Heatwave analysis error: {e}")
+            raise
 
     async def analyze_cyclone_risk(self, aoi: Polygon, satellite_data: Dict = None) -> CycloneRisk:
-        """Mock cyclone risk analysis"""
-        return CycloneRisk(
-            hazard_type=HazardType.CYCLONE,
-            risk_score=15.0,
-            risk_level=RiskLevel.LOW,
-            trend=TrendDirection.DOWN,
-            confidence=75.0,
-            factors=["Low sea surface temperature", "High wind shear"],
-            recommendations=["Continue monitoring", "Maintain preparedness"],
-            intensity_category=1,
-            wind_speed=85.0,
-            storm_surge=1.2,
-            track_probability=0.1
-        )
+        """
+        Cyclone risk computed from:
+        - Latitude: cyclone genesis occurs 5°-20° from equator
+        - MODIS LST over water bodies (JRC water mask) as SST proxy
+        - ERA5 wind speed → Saffir-Simpson category
+        - Historical basin frequency weighting
+        """
+        try:
+            if satellite_data is None:
+                satellite_data = await self.satellite_service.get_aoi_data(aoi)
 
-    def _get_mock_hazard_analysis(self) -> HazardAnalysisResponse:
-        """Return mock hazard analysis when real analysis fails"""
-        wildfire = self._get_mock_wildfire_risk()
-        flood = self._get_mock_flood_risk()
-        landslide = self._get_mock_landslide_risk()
-        deforestation = DeforestationRisk(
-            hazard_type=HazardType.DEFORESTATION,
-            risk_score=30.0,
-            risk_level=RiskLevel.MODERATE,
-            trend=TrendDirection.UP,
-            confidence=85.0,
-            factors=["Road proximity"],
-            recommendations=["Monitor boundaries"],
-            clearing_probability=0.15,
-            road_proximity=2.5,
-            protection_status="Partially Protected"
-        )
-        heatwave = HeatwaveRisk(
-            hazard_type=HazardType.HEATWAVE,
-            risk_score=85.0,
-            risk_level=RiskLevel.EXTREME,
-            trend=TrendDirection.UP,
-            confidence=90.0,
-            factors=["High temperatures"],
-            recommendations=["Heat warnings"],
-            max_temperature=42.0,
-            duration_days=5,
-            heat_index=48.0
-        )
-        cyclone = CycloneRisk(
-            hazard_type=HazardType.CYCLONE,
-            risk_score=15.0,
-            risk_level=RiskLevel.LOW,
-            trend=TrendDirection.DOWN,
-            confidence=75.0,
-            factors=["Low SST"],
-            recommendations=["Monitor"],
-            intensity_category=1,
-            wind_speed=85.0,
-            storm_surge=1.2,
-            track_probability=0.1
-        )
+            from app.core.exceptions import GEEDataUnavailableError
+            era5_data: Dict = {}
+            jrc_data:  Dict = {}
+            try:
+                era5_data = await self.satellite_service.get_era5_wind(aoi)
+            except (GEEDataUnavailableError, Exception) as e:
+                logger.warning(f"ERA5 unavailable for cyclone: {e}")
+            try:
+                jrc_data = await self.satellite_service.get_jrc_surface_water(aoi)
+            except (GEEDataUnavailableError, Exception) as e:
+                logger.warning(f"JRC unavailable for cyclone: {e}")
 
-        return HazardAnalysisResponse(
-            wildfire=wildfire,
-            flood=flood,
-            landslide=landslide,
-            deforestation=deforestation,
-            heatwave=heatwave,
-            cyclone=cyclone,
-            overall_risk_score=55.0,
-            priority_hazards=[HazardType.HEATWAVE, HazardType.WILDFIRE]
-        )
+            # --- AOI centroid latitude for genesis probability ---
+            coords = aoi.coordinates[0]
+            lat = float(np.mean([c[1] for c in coords]))
+            lon = float(np.mean([c[0] for c in coords]))
 
-    def _get_mock_wildfire_risk(self) -> WildfireRisk:
-        """Return mock wildfire risk"""
-        return WildfireRisk(
-            hazard_type=HazardType.WILDFIRE,
-            risk_score=78.0,
-            risk_level=RiskLevel.HIGH,
-            trend=TrendDirection.UP,
-            confidence=88.0,
-            factors=["High temperature", "Low humidity", "Dry vegetation"],
-            recommendations=["Fire watch", "Evacuation planning"],
-            ignition_probability=0.65,
-            spread_rate=2.5,
-            fuel_moisture=15.0,
-            fire_weather_index=85.0
-        )
+            # Latitude factor: peak probability 10°-15°, drops off toward equator and poles
+            abs_lat = abs(lat)
+            lat_factor = max(0.0, 1.0 - abs(abs_lat - 12.5) / 12.5) if abs_lat <= 25 else 0.0
 
-    def _get_mock_flood_risk(self) -> FloodRisk:
-        """Return mock flood risk"""
-        return FloodRisk(
-            hazard_type=HazardType.FLOOD,
-            risk_score=45.0,
-            risk_level=RiskLevel.MODERATE,
-            trend=TrendDirection.DOWN,
-            confidence=82.0,
-            factors=["Recent rainfall", "Poor drainage"],
-            recommendations=["Improve drainage", "Early warning"],
-            return_period=25,
-            max_depth=1.5,
-            affected_area=12.5,
-            drainage_capacity=65.0
-        )
+            # Ocean basin historical frequency weighting
+            # (storms/year per 5° grid roughly: W Pacific ~25, E Pacific ~15, N Atlantic ~12, etc.)
+            basin_freq = (
+                1.0  if (lon > 100 and lon < 180 and lat > 0)   else  # W Pacific
+                0.8  if (lon > 180 or lon < -80 and lat > 0)    else  # E Pacific
+                0.65 if (lon > -100 and lon < -20 and lat > 0)  else  # N Atlantic
+                0.4  if (lon > 30 and lon < 100 and lat < 0)    else  # S Indian
+                0.3
+            )
 
-    def _get_mock_landslide_risk(self) -> LandslideRisk:
-        """Return mock landslide risk"""
-        return LandslideRisk(
-            hazard_type=HazardType.LANDSLIDE,
-            risk_score=62.0,
-            risk_level=RiskLevel.HIGH,
-            trend=TrendDirection.STABLE,
-            confidence=79.0,
-            factors=["Steep slopes", "Saturated soil"],
-            recommendations=["Slope monitoring", "Drainage improvement"],
-            slope_stability=45.0,
-            soil_saturation=85.0,
-            trigger_threshold=75.0
-        )
+            # SST proxy: use MODIS LST mean (not ideal, but best available without GHRSST in GEE)
+            lst_mean = satellite_data.get("land_surface_temperature", 28.0)
+            # SST typically 3-8°C lower than land LST; cyclones need SST > 26°C
+            sst_est  = max(0.0, lst_mean - 5.0)
+            sst_factor = min(1.0, max(0.0, (sst_est - 24.0) / 6.0))  # 0 at 24°C, 1 at 30°C
+
+            # Wind shear from ERA5 (high shear suppresses cyclone development)
+            wind_speed_10m = era5_data.get("wind_speed_ms", 5.0)
+            # High wind shear at low levels correlates with strong surface winds
+            wind_shear_factor = max(0.0, 1.0 - (wind_speed_10m - 8) / 20) if wind_speed_10m > 8 else 1.0
+
+            # Track probability = product of all favorable conditions
+            track_probability = round(lat_factor * sst_factor * basin_freq * wind_shear_factor, 4)
+
+            # Saffir-Simpson intensity estimate from wind speed
+            wind_kmh = wind_speed_10m * 3.6
+            if wind_kmh >= 252:   cat, cat_wind = 5, wind_speed_10m
+            elif wind_kmh >= 209: cat, cat_wind = 4, wind_speed_10m
+            elif wind_kmh >= 178: cat, cat_wind = 3, wind_speed_10m
+            elif wind_kmh >= 154: cat, cat_wind = 2, wind_speed_10m
+            elif wind_kmh >= 119: cat, cat_wind = 1, wind_speed_10m
+            else:                  cat, cat_wind = 0, wind_speed_10m
+
+            # Storm surge estimate (NOAA empirical: ~0.3m/Saffur cat)
+            storm_surge = round(cat * 0.8 + 0.2, 1)
+
+            # Final risk score
+            risk_score = float(np.clip(track_probability * 100 * 1.5, 0, 100))
+
+            factors = []
+            if lat_factor > 0.5:    factors.append(f"Latitude {lat:.1f}° in prime cyclone genesis zone")
+            if sst_factor > 0.5:    factors.append(f"Estimated SST {sst_est:.1f}°C (favourable for intensification)")
+            if basin_freq > 0.6:    factors.append("High historical cyclone basin frequency")
+            if wind_shear_factor < 0.5: factors.append("Low wind shear favours development")
+            if not factors:         factors = ["Low cyclone risk — unfavourable conditions"]
+
+            recs = []
+            if risk_score > 60: recs = ["Issue cyclone watch for coastal communities", "Pre-position emergency supplies", "Activate evacuation plans"]
+            elif risk_score > 30: recs = ["Monitor tropical weather systems", "Prepare disaster response plans"]
+            else: recs = ["Maintain standard tropical weather watch", "Seasonal preparedness review"]
+
+            return CycloneRisk(
+                hazard_type=HazardType.CYCLONE,
+                risk_score=round(risk_score, 1),
+                risk_level=self._get_risk_level(risk_score),
+                trend=TrendDirection.UP if sst_factor > 0.7 else TrendDirection.STABLE,
+                confidence=75.0 if era5_data else 55.0,
+                factors=factors,
+                recommendations=recs,
+                intensity_category=cat,
+                wind_speed=round(cat_wind, 1),
+                storm_surge=storm_surge,
+                track_probability=track_probability,
+            )
+        except Exception as e:
+            logger.error(f"Cyclone analysis error: {e}")
+            raise
 
     async def _extract_landslide_features(self, aoi: Polygon, satellite_data: Dict = None) -> Dict[str, Any]:
         """Extract features for landslide susceptibility analysis"""

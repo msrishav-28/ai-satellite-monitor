@@ -1,4 +1,6 @@
-"""Enhanced weather service extending WeatherService to include OpenWeather Air Pollution API."""
+"""Enhanced weather service extending WeatherService to include OpenWeather Air Pollution API.
+No mock fallbacks — raises ExternalAPIError if API key missing or API fails.
+"""
 from __future__ import annotations
 
 import aiohttp
@@ -7,6 +9,7 @@ from typing import Dict, Any
 from datetime import datetime
 
 from app.core.config import settings
+from app.core.exceptions import ExternalAPIError
 from app.services.weather import WeatherService
 
 logger = logging.getLogger(__name__)
@@ -15,7 +18,7 @@ logger = logging.getLogger(__name__)
 class EnhancedWeatherService(WeatherService):
     async def get_air_quality(self, lat: float, lon: float) -> Dict[str, Any]:
         if not self.enabled:
-            return self._mock_air_quality_data(lat, lon)
+            raise ExternalAPIError("OpenWeatherMap", detail="OPENWEATHER_API_KEY not configured")
         try:
             async with aiohttp.ClientSession() as session:
                 url = f"{self.base_url}/air_pollution"
@@ -24,11 +27,11 @@ class EnhancedWeatherService(WeatherService):
                     if resp.status == 200:
                         raw = await resp.json()
                         return self._format_air_quality_data(raw)
-                    logger.warning(f"OpenWeather Air Quality failed: HTTP {resp.status}")
-                    return self._mock_air_quality_data(lat, lon)
+                    raise ExternalAPIError("OpenWeatherMap Air Pollution", resp.status, await resp.text())
+        except ExternalAPIError:
+            raise
         except Exception as e:
-            logger.error(f"OpenWeather Air Quality error: {e}")
-            return self._mock_air_quality_data(lat, lon)
+            raise ExternalAPIError("OpenWeatherMap Air Pollution", detail=str(e))
 
     def _format_air_quality_data(self, raw: Dict[str, Any]) -> Dict[str, Any]:
         item = (raw.get("list") or [{}])[0]
@@ -38,14 +41,4 @@ class EnhancedWeatherService(WeatherService):
             "components": item.get("components", {}),
             "source": "openweathermap_air",
             "data_quality": "live",
-        }
-
-    def _mock_air_quality_data(self, lat: float, lon: float) -> Dict[str, Any]:
-        base = int((abs(lat) + abs(lon)) % 5) + 1  # 1-5 scale
-        return {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
-            "aqi": base,
-            "components": {"pm25": 12.3, "pm10": 20.5, "o3": 30.1},
-            "source": "mock",
-            "data_quality": "simulated",
         }
