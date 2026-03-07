@@ -32,7 +32,7 @@ class AIInsight(Base):
     detected_at = Column(DateTime, default=datetime.utcnow)
     
     # Additional data
-    metadata_json = Column("metadata", JSON)  # Additional insight-specific data
+    insight_metadata = Column("metadata", JSON)  # Additional insight-specific data
     
     # Status
     is_active = Column(Boolean, default=True)
