@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
     Globe,
@@ -23,25 +23,23 @@ import {
     CommandSeparator,
 } from '@/components/ui/command'
 
-const navigationItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, group: 'Navigation' },
-    { name: 'Monitor', href: '/monitor', icon: Globe, group: 'Navigation' },
-    { name: 'Analysis', href: '/analysis', icon: Flame, group: 'Navigation' },
-    { name: 'Analytics', href: '/analytics', icon: BarChart3, group: 'Navigation' },
-    { name: 'Alerts', href: '/alerts', icon: Bell, group: 'Navigation' },
-    { name: 'Settings', href: '/settings', icon: Settings, group: 'Navigation' },
-    { name: 'Home', href: '/', icon: ArrowRight, group: 'Navigation' },
-]
+// --- Shared State Context ---
+interface CommandPaletteContextType {
+    open: boolean
+    setOpen: (open: boolean) => void
+}
 
-const quickActions = [
-    { name: 'Search satellite data...', action: 'search-data', icon: Search, group: 'Actions' },
-    { name: 'Draw new AOI polygon', action: 'draw-aoi', icon: Globe, group: 'Actions' },
-    { name: 'View latest alerts', action: 'view-alerts', icon: Bell, group: 'Actions' },
-]
+const CommandPaletteContext = createContext<CommandPaletteContextType>({
+    open: false,
+    setOpen: () => {},
+})
 
-export function CommandPalette() {
+export function useCommandPalette() {
+    return useContext(CommandPaletteContext)
+}
+
+export function CommandPaletteProvider({ children }: { children: React.ReactNode }) {
     const [open, setOpen] = useState(false)
-    const router = useRouter()
 
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
@@ -50,15 +48,43 @@ export function CommandPalette() {
                 setOpen((prev) => !prev)
             }
         }
-
         document.addEventListener('keydown', down)
         return () => document.removeEventListener('keydown', down)
     }, [])
 
-    const handleSelect = (href: string) => {
+    return (
+        <CommandPaletteContext.Provider value={{ open, setOpen }}>
+            {children}
+        </CommandPaletteContext.Provider>
+    )
+}
+
+// --- Navigation Items ---
+const navigationItems = [
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Monitor', href: '/monitor', icon: Globe },
+    { name: 'Analysis', href: '/analysis', icon: Flame },
+    { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { name: 'Alerts', href: '/alerts', icon: Bell },
+    { name: 'Settings', href: '/settings', icon: Settings },
+    { name: 'Home', href: '/', icon: ArrowRight },
+]
+
+const quickActions = [
+    { name: 'Search satellite data...', action: 'search-data', icon: Search },
+    { name: 'Draw new AOI polygon', action: 'draw-aoi', icon: Globe },
+    { name: 'View latest alerts', action: 'view-alerts', icon: Bell },
+]
+
+// --- Command Palette Dialog ---
+export function CommandPalette() {
+    const { open, setOpen } = useCommandPalette()
+    const router = useRouter()
+
+    const handleSelect = useCallback((href: string) => {
         setOpen(false)
         router.push(href)
-    }
+    }, [setOpen, router])
 
     return (
         <CommandDialog

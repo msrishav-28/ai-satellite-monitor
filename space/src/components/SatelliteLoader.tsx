@@ -3,21 +3,22 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 
-interface SatelliteLoaderProps {
-    onComplete?: () => void
-    duration?: number
-}
-
-export function SatelliteLoader({ onComplete, duration = 2500 }: SatelliteLoaderProps) {
-    const [isVisible, setIsVisible] = useState(true)
+export function SatelliteLoader() {
+    const [isVisible, setIsVisible] = useState(false)
 
     useEffect(() => {
+        // Only show on first visit per session
+        if (sessionStorage.getItem('space-loaded')) {
+            setIsVisible(false)
+            return
+        }
+        setIsVisible(true)
         const timer = setTimeout(() => {
             setIsVisible(false)
-            onComplete?.()
-        }, duration)
+            sessionStorage.setItem('space-loaded', 'true')
+        }, 2500)
         return () => clearTimeout(timer)
-    }, [duration, onComplete])
+    }, [])
 
     return (
         <AnimatePresence>

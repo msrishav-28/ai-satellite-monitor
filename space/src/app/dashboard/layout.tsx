@@ -1,11 +1,11 @@
-'use client'
+export const dynamic = 'force-dynamic'
 
-import { AppShell } from '@/components/AppShell'
+import DashboardLayoutClient from './layout-client'
 
 export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
-    return <AppShell>{children}</AppShell>
+    return <DashboardLayoutClient>{children}</DashboardLayoutClient>
 }

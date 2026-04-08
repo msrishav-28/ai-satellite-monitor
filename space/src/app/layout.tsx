@@ -52,7 +52,7 @@ export default function RootLayout({
         />
 
         <SmoothScroll>
-          <main id="main-content">{children}</main>
+          <div id="main-content" role="main">{children}</div>
         </SmoothScroll>
 
         <VisualEditsMessenger />

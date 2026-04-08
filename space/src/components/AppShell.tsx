@@ -12,7 +12,6 @@ import {
     Search,
     Flame,
     Settings,
-    ChevronLeft,
 } from 'lucide-react'
 import {
     SidebarProvider,
@@ -32,7 +31,7 @@ import {
     useSidebar,
 } from '@/components/ui/sidebar'
 import { Magnetic } from '@/components/ui/Magnetic'
-import { CommandPalette } from '@/components/CommandPalette'
+import { CommandPalette, CommandPaletteProvider, useCommandPalette } from '@/components/CommandPalette'
 
 const platformLinks = [
     {
@@ -66,6 +65,7 @@ const platformLinks = [
 function AppSidebarContent() {
     const pathname = usePathname()
     const { state } = useSidebar()
+    const { setOpen: openPalette } = useCommandPalette()
     const isCollapsed = state === 'collapsed'
 
     return (
@@ -133,7 +133,7 @@ function AppSidebarContent() {
                                 <SidebarMenuItem>
                                     <SidebarMenuButton
                                         className="h-10 gap-3 px-4 rounded-xl hover:bg-white/[0.03] text-white/40"
-                                        onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
+                                        onClick={() => openPalette(true)}
                                     >
                                         <Search className="w-4 h-4 flex-shrink-0" />
                                         <span className="text-[11px] font-semibold uppercase tracking-[0.15em]">
@@ -176,7 +176,9 @@ interface AppShellProps {
     children: React.ReactNode
 }
 
-export function AppShell({ children }: AppShellProps) {
+function AppShellInner({ children }: AppShellProps) {
+    const { setOpen: openPalette } = useCommandPalette()
+
     return (
         <SidebarProvider defaultOpen={false}>
             <AppSidebarContent />
@@ -188,7 +190,7 @@ export function AppShell({ children }: AppShellProps) {
                     <div className="flex items-center gap-3">
                         <Magnetic strength={0.2}>
                             <button
-                                onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
+                                onClick={() => openPalette(true)}
                                 className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/5 text-white/30 text-[10px] font-medium uppercase tracking-widest hover:bg-white/[0.06] hover:text-white/50 transition-all"
                             >
                                 <Search className="w-3 h-3" />
@@ -202,5 +204,13 @@ export function AppShell({ children }: AppShellProps) {
             </SidebarInset>
             <CommandPalette />
         </SidebarProvider>
+    )
+}
+
+export function AppShell({ children }: AppShellProps) {
+    return (
+        <CommandPaletteProvider>
+            <AppShellInner>{children}</AppShellInner>
+        </CommandPaletteProvider>
     )
 }

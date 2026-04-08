@@ -46,25 +46,35 @@ function AnimatedCounter({ value, duration = 2 }: { value: number; duration?: nu
 }
 
 // --- KPI Card ---
+const kpiColorMap = {
+    'white': { bg: 'bg-white/10', text: 'text-white' },
+    'red': { bg: 'bg-red-500/10', text: 'text-red-500' },
+    'blue': { bg: 'bg-blue-500/10', text: 'text-blue-500' },
+    'green': { bg: 'bg-emerald-500/10', text: 'text-emerald-500' },
+} as const
+
+type KPIColor = keyof typeof kpiColorMap
+
 interface KPICardProps {
     title: string
     value: number
     suffix?: string
     trend: number
     icon: React.ElementType
-    color: string
+    color: KPIColor
 }
 
 function KPICard({ title, value, suffix = '', trend, icon: Icon, color }: KPICardProps) {
     const isPositive = trend >= 0
     const TrendIcon = isPositive ? TrendingUp : TrendingDown
+    const colors = kpiColorMap[color] ?? kpiColorMap.white
 
     return (
         <PerspectiveCard className="h-full">
             <div className="h-full bg-white/[0.02] border border-white/5 backdrop-blur-xl rounded-[1.5rem] p-6 flex flex-col justify-between">
                 <div className="flex items-start justify-between">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-${color}/10`}>
-                        <Icon className={`w-5 h-5 text-${color}`} />
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${colors.bg}`}>
+                        <Icon className={`w-5 h-5 ${colors.text}`} />
                     </div>
                     <div className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest ${isPositive ? 'text-[var(--status-safe)]' : 'text-[var(--status-critical)]'}`}>
                         <TrendIcon className="w-3 h-3" />
@@ -176,9 +186,9 @@ function AOICard({ name, location, riskLevel, lastUpdated, hazards }: AOICardPro
 // --- Sample Data ---
 const kpiData: KPICardProps[] = [
     { title: 'Active AOIs', value: 12, trend: 8, icon: Globe, color: 'white' },
-    { title: 'Active Alerts', value: 7, trend: -12, icon: AlertTriangle, color: 'red-500' },
+    { title: 'Active Alerts', value: 7, trend: -12, icon: AlertTriangle, color: 'red' },
     { title: 'Satellites Tracked', value: 34, trend: 3, icon: Satellite, color: 'white' },
-    { title: 'Risk Index', value: 67, suffix: '/100', trend: -5, icon: Shield, color: 'red-500' },
+    { title: 'Risk Index', value: 67, suffix: '/100', trend: -5, icon: Shield, color: 'red' },
 ]
 
 const activityData: ActivityItemProps[] = [
@@ -205,9 +215,7 @@ export default function DashboardPage() {
         <div className="min-h-screen bg-[#0E0E0E] p-8">
             {/* Header */}
             <div className="mb-12">
-                <TextReveal>
-                    <h1 className="text-4xl font-bold text-white">Mission Control</h1>
-                </TextReveal>
+                <TextReveal text="Mission Control" className="text-4xl font-bold text-white" />
                 <p className="text-sm text-white/30 mt-2 normal-case tracking-normal">
                     Environmental intelligence — real-time satellite monitoring overview
                 </p>
