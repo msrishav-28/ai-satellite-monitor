@@ -1,5 +1,7 @@
 'use client'
 
+import type { AOI } from '@/types/domain'
+
 import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import * as turf from '@turf/turf'
@@ -7,7 +9,7 @@ import { GlassPanel } from '../shared/GlassPanel'
 import { useWeatherData } from '@/hooks/useWeatherData'
 
 interface Props {
-  aoi: any
+  aoi: AOI | null
   onClose?: () => void
 }
 
@@ -83,3 +85,4 @@ export default function WeatherPanel({ aoi, onClose }: Props) {
     </motion.div>
   )
 }
+

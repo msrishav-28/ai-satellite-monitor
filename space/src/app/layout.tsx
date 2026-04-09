@@ -6,6 +6,8 @@ import Script from "next/script";
 import { CustomCursor } from "@/components/CustomCursor";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { SatelliteLoader } from "@/components/SatelliteLoader";
+import { MobileTabBar } from "@/components/MobileTabBar";
+import { PageTransition } from "@/components/PageTransition";
 
 export const metadata: Metadata = {
   title: "SPACE — AI Satellite Environmental Monitor",
@@ -52,9 +54,12 @@ export default function RootLayout({
         />
 
         <SmoothScroll>
-          <div id="main-content" role="main">{children}</div>
+          <div id="main-content" role="main">
+            <PageTransition>{children}</PageTransition>
+          </div>
         </SmoothScroll>
 
+        <MobileTabBar />
         <VisualEditsMessenger />
       </body>
     </html>

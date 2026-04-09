@@ -1,5 +1,7 @@
 'use client'
 
+import type { AOI } from '@/types/domain'
+
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GlassPanel } from '../shared/GlassPanel'
@@ -7,7 +9,7 @@ import { useImpactAnalysis } from '../../hooks/useImpactAnalysis'
 import { BarChart3, Footprints, PawPrint, Sprout, Droplets } from 'lucide-react'
 
 interface Props {
-  aoi: any
+  aoi: AOI | null
 }
 
 export default function ImpactAnalysis({ aoi }: Props) {
@@ -73,3 +75,4 @@ export default function ImpactAnalysis({ aoi }: Props) {
     </motion.div>
   )
 }
+

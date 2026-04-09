@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useCallback } from 'react'
+import type { AOI } from '@/types/domain'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Nav } from '@/components/Nav'
@@ -25,11 +26,11 @@ const TimeSeriesControl = dynamic(() => import('@/components/panels/TimeSeriesCo
 type ActivePanel = 'metrics' | 'weather' | 'aqi' | 'hazard' | 'ai' | 'impact' | 'timelapse' | null
 
 export default function MonitorPage() {
-    const [selectedAOI, setSelectedAOI] = useState<any>(null)
+    const [selectedAOI, setSelectedAOI] = useState<AOI | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [activePanel, setActivePanel] = useState<ActivePanel>(null)
 
-    const handleAOISelect = useCallback((aoi: any) => {
+    const handleAOISelect = useCallback((aoi: AOI) => {
         setSelectedAOI(aoi)
         setActivePanel('metrics')
     }, [])

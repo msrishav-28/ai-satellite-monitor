@@ -1,14 +1,16 @@
 'use client'
 
+import type { AOI } from '@/types/domain'
+
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GlassPanel } from '../shared/GlassPanel'
-import { RiskGauge } from '../charts/RiskGauge'
+import RiskGauge from '../charts/RiskGauge'
 import { useHazardAnalysis } from '../../hooks/useHazardPrediction'
 import { Shield, Flame, Droplet, Mountain, Trees, Sun, Wind } from 'lucide-react'
 
 interface Props {
-  aoi: any
+  aoi: AOI | null
 }
 
 const hazardIcons = {
@@ -121,3 +123,4 @@ export default function HazardAnalysis({ aoi }: Props) {
     </motion.div>
   )
 }
+

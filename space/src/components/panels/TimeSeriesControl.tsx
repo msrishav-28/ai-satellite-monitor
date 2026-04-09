@@ -1,12 +1,14 @@
 'use client'
 
+import type { AOI } from '@/types/domain'
+
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { GlassPanel } from '../shared/GlassPanel'
 import { Clock, Calendar, Film } from 'lucide-react'
 
 interface Props {
-  aoi: any
+  aoi: AOI | null
 }
 
 export default function TimeSeriesControl({ aoi }: Props) {
@@ -89,3 +91,4 @@ export default function TimeSeriesControl({ aoi }: Props) {
     </motion.div>
   )
 }
+

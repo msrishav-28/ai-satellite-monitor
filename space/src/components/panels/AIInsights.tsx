@@ -1,5 +1,7 @@
 'use client'
 
+import type { AOI } from '@/types/domain'
+
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GlassPanel } from '../shared/GlassPanel'
@@ -7,7 +9,7 @@ import { useAIInsights } from '../../hooks/useAIInsights'
 import { Brain, Zap, Search } from 'lucide-react'
 
 interface Props {
-  aoi: any
+  aoi: AOI | null
 }
 
 export default function AIInsights({ aoi }: Props) {
@@ -184,3 +186,4 @@ export default function AIInsights({ aoi }: Props) {
     </motion.div>
   )
 }
+

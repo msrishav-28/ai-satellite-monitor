@@ -89,20 +89,25 @@ function Artifact({ position, rotation }: { position: [number, number, number], 
 }
 
 export function Space3D() {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const starCount = isMobile ? 3500 : 7000;
+  const sparkleCount = isMobile ? 50 : 150;
+  const dpr: [number, number] = isMobile ? [1, 1] : [1, 2];
+
   return (
     <div
       className="fixed inset-0 z-0 pointer-events-none opacity-50"
       role="img"
       aria-label="3D space visualization with floating celestial objects"
     >
-      <Canvas shadows dpr={[1, 2]}>
+      <Canvas shadows dpr={dpr}>
         <PerspectiveCamera makeDefault position={[0, 0, 12]} fov={50} />
         <ambientLight intensity={0.5} />
         <spotLight position={[15, 20, 5]} angle={0.3} penumbra={1} intensity={2} color="#ffffff" castShadow />
         <pointLight position={[-10, -10, -10]} intensity={1} color="#ff0000" />
 
-        <Stars radius={100} depth={50} count={7000} factor={4} saturation={0} fade speed={0.5} />
-        <Sparkles count={150} scale={20} size={1} speed={0.3} color="#ffffff" />
+        <Stars radius={100} depth={50} count={starCount} factor={4} saturation={0} fade speed={0.5} />
+        <Sparkles count={sparkleCount} scale={20} size={1} speed={0.3} color="#ffffff" />
 
         <Scene />
 
@@ -111,4 +116,3 @@ export function Space3D() {
     </div>
   );
 }
-

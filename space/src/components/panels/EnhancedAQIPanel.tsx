@@ -1,5 +1,7 @@
 'use client'
 
+import type { AOI } from '@/types/domain'
+
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import * as turf from '@turf/turf'
@@ -7,7 +9,7 @@ import { useEnhancedAirQuality, EnhancedAQIData } from '@/hooks/useEnhancedAirQu
 import { useWebSocket } from '@/hooks/useWebSocket'
 
 interface Props {
-  aoi: any
+  aoi: AOI | null
   onClose?: () => void
 }
 
@@ -110,3 +112,4 @@ export default function EnhancedAQIPanel({ aoi, onClose }: Props) {
     </motion.div>
   )
 }
+

@@ -7,6 +7,7 @@ import { ArrowRight, Globe, Shield, Zap, Sparkles, ChevronRight, ArrowUpRight } 
 import { Nav } from "@/components/Nav";
 import { StarIcon } from "@/components/StarIcon";
 import { Space3D } from "@/components/Space3D";
+import { CanvasErrorBoundary } from "@/components/CanvasErrorBoundary";
 import { TextReveal } from "@/components/ui/TextReveal";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { PerspectiveCard } from "@/components/ui/PerspectiveCard";
@@ -30,7 +31,9 @@ export default function SpaceLanding() {
         style={{ scaleX }}
       />
       <Nav />
-      <Space3D />
+      <CanvasErrorBoundary>
+        <Space3D />
+      </CanvasErrorBoundary>
 
       {/* Hero Section */}
       <section className="relative h-screen flex flex-col items-center justify-center pt-20 px-8 overflow-hidden">

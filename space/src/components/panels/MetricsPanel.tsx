@@ -1,5 +1,7 @@
 'use client'
 
+import type { AOI } from '@/types/domain'
+
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Sun, Wind, Droplets, Cloud, ShieldAlert } from 'lucide-react'
@@ -10,7 +12,7 @@ import { useEnvironmentalData } from '../../hooks/useEnvironmentalData'
 import * as turf from '@turf/turf'
 
 interface Props {
-  aoi: any
+  aoi: AOI | null
 }
 
 export default function MetricsPanel({ aoi }: Props) {
@@ -151,3 +153,4 @@ export default function MetricsPanel({ aoi }: Props) {
     </motion.div>
   )
 }
+

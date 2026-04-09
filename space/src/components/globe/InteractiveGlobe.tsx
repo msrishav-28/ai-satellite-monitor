@@ -1,6 +1,8 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
+import type { MapRef } from 'react-map-gl/mapbox'
+import type { AOI } from '@/types/domain'
 import Map, { Source, Layer } from 'react-map-gl/mapbox'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
@@ -11,12 +13,13 @@ import AOIDrawing from './AOIDrawing'
 
 
 interface Props {
-  onAOISelect: (aoi: any) => void
+  onAOISelect: (aoi: AOI) => void
   onLoadingChange: (loading: boolean) => void
 }
 
 export default function InteractiveGlobe({ onAOISelect, onLoadingChange }: Props) {
-  const mapRef = useRef<any>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mapbox-gl Map instance exposes setProjection/setFog not typed in react-map-gl's MapRef
+  const mapRef = useRef<MapRef & Record<string, any>>(null)
   const [viewState, setViewState] = useState({
     longitude: 0,
     latitude: 20,
@@ -26,7 +29,7 @@ export default function InteractiveGlobe({ onAOISelect, onLoadingChange }: Props
   })
 
   const { activeLayers, setMapInstance } = useMapStore()
-  const [layerData, setLayerData] = useState<Record<string, any>>({})
+  const [layerData, setLayerData] = useState<Record<string, unknown>>({})
   const projection = 'globe' as const
 
   useEffect(() => {
