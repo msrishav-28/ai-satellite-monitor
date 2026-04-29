@@ -1,6 +1,7 @@
 # Operations Checklist
 
 - [ ] `RUNTIME_ENV` is set correctly for the target deployment.
+- [ ] `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_WS_URL` point at the intended backend host.
 - [ ] Staging/production uses PostgreSQL + PostGIS via `DATABASE_URL`.
 - [ ] Redis is configured through `REDIS_URL`.
 - [ ] Celery broker and result backend are configured.
@@ -9,3 +10,4 @@
 - [ ] OpenWeather and AQICN keys are present for live deployments.
 - [ ] `/health/live`, `/health/ready`, and `/health/dependencies` all respond as expected.
 - [ ] `/api/v1/data-sources/health` matches the intended provider rollout state.
+- [ ] Frontend routes `/dashboard`, `/monitor`, `/analytics`, `/alerts`, and `/settings` render against the target environment.

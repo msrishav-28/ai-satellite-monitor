@@ -1,23 +1,47 @@
 'use client'
 
+/*
+  Layer control for the globe monitor.
+  Updated in Phase 4 to use canonical backend layer identifiers, non-emoji
+  iconography, and clearer descriptions for each operational overlay.
+*/
+
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Layers, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useMapStore } from '@/store/useMapStore'
+import {
+  Layers,
+  ChevronLeft,
+  ChevronRight,
+  Flame,
+  Droplets,
+  Mountain,
+  Trees,
+  Sun,
+  Wind,
+  Cloudy,
+  Thermometer,
+  type LucideIcon,
+} from 'lucide-react'
 import * as Switch from '@radix-ui/react-switch'
+import { useMapStore } from '@/store/useMapStore'
 
-const layers = [
-  { id: 'wildfire-risk', name: 'Wildfire Risk', icon: '🔥', color: 'bg-red-500/20' },
-  { id: 'flood-zones', name: 'Flood Susceptibility', icon: '💧', color: 'bg-blue-500/20' },
-  { id: 'landslide-risk', name: 'Landslide Risk', icon: '⛰️', color: 'bg-orange-500/20' },
-  { id: 'deforestation', name: 'Deforestation Risk', icon: '🌳', color: 'bg-green-500/20' },
-  { id: 'heat-wave', name: 'Heat Wave Forecast', icon: '☀️', color: 'bg-pink-500/20' },
-  { id: 'cyclone', name: 'Cyclone Intensity', icon: '🌀', color: 'bg-purple-500/20' },
-  { id: 'air-quality', name: 'Air Quality (AQI)', icon: '💨', color: 'bg-indigo-500/20' },
-  { id: 'infrared', name: 'Infrared Heatmap', icon: '🌡️', color: 'bg-amber-500/20' },
-  // Premium/paid layers hidden by default (kept for future use)
-  // { id: 'arcgis-air-quality', name: 'ArcGIS AQI', icon: '🗺️', color: 'bg-teal-500/20' },
-  // { id: 'google-airview', name: 'Google AirView', icon: '📡', color: 'bg-cyan-500/20' },
+type LayerDefinition = {
+  id: string
+  name: string
+  description: string
+  icon: LucideIcon
+  color: string
+}
+
+const layers: LayerDefinition[] = [
+  { id: 'wildfire', name: 'Wildfire Risk', description: 'Active burn and spread exposure', icon: Flame, color: 'bg-red-500/20' },
+  { id: 'flood', name: 'Flood Exposure', description: 'Drainage and inundation pressure', icon: Droplets, color: 'bg-blue-500/20' },
+  { id: 'landslide', name: 'Landslide Risk', description: 'Slope instability and saturation', icon: Mountain, color: 'bg-orange-500/20' },
+  { id: 'vegetation', name: 'Vegetation Health', description: 'Coverage and biomass trends', icon: Trees, color: 'bg-emerald-500/20' },
+  { id: 'temperature', name: 'Surface Heat', description: 'Thermal anomalies and hotspots', icon: Thermometer, color: 'bg-amber-500/20' },
+  { id: 'weather', name: 'Weather Systems', description: 'Storm structures and fronts', icon: Cloudy, color: 'bg-sky-500/20' },
+  { id: 'aqi', name: 'Air Quality', description: 'AQI and pollution plumes', icon: Wind, color: 'bg-violet-500/20' },
+  { id: 'satellite', name: 'Satellite Coverage', description: 'Recent imagery availability', icon: Sun, color: 'bg-fuchsia-500/20' },
 ]
 
 export default function LayerControl() {
@@ -30,7 +54,7 @@ export default function LayerControl() {
       animate={{ opacity: 1, x: 0 }}
       transition={{
         duration: 0.5,
-        ease: [0.16, 1, 0.3, 1]
+        ease: [0.16, 1, 0.3, 1],
       }}
       className="absolute top-24 right-6 z-10"
     >
@@ -43,21 +67,21 @@ export default function LayerControl() {
             exit={{ opacity: 0, scale: 0.8, rotate: 90 }}
             transition={{
               duration: 0.4,
-              ease: [0.16, 1, 0.3, 1]
+              ease: [0.16, 1, 0.3, 1],
             }}
             onClick={() => setIsCollapsed(false)}
-            className="glass-panel-purple p-4 flex items-center gap-2 group hover:shadow-purple transition-all duration-300"
+            className="glass-panel-purple group flex items-center gap-2 p-4 transition-all duration-300 hover:shadow-purple"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <Layers className="w-4 h-4 text-white" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-600">
+              <Layers className="h-4 w-4 text-white" />
             </div>
             <motion.div
               animate={{ x: [0, 4, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <ChevronLeft className="w-4 h-4 text-purple-400" />
+              <ChevronLeft className="h-4 w-4 text-purple-400" />
             </motion.div>
           </motion.button>
         ) : (
@@ -68,66 +92,65 @@ export default function LayerControl() {
             exit={{ opacity: 0, scale: 0.9, y: -20 }}
             transition={{
               duration: 0.4,
-              ease: [0.16, 1, 0.3, 1]
+              ease: [0.16, 1, 0.3, 1],
             }}
-            className="glass-panel-purple p-6 w-[340px] relative overflow-hidden"
+            className="glass-panel-purple relative w-[340px] overflow-hidden p-6"
           >
-            {/* Ambient glow effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-purple-600/5" />
 
-            <div className="flex items-center justify-between mb-6 relative z-10">
+            <div className="relative z-10 mb-6 flex items-center justify-between">
               <motion.div
                 className="flex items-center gap-3"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-purple">
-                  <Layers className="w-4 h-4 text-white" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 shadow-purple">
+                  <Layers className="h-4 w-4 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-gradient-purple">Data Layers</h3>
               </motion.div>
               <motion.button
                 onClick={() => setIsCollapsed(true)}
-                className="p-2 hover:bg-purple-500/10 rounded-lg transition-all duration-200 group"
+                className="group rounded-lg p-2 transition-all duration-200 hover:bg-purple-500/10"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <ChevronRight className="w-4 h-4 text-text-secondary group-hover:text-purple-400 transition-colors duration-200" />
+                <ChevronRight className="h-4 w-4 text-text-secondary transition-colors duration-200 group-hover:text-purple-400" />
               </motion.button>
             </div>
 
-            <div className="space-y-2 relative z-10">
+            <div className="relative z-10 space-y-2">
               {layers.map((layer, index) => (
                 <motion.div
                   key={layer.id}
-                  className="flex items-center justify-between p-4 hover:bg-purple-500/5 rounded-xl transition-all duration-300 cursor-pointer group border border-transparent hover:border-purple-500/20"
+                  className="group flex cursor-pointer items-center justify-between rounded-xl border border-transparent p-4 transition-all duration-300 hover:border-purple-500/20 hover:bg-purple-500/5"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{
                     delay: 0.3 + index * 0.1,
                     duration: 0.4,
-                    ease: [0.16, 1, 0.3, 1]
+                    ease: [0.16, 1, 0.3, 1],
                   }}
                   whileHover={{
                     x: -6,
-                    transition: { duration: 0.2 }
+                    transition: { duration: 0.2 },
                   }}
                   onClick={() => toggleLayer(layer.id)}
                 >
                   <div className="flex items-center gap-3">
                     <motion.div
-                      className={`w-10 h-10 ${layer.color} rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300`}
+                      className={`flex h-10 w-10 items-center justify-center rounded-xl ${layer.color} shadow-lg transition-all duration-300 group-hover:shadow-xl`}
                       whileHover={{ scale: 1.1, rotate: 5 }}
                     >
-                      <span className="text-white text-sm">{layer.icon}</span>
+                      <layer.icon className="h-4 w-4 text-white" />
                     </motion.div>
                     <div>
-                      <span className="text-sm font-medium text-text-primary group-hover:text-white transition-colors duration-200">
+                      <span className="text-sm font-medium text-text-primary transition-colors duration-200 group-hover:text-white">
                         {layer.name}
                       </span>
                       <div className="text-xs text-text-tertiary">
-                        {activeLayers.includes(layer.id) ? 'Active' : 'Inactive'}
+                        {layer.description}
                       </div>
                     </div>
                   </div>
@@ -136,7 +159,7 @@ export default function LayerControl() {
                     checked={activeLayers.includes(layer.id)}
                     onCheckedChange={() => toggleLayer(layer.id)}
                     className="layer-toggle"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(event) => event.stopPropagation()}
                   >
                     <Switch.Thumb className="layer-toggle-ball" />
                   </Switch.Root>
@@ -145,24 +168,14 @@ export default function LayerControl() {
             </div>
 
             <motion.div
-              className="mt-6 pt-6 border-t border-glass-border-strong relative z-10"
+              className="relative z-10 mt-6 border-t border-glass-border-strong pt-6"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
             >
-              <motion.button
-                className="w-full py-3 text-sm text-text-secondary hover:text-purple-400 transition-all duration-200 hover:bg-purple-500/5 rounded-xl group flex items-center justify-center gap-2"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span>Configure layer settings</span>
-                <motion.span
-                  animate={{ x: [0, 4, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  →
-                </motion.span>
-              </motion.button>
+              <p className="text-xs leading-relaxed text-text-tertiary">
+                Layer visibility is driven by the live map-layer API. Combine overlays to compare weather, heat, vegetation, and hazard signals within the same AOI.
+              </p>
             </motion.div>
           </motion.div>
         )}

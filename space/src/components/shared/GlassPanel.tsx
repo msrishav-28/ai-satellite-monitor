@@ -1,9 +1,15 @@
 'use client'
 
+/*
+  Shared glass surface wrapper for /space overlays and cards.
+  Updated in Phase 4 so the variant API maps to the restored global utilities.
+*/
+
 import { motion } from 'framer-motion'
+import type { ReactNode } from 'react'
 
 interface GlassPanelProps {
-    children: React.ReactNode
+    children: ReactNode
     className?: string
     variant?: 'default' | 'purple' | 'elevated'
     animate?: boolean
@@ -16,9 +22,9 @@ export function GlassPanel({
     animate = true
 }: GlassPanelProps) {
     const baseClasses: Record<string, string> = {
-        default: 'bg-white/[0.02] border border-white/5 backdrop-blur-xl rounded-[2rem]',
-        purple: 'bg-white/[0.02] border border-white/5 backdrop-blur-xl rounded-[2rem]',
-        elevated: 'bg-white/[0.02] border border-white/5 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]'
+        default: 'glass-panel rounded-[2rem]',
+        purple: 'glass-panel-purple rounded-[2rem]',
+        elevated: 'glass-panel rounded-[2rem] shadow-glass-lg'
     }
 
     const MotionComponent = animate ? motion.div : 'div'

@@ -26,6 +26,14 @@ class TimeRange(BaseModel):
     end_date: datetime = Field(..., description="End date and time")
 
 
+class TimelapseRequestPayload(BaseModel):
+    """Canonical request body for timelapse generation."""
+    geometry: Polygon = Field(..., description="GeoJSON Polygon defining the area of interest")
+    start_date: datetime = Field(..., description="Start date and time")
+    end_date: datetime = Field(..., description="End date and time")
+    properties: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Additional request metadata")
+
+
 class WeatherData(BaseModel):
     """Weather data schema"""
     temperature: float = Field(..., description="Temperature in Celsius")

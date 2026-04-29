@@ -1,294 +1,275 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+/*
+  Operations dashboard for the application shell.
+  Updated in Phase 4 to replace hardcoded sample cards with live platform
+  health, provider status, websocket, and alert data.
+*/
+
+import { motion } from 'framer-motion'
 import {
-    Globe,
-    Shield,
-    AlertTriangle,
-    Satellite,
-    TrendingUp,
-    TrendingDown,
-    Activity,
-    Flame,
-    Droplets,
-    Wind,
-    TreePine,
-    ArrowUpRight,
-    Clock,
-    MapPin,
-    Eye,
+  Activity,
+  AlertTriangle,
+  RadioTower,
+  Satellite,
+  ShieldCheck,
+  ArrowUpRight,
+  Clock3,
+  MapPin,
 } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 import { PerspectiveCard } from '@/components/ui/PerspectiveCard'
-import { Magnetic } from '@/components/ui/Magnetic'
 import { TextReveal } from '@/components/ui/TextReveal'
+import {
+  useActiveAlerts,
+  useDataSourceHealth,
+  usePlatformHealth,
+  useRecentHazardUpdates,
+  useWebSocketStatus,
+} from '@/hooks/useOperationsData'
 
-// --- Animated Counter Component ---
-function AnimatedCounter({ value, duration = 2 }: { value: number; duration?: number }) {
-    const count = useMotionValue(0)
-    const rounded = useTransform(count, (latest) => Math.round(latest))
-    const [display, setDisplay] = useState(0)
+function MetricCard({
+  label,
+  value,
+  detail,
+  icon: Icon,
+  tone,
+}: {
+  label: string
+  value: string
+  detail: string
+  icon: LucideIcon
+  tone: 'white' | 'red' | 'green' | 'blue'
+}) {
+  const toneClasses: Record<'white' | 'red' | 'green' | 'blue', string> = {
+    white: 'bg-white/10 text-white',
+    red: 'bg-red-500/15 text-red-200',
+    green: 'bg-emerald-500/15 text-emerald-200',
+    blue: 'bg-sky-500/15 text-sky-200',
+  }
 
-    useEffect(() => {
-        const controls = animate(count, value, {
-            duration,
-            ease: [0.22, 1, 0.36, 1],
-        })
-        const unsubscribe = rounded.on('change', (v) => setDisplay(v))
-        return () => {
-            controls.stop()
-            unsubscribe()
-        }
-    }, [value, duration, count, rounded])
-
-    return <span>{display.toLocaleString()}</span>
-}
-
-// --- KPI Card ---
-interface KPICardProps {
-    title: string
-    value: number
-    suffix?: string
-    trend: number
-    icon: React.ElementType
-    color: string
-}
-
-function KPICard({ title, value, suffix = '', trend, icon: Icon, color }: KPICardProps) {
-    const isPositive = trend >= 0
-    const TrendIcon = isPositive ? TrendingUp : TrendingDown
-
-    return (
-        <PerspectiveCard className="h-full">
-            <div className="h-full bg-white/[0.02] border border-white/5 backdrop-blur-xl rounded-[1.5rem] p-6 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-${color}/10`}>
-                        <Icon className={`w-5 h-5 text-${color}`} />
-                    </div>
-                    <div className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest ${isPositive ? 'text-[var(--status-safe)]' : 'text-[var(--status-critical)]'}`}>
-                        <TrendIcon className="w-3 h-3" />
-                        {Math.abs(trend)}%
-                    </div>
-                </div>
-                <div className="mt-6">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30 mb-2">
-                        {title}
-                    </p>
-                    <p className="text-3xl font-bold tracking-tight text-white">
-                        <AnimatedCounter value={value} />
-                        {suffix && <span className="text-lg text-white/40 ml-1">{suffix}</span>}
-                    </p>
-                </div>
-            </div>
-        </PerspectiveCard>
-    )
-}
-
-// --- Activity Item ---
-interface ActivityItemProps {
-    time: string
-    title: string
-    description: string
-    type: 'alert' | 'analysis' | 'update' | 'satellite'
-}
-
-function ActivityItem({ time, title, description, type }: ActivityItemProps) {
-    const iconMap = {
-        alert: { icon: AlertTriangle, color: 'text-[var(--status-warning)]' },
-        analysis: { icon: Eye, color: 'text-[var(--ops-blue)]' },
-        update: { icon: Activity, color: 'text-[var(--status-safe)]' },
-        satellite: { icon: Satellite, color: 'text-white/60' },
-    }
-    const { icon: Icon, color } = iconMap[type]
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex gap-4 py-4 border-b border-white/5 last:border-0"
-        >
-            <div className={`w-8 h-8 rounded-full bg-white/[0.03] flex items-center justify-center flex-shrink-0 ${color}`}>
-                <Icon className="w-3.5 h-3.5" />
-            </div>
-            <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">{title}</p>
-                <p className="text-xs text-white/30 mt-0.5">{description}</p>
-            </div>
-            <span className="text-[10px] text-white/20 tracking-wider flex-shrink-0">{time}</span>
-        </motion.div>
-    )
-}
-
-// --- AOI Card ---
-interface AOICardProps {
-    name: string
-    location: string
-    riskLevel: 'low' | 'medium' | 'high' | 'critical'
-    lastUpdated: string
-    hazards: string[]
-}
-
-function AOICard({ name, location, riskLevel, lastUpdated, hazards }: AOICardProps) {
-    const riskColors = {
-        low: 'bg-[var(--status-safe)] text-black',
-        medium: 'bg-[var(--status-warning)] text-black',
-        high: 'bg-[var(--status-critical)] text-white',
-        critical: 'bg-red-600 text-white',
-    }
-
-    return (
-        <PerspectiveCard>
-            <Link href="/monitor" className="block">
-                <div className="bg-white/[0.02] border border-white/5 backdrop-blur-xl rounded-[1.5rem] p-5 hover:bg-white/[0.04] transition-colors group">
-                    <div className="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 className="text-sm font-semibold text-white normal-case tracking-normal">{name}</h3>
-                            <p className="text-[10px] text-white/30 flex items-center gap-1 mt-1">
-                                <MapPin className="w-3 h-3" /> {location}
-                            </p>
-                        </div>
-                        <span className={`text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${riskColors[riskLevel]}`}>
-                            {riskLevel}
-                        </span>
-                    </div>
-
-                    <div className="flex items-center gap-2 mb-3">
-                        {hazards.map((hazard) => (
-                            <span key={hazard} className="text-[9px] text-white/40 border border-white/10 rounded-full px-2 py-0.5">
-                                {hazard}
-                            </span>
-                        ))}
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-white/20 flex items-center gap-1">
-                            <Clock className="w-3 h-3" /> {lastUpdated}
-                        </span>
-                        <ArrowUpRight className="w-4 h-4 text-white/20 group-hover:text-white/60 transition-colors" />
-                    </div>
-                </div>
-            </Link>
-        </PerspectiveCard>
-    )
-}
-
-// --- Sample Data ---
-const kpiData: KPICardProps[] = [
-    { title: 'Active AOIs', value: 12, trend: 8, icon: Globe, color: 'white' },
-    { title: 'Active Alerts', value: 7, trend: -12, icon: AlertTriangle, color: 'red-500' },
-    { title: 'Satellites Tracked', value: 34, trend: 3, icon: Satellite, color: 'white' },
-    { title: 'Risk Index', value: 67, suffix: '/100', trend: -5, icon: Shield, color: 'red-500' },
-]
-
-const activityData: ActivityItemProps[] = [
-    { time: '2m ago', title: 'Wildfire risk elevated', description: 'AOI "Amazon Basin" — fire risk increased to HIGH', type: 'alert' },
-    { time: '15m ago', title: 'Analysis complete', description: 'NDVI analysis for "Borneo Rainforest" finished', type: 'analysis' },
-    { time: '1h ago', title: 'Sentinel-2 pass', description: 'New imagery available for 8 AOIs', type: 'satellite' },
-    { time: '2h ago', title: 'Deforestation detected', description: 'AOI "Congo Basin" — 12 hectares cleared', type: 'alert' },
-    { time: '3h ago', title: 'System update', description: 'Hazard prediction model v2.3 deployed', type: 'update' },
-    { time: '5h ago', title: 'Flood risk normalized', description: 'AOI "Bangladesh Delta" — risk returned to LOW', type: 'update' },
-]
-
-const aoiData: AOICardProps[] = [
-    { name: 'Amazon Basin', location: 'Brazil', riskLevel: 'critical', lastUpdated: '2 min ago', hazards: ['Fire', 'Deforestation'] },
-    { name: 'Borneo Rainforest', location: 'Indonesia', riskLevel: 'high', lastUpdated: '15 min ago', hazards: ['Deforestation', 'Erosion'] },
-    { name: 'Bangladesh Delta', location: 'Bangladesh', riskLevel: 'low', lastUpdated: '1 hr ago', hazards: ['Flood', 'Erosion'] },
-    { name: 'California Coast', location: 'USA', riskLevel: 'medium', lastUpdated: '2 hr ago', hazards: ['Fire', 'Drought'] },
-    { name: 'Congo Basin', location: 'DRC', riskLevel: 'high', lastUpdated: '30 min ago', hazards: ['Deforestation', 'Air'] },
-    { name: 'Great Barrier Reef', location: 'Australia', riskLevel: 'medium', lastUpdated: '4 hr ago', hazards: ['Water', 'Erosion'] },
-]
-
-// --- Main Dashboard Page ---
-export default function DashboardPage() {
-    return (
-        <div className="min-h-screen bg-[#0E0E0E] p-8">
-            {/* Header */}
-            <div className="mb-12">
-                <TextReveal>
-                    <h1 className="text-4xl font-bold text-white">Mission Control</h1>
-                </TextReveal>
-                <p className="text-sm text-white/30 mt-2 normal-case tracking-normal">
-                    Environmental intelligence — real-time satellite monitoring overview
-                </p>
-            </div>
-
-            {/* KPI Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
-                {kpiData.map((kpi, i) => (
-                    <motion.div
-                        key={kpi.title}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                        <KPICard {...kpi} />
-                    </motion.div>
-                ))}
-            </div>
-
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Activity Timeline — 1 col */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.6 }}
-                    className="lg:col-span-1"
-                >
-                    <div className="bg-white/[0.02] border border-white/5 backdrop-blur-xl rounded-[2rem] p-6 h-full">
-                        <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30 mb-6">
-                            Live Activity
-                        </h2>
-                        <div className="space-y-0">
-                            {activityData.map((item, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.5 + i * 0.05 }}
-                                >
-                                    <ActivityItem {...item} />
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* AOI Grid — 2 cols */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5, duration: 0.6 }}
-                    className="lg:col-span-2"
-                >
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30">
-                            Areas of Interest
-                        </h2>
-                        <Magnetic strength={0.2}>
-                            <Link
-                                href="/monitor"
-                                className="text-[10px] font-bold uppercase tracking-widest text-white/30 hover:text-white transition-colors flex items-center gap-2"
-                            >
-                                View All <ArrowUpRight className="w-3 h-3" />
-                            </Link>
-                        </Magnetic>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                        {aoiData.map((aoi, i) => (
-                            <motion.div
-                                key={aoi.name}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.6 + i * 0.05 }}
-                            >
-                                <AOICard {...aoi} />
-                            </motion.div>
-                        ))}
-                    </div>
-                </motion.div>
-            </div>
+  return (
+    <PerspectiveCard className="h-full">
+      <div className="flex h-full flex-col justify-between rounded-[1.5rem] border border-white/5 bg-white/[0.02] p-6 backdrop-blur-xl">
+        <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${toneClasses[tone]}`}>
+          <Icon className="h-5 w-5" />
         </div>
-    )
+        <div className="mt-8">
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-white/30">{label}</p>
+          <p className="text-3xl font-bold tracking-tight text-white">{value}</p>
+          <p className="mt-2 text-sm text-white/35">{detail}</p>
+        </div>
+      </div>
+    </PerspectiveCard>
+  )
+}
+
+export default function DashboardPage() {
+  const { data: platformHealth, isLoading: loadingHealth } = usePlatformHealth()
+  const { data: sourceHealth, isLoading: loadingSources } = useDataSourceHealth()
+  const { data: websocketStatus, isLoading: loadingWebsocket } = useWebSocketStatus()
+  const { data: activeAlerts, isLoading: loadingAlerts } = useActiveAlerts()
+  const { data: recentUpdates, isLoading: loadingUpdates } = useRecentHazardUpdates()
+
+  const providers = Object.entries(sourceHealth?.providers ?? {})
+  const liveProviders = providers.filter(([, provider]) => provider.status === 'live').length
+  const partialProviders = providers.filter(([, provider]) => provider.status === 'partial').length
+  const blockedProviders = providers.filter(([, provider]) => provider.status.includes('blocked')).length
+
+  return (
+    <div className="min-h-screen bg-[#0E0E0E] p-8">
+      <div className="mb-12">
+        <TextReveal text="Mission Control" className="text-4xl font-bold text-white" />
+        <p className="mt-2 text-sm tracking-normal text-white/30">
+          Live operational status for the environmental intelligence platform.
+        </p>
+      </div>
+
+      <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <MetricCard
+            label="Platform Status"
+            value={platformHealth?.status?.toUpperCase() || (loadingHealth ? 'LOADING' : 'UNKNOWN')}
+            detail={`Environment: ${sourceHealth?.environment || 'unavailable'}`}
+            icon={ShieldCheck}
+            tone="red"
+          />
+        </motion.div>
+        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
+          <MetricCard
+            label="Active Alerts"
+            value={`${activeAlerts?.length ?? 0}`}
+            detail={loadingAlerts ? 'Checking database-backed alerts' : 'Live alerts currently marked active'}
+            icon={AlertTriangle}
+            tone="white"
+          />
+        </motion.div>
+        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <MetricCard
+            label="Providers Live"
+            value={`${liveProviders}/${providers.length || 0}`}
+            detail={`${partialProviders} partial - ${blockedProviders} blocked`}
+            icon={Satellite}
+            tone="green"
+          />
+        </motion.div>
+        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }}>
+          <MetricCard
+            label="WebSocket Links"
+            value={`${websocketStatus?.total_connections ?? 0}`}
+            detail={loadingWebsocket ? 'Checking real-time transport' : `Status: ${websocketStatus?.status || 'idle'}`}
+            icon={RadioTower}
+            tone="blue"
+          />
+        </motion.div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.6 }}
+          className="lg:col-span-2"
+        >
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30">
+              Provider Matrix
+            </h2>
+            <Link
+              href="/settings"
+              className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/30 transition-colors hover:text-white"
+            >
+              Runtime Settings <ArrowUpRight className="h-3 w-3" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {providers.map(([name, provider]) => (
+              <PerspectiveCard key={name}>
+                <div className="rounded-[1.5rem] border border-white/5 bg-white/[0.02] p-5 backdrop-blur-xl">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-white">{name.replaceAll('_', ' ')}</h3>
+                      <p className="mt-2 text-sm text-white/35">{provider.purpose}</p>
+                    </div>
+                    <span className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] ${
+                      provider.status === 'live'
+                        ? 'bg-emerald-500/15 text-emerald-200'
+                        : provider.status === 'partial'
+                          ? 'bg-amber-500/15 text-amber-200'
+                          : 'bg-white/10 text-white/50'
+                    }`}>
+                      {provider.status}
+                    </span>
+                  </div>
+                  <div className="mt-4 border-t border-white/5 pt-4 text-xs text-white/30">
+                    Auth: {provider.auth_method}
+                  </div>
+                </div>
+              </PerspectiveCard>
+            ))}
+
+            {!loadingSources && providers.length === 0 && (
+              <div className="rounded-[1.5rem] border border-dashed border-white/10 bg-white/[0.01] p-6 text-sm text-white/35">
+                No provider status data is available from the backend.
+              </div>
+            )}
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25, duration: 0.6 }}
+          className="lg:col-span-1"
+        >
+          <div className="rounded-[2rem] border border-white/5 bg-white/[0.02] p-6 backdrop-blur-xl">
+            <h2 className="mb-6 text-[10px] font-bold uppercase tracking-[0.3em] text-white/30">
+              Recent Hazard Flow
+            </h2>
+
+            <div className="space-y-4">
+              {recentUpdates?.map((update) => (
+                <div key={`${update.hazard_type}-${update.timestamp}`} className="border-b border-white/5 pb-4 last:border-0 last:pb-0">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium text-white capitalize">{update.hazard_type}</p>
+                      <p className="mt-1 flex items-center gap-1 text-xs text-white/30">
+                        <MapPin className="h-3 w-3" />
+                        {update.location?.name || 'Unspecified AOI'}
+                      </p>
+                    </div>
+                    <span className="rounded-full bg-white/5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/50">
+                      {Math.round(update.risk_score)}
+                    </span>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between text-[11px] text-white/25">
+                    <span>{update.risk_level}</span>
+                    <span className="flex items-center gap-1">
+                      <Clock3 className="h-3 w-3" />
+                      {new Date(update.timestamp).toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              ))}
+
+              {!loadingUpdates && (recentUpdates?.length ?? 0) === 0 && (
+                <div className="rounded-[1.25rem] border border-dashed border-white/10 bg-white/[0.01] p-5 text-sm text-white/35">
+                  No recent hazard updates are stored yet.
+                </div>
+              )}
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.35, duration: 0.6 }}
+        className="mt-8"
+      >
+        <div className="rounded-[2rem] border border-white/5 bg-white/[0.02] p-6 backdrop-blur-xl">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30">
+              Active Alerts
+            </h2>
+            <Link
+              href="/alerts"
+              className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/30 transition-colors hover:text-white"
+            >
+              Open Alerts <ArrowUpRight className="h-3 w-3" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+            {activeAlerts?.map((alert) => (
+              <div key={alert.id} className="rounded-[1.5rem] border border-white/5 bg-black/20 p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-white">{alert.title}</p>
+                    <p className="mt-2 text-sm text-white/35">{alert.description || 'No alert description provided.'}</p>
+                  </div>
+                  <span className="rounded-full bg-red-500/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-red-200">
+                    {alert.severity || alert.risk_level}
+                  </span>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-4 text-xs text-white/30">
+                  <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{alert.location_name || 'Unknown location'}</span>
+                  <span className="flex items-center gap-1"><Activity className="h-3 w-3" />{alert.hazard_type}</span>
+                </div>
+              </div>
+            ))}
+
+            {!loadingAlerts && (activeAlerts?.length ?? 0) === 0 && (
+              <div className="rounded-[1.5rem] border border-dashed border-white/10 bg-white/[0.01] p-6 text-sm text-white/35">
+                No active alerts are currently marked in the database.
+              </div>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  )
 }

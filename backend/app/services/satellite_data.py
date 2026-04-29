@@ -3,6 +3,7 @@ Satellite data service for fetching and processing satellite imagery
 Integrates with Google Earth Engine, Sentinel Hub, and Planetary Computer
 """
 
+import asyncio
 import logging
 import os
 import json
@@ -137,7 +138,71 @@ class SatelliteDataService:
         """
         try:
             if self.gee_initialized and GEE_AVAILABLE:
-                return await self._get_gee_satellite_data(aoi)
+                core, precipitation, dem, land_cover, soil, era5 = await asyncio.gather(
+                    self._get_gee_satellite_data(aoi),
+                    self.get_precipitation_data(aoi),
+                    self.get_dem_data(aoi),
+                    self.get_land_cover_data(aoi),
+                    self.get_soil_moisture_data(aoi),
+                    self.get_era5_wind(aoi),
+                    return_exceptions=True,
+                )
+
+                if isinstance(core, Exception):
+                    raise core
+
+                merged = dict(core)
+
+                if isinstance(precipitation, dict):
+                    merged.update({
+                        "precipitation": precipitation.get("monthly_total", merged.get("precipitation_30day", 50.0)),
+                        "precipitation_30day": precipitation.get("monthly_total", merged.get("precipitation_30day", 50.0)),
+                        "precipitation_anomaly": precipitation.get("precipitation_anomaly", 0.0),
+                    })
+
+                if isinstance(dem, dict):
+                    merged.update({
+                        "elevation": dem.get("mean_elevation", merged.get("elevation", 500.0)),
+                        "slope": dem.get("mean_slope", merged.get("slope", 10.0)),
+                        "aspect": dem.get("aspect_dominant", 180.0),
+                    })
+
+                if isinstance(land_cover, dict):
+                    merged.update({
+                        "land_cover": land_cover.get("dominant_class", "mixed"),
+                        "dominant_land_cover": land_cover.get("dominant_class", "mixed"),
+                        "forest_percentage": land_cover.get("forest_percentage", 0.0),
+                        "urban_percentage": land_cover.get("urban_percentage", 0.0),
+                        "agriculture_percentage": land_cover.get("agriculture_percentage", 0.0),
+                        "water_percentage": land_cover.get("water_percentage", 0.0),
+                    })
+
+                if isinstance(soil, dict):
+                    soil_moisture = soil.get("surface_soil_moisture", soil.get("root_zone_moisture", 0.35))
+                    merged.update({
+                        "soil_moisture": soil_moisture,
+                        "surface_soil_moisture": soil.get("surface_soil_moisture", soil_moisture),
+                        "root_zone_moisture": soil.get("root_zone_moisture", soil_moisture),
+                        "moisture_anomaly": soil.get("moisture_anomaly", 0.0),
+                    })
+
+                if isinstance(era5, dict):
+                    merged.update({
+                        "wind_speed": era5.get("wind_speed_ms", merged.get("wind_speed", 5.0)),
+                        "wind_direction": era5.get("wind_direction_deg", merged.get("wind_direction", 180.0)),
+                        "air_temp_max": era5.get("air_temp_max_c"),
+                        "air_temp_min": era5.get("air_temp_min_c"),
+                    })
+
+                merged.setdefault("humidity", 60.0)
+                merged.setdefault("aspect", 180.0)
+                merged.setdefault("fuel_load", max(0.1, merged.get("forest_percentage", 35.0) / 100.0))
+                merged.setdefault("fuel_moisture", max(5.0, min(50.0, merged.get("soil_moisture", 0.35) * 100.0)))
+                merged.setdefault("drainage_density", max(0.1, merged.get("water_percentage", 5.0) / 20.0))
+                merged.setdefault("road_distance", 2.0)
+                merged.setdefault("fault_distance", 5.0)
+                merged.setdefault("settlement_distance", max(0.5, 10.0 - (merged.get("urban_percentage", 0.0) / 10.0)))
+                return merged
             else:
                 raise GEEDataUnavailableError("GEE not initialized — set credentials in .env")
 

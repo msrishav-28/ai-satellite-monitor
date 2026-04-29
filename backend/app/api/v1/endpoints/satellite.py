@@ -8,7 +8,7 @@ import logging
 from datetime import datetime
 
 from app.core.database import get_db
-from app.schemas.common import AOIRequest, APIResponse, TimeRange
+from app.schemas.common import AOIRequest, APIResponse, TimelapseRequestPayload
 from app.services.satellite_data import SatelliteDataService
 from app.services.timelapse import TimelapseService
 
@@ -18,8 +18,7 @@ logger = logging.getLogger(__name__)
 
 @router.post("/timelapse", response_model=APIResponse)
 async def generate_timelapse(
-    request: AOIRequest,
-    time_range: TimeRange,
+    request: TimelapseRequestPayload,
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -28,17 +27,17 @@ async def generate_timelapse(
     try:
         service = TimelapseService(db)
         timelapse_result = await service.generate_timelapse(
-            request.geometry, 
-            time_range.start_date, 
-            time_range.end_date
+            request.geometry,
+            request.start_date,
+            request.end_date
         )
-        
+
         return APIResponse(
             success=True,
             message="Time-lapse generated successfully",
             data=timelapse_result
         )
-        
+
     except Exception as e:
         logger.error(f"Error generating time-lapse: {e}")
         raise HTTPException(

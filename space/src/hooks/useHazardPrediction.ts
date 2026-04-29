@@ -1,5 +1,12 @@
+/*
+  React Query hooks for hazard analysis.
+  Updated in Phase 4 to normalize AOI payloads and type the backend's
+  risk_score-based response correctly.
+*/
+
 import { useMutation, useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import { buildAOIPayload, getApiBase, unwrapApiData } from '@/lib/api'
 
 interface AOI {
   type: 'Polygon'
@@ -50,16 +57,8 @@ interface HazardAnalysisResponse {
 export function useHazardAnalysis() {
   const mutation = useMutation({
     mutationFn: async (aoi: AOI): Promise<HazardAnalysisResponse> => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/hazards/analyze`, {
-        geometry: aoi
-      })
-
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to analyze hazards')
-      }
-
-      return response.data.data
+      const response = await axios.post(`${getApiBase()}/api/v1/hazards/analyze`, buildAOIPayload(aoi))
+      return unwrapApiData<HazardAnalysisResponse>(response.data)
     },
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
@@ -79,16 +78,8 @@ export function useHazardAnalysis() {
 export function useWildfireAnalysis() {
   const mutation = useMutation({
     mutationFn: async (aoi: AOI): Promise<WildfireRisk> => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/hazards/wildfire`, {
-        geometry: aoi
-      })
-
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to analyze wildfire risk')
-      }
-
-      return response.data.data
+      const response = await axios.post(`${getApiBase()}/api/v1/hazards/wildfire`, buildAOIPayload(aoi))
+      return unwrapApiData<WildfireRisk>(response.data)
     }
   })
 
@@ -104,16 +95,8 @@ export function useWildfireAnalysis() {
 export function useFloodAnalysis() {
   const mutation = useMutation({
     mutationFn: async (aoi: AOI): Promise<FloodRisk> => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/hazards/flood`, {
-        geometry: aoi
-      })
-
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to analyze flood risk')
-      }
-
-      return response.data.data
+      const response = await axios.post(`${getApiBase()}/api/v1/hazards/flood`, buildAOIPayload(aoi))
+      return unwrapApiData<FloodRisk>(response.data)
     }
   })
 
@@ -129,16 +112,8 @@ export function useFloodAnalysis() {
 export function useLandslideAnalysis() {
   const mutation = useMutation({
     mutationFn: async (aoi: AOI): Promise<LandslideRisk> => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/hazards/landslide`, {
-        geometry: aoi
-      })
-
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to analyze landslide risk')
-      }
-
-      return response.data.data
+      const response = await axios.post(`${getApiBase()}/api/v1/hazards/landslide`, buildAOIPayload(aoi))
+      return unwrapApiData<LandslideRisk>(response.data)
     }
   })
 

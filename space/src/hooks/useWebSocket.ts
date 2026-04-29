@@ -1,4 +1,11 @@
+/*
+  Shared websocket client hook for streaming monitor updates.
+  Updated in Phase 4 to use safe timer refs and cleanup paths so reconnect
+  handling works under strict TypeScript checks.
+*/
+
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { getWebSocketUrl } from '@/lib/api'
 
 interface WebSocketMessage {
   type: string
@@ -29,7 +36,7 @@ interface WebSocketState {
 
 export function useWebSocket(options: UseWebSocketOptions = {}) {
   const {
-    url = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000/ws',
+    url = getWebSocketUrl(),
     protocols,
     onOpen,
     onMessage,
@@ -49,12 +56,21 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
     reconnectCount: 0
   })
 
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout>()
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const shouldReconnectRef = useRef(shouldReconnect)
   const reconnectCountRef = useRef(0)
+  const stateRef = useRef(state)
 
-  const connect = useCallback(() => {
-    if (state.isConnecting || state.isConnected) {
+  useEffect(() => {
+    stateRef.current = state
+  }, [state])
+
+  useEffect(() => {
+    shouldReconnectRef.current = shouldReconnect
+  }, [shouldReconnect])
+
+  const connect = useCallback(function connectSocket() {
+    if (stateRef.current.isConnecting || stateRef.current.isConnected) {
       return
     }
 
@@ -117,7 +133,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
           setState(prev => ({ ...prev, reconnectCount: reconnectCountRef.current }))
 
           reconnectTimeoutRef.current = setTimeout(() => {
-            connect()
+            connectSocket()
           }, reconnectInterval)
         }
       }
@@ -136,6 +152,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
 
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current)
+      reconnectTimeoutRef.current = null
     }
 
     if (state.socket) {
@@ -171,9 +188,10 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
       shouldReconnectRef.current = false
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current)
+        reconnectTimeoutRef.current = null
       }
-      if (state.socket) {
-        state.socket.close()
+      if (stateRef.current.socket) {
+        stateRef.current.socket.close()
       }
     }
   }, [])

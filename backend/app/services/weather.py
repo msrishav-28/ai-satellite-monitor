@@ -22,6 +22,8 @@ class WeatherService:
             api_key=settings.OPENWEATHER_API_KEY,
             base_url=settings.OPENWEATHER_BASE_URL,
         )
+        self.api_key = self.client.api_key
+        self.base_url = self.client.base_url
         self.enabled = self.client.enabled
         self.cache_ttl = settings.WEATHER_CACHE_TTL
 

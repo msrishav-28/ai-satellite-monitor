@@ -11,6 +11,7 @@ from app.core.database import get_db
 from app.schemas.common import AOIRequest, APIResponse
 from app.schemas.hazards import HazardAnalysisResponse, HazardRisk
 from app.services.hazard_models import HazardModelService
+from app.services.realtime_data import RealtimeDataService
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -150,4 +151,57 @@ async def analyze_landslide_risk(
         raise HTTPException(
             status_code=500,
             detail=f"Failed to analyze landslide risk: {str(e)}"
+        )
+
+
+@router.get("/alerts/active", response_model=APIResponse)
+async def get_active_hazard_alerts(
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Return active hazard alerts from the database.
+
+    This powers the operational alerts console and never fabricates alert rows
+    when the database is empty.
+    """
+    try:
+        service = RealtimeDataService(db)
+        alerts = await service.get_active_alerts()
+
+        return APIResponse(
+            success=True,
+            message="Active hazard alerts retrieved successfully",
+            data=alerts
+        )
+
+    except Exception as e:
+        logger.error(f"Error getting active hazard alerts: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get active hazard alerts: {str(e)}"
+        )
+
+
+@router.get("/updates/recent", response_model=APIResponse)
+async def get_recent_hazard_updates(
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Return recent hazard updates derived from stored alert records.
+    """
+    try:
+        service = RealtimeDataService(db)
+        updates = await service.get_hazard_updates()
+
+        return APIResponse(
+            success=True,
+            message="Recent hazard updates retrieved successfully",
+            data=updates
+        )
+
+    except Exception as e:
+        logger.error(f"Error getting recent hazard updates: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get recent hazard updates: {str(e)}"
         )

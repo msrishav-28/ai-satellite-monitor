@@ -1,11 +1,12 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { AppShell } from '@/components/AppShell'
 
 export default function DashboardLayout({
     children,
 }: {
-    children: React.ReactNode
+    children: ReactNode
 }) {
     return <AppShell>{children}</AppShell>
 }

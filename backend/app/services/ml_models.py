@@ -3,10 +3,12 @@ Machine Learning models service for hazard prediction.
 Delegates to ModelManager for trained ensemble predictions — no mock fallbacks.
 """
 
+import asyncio
 import logging
 import numpy as np
 from typing import Dict, Any, List
 
+from app.core.config import settings
 from app.core.exceptions import MLModelError
 
 logger = logging.getLogger(__name__)
@@ -15,9 +17,28 @@ logger = logging.getLogger(__name__)
 class MLModelService:
     """Service for running ML prediction models via the trained model manager."""
 
+    _shared_manager = None
+    _manager_lock = asyncio.Lock()
+
     def __init__(self, model_manager=None):
-        self.model_manager = model_manager
-        self.models_loaded = model_manager is not None
+        self.model_manager = model_manager or self.__class__._shared_manager
+        self.models_loaded = self.model_manager is not None
+
+    async def _ensure_model_manager(self):
+        if self.model_manager:
+            return self.model_manager
+
+        async with self.__class__._manager_lock:
+            if self.__class__._shared_manager is None:
+                from app.ml.model_manager import ModelManager
+
+                manager = ModelManager(model_dir=settings.MODEL_DIR)
+                await manager.initialize_models()
+                self.__class__._shared_manager = manager
+
+            self.model_manager = self.__class__._shared_manager
+            self.models_loaded = True
+            return self.model_manager
 
     async def predict_wildfire_risk(self, features: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -31,10 +52,9 @@ class MLModelService:
         - slope: Terrain slope
         - fuel_load: Vegetation fuel load
         """
-        if not self.model_manager:
-            raise MLModelError("wildfire", "ModelManager not initialized")
+        model_manager = await self._ensure_model_manager()
         try:
-            prediction = await self.model_manager.predict("wildfire", features)
+            prediction = await model_manager.predict("wildfire", features)
             return prediction
         except Exception as e:
             logger.error(f"Wildfire prediction error: {e}")
@@ -52,10 +72,9 @@ class MLModelService:
         - soil_moisture: Soil moisture content
         - drainage_density: Drainage network density
         """
-        if not self.model_manager:
-            raise MLModelError("flood", "ModelManager not initialized")
+        model_manager = await self._ensure_model_manager()
         try:
-            prediction = await self.model_manager.predict("flood", features)
+            prediction = await model_manager.predict("flood", features)
             return prediction
         except Exception as e:
             logger.error(f"Flood prediction error: {e}")
@@ -66,9 +85,10 @@ class MLModelService:
         Predict landslide susceptibility using physics-informed scoring.
         Falls through to trained ML model if available.
         """
-        if self.model_manager:
+        model_manager = await self._ensure_model_manager()
+        if model_manager:
             try:
-                prediction = await self.model_manager.predict("landslide", features)
+                prediction = await model_manager.predict("landslide", features)
                 return prediction
             except Exception as e:
                 logger.warning(f"ML landslide model failed, using physics formula: {e}")

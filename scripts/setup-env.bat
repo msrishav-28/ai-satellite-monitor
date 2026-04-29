@@ -1,48 +1,33 @@
 @echo off
+REM Creates local environment files for backend and the canonical /space frontend.
+REM Updated in Phase 4 to stop generating files for the old /frontend app.
+
 echo ============================================================
-echo     Environmental Intelligence Platform - Environment Setup
+echo          AI Satellite Monitor - Environment Setup
 echo ============================================================
 echo.
 
-REM Check if .env files exist
 if not exist "backend\.env" (
-    echo Creating backend environment file...
-    copy "backend\.env.example" "backend\.env"
-    echo ✓ Created backend/.env from template
+    copy "backend\.env.example" "backend\.env" >nul
+    echo [OK] Created backend/.env from template
 ) else (
-    echo ⚠ backend/.env already exists, skipping...
+    echo [INFO] backend/.env already exists, skipping
 )
 
-if not exist "frontend\.env.local" (
-    echo Creating frontend environment file...
-    copy "frontend\.env.example" "frontend\.env.local"
-    echo ✓ Created frontend/.env.local from template
+if not exist "space\.env.local" (
+    copy "space\.env.example" "space\.env.local" >nul
+    echo [OK] Created space/.env.local from template
 ) else (
-    echo ⚠ frontend/.env.local already exists, skipping...
+    echo [INFO] space/.env.local already exists, skipping
 )
 
-if not exist ".env" (
-    echo Creating root environment file...
-    copy ".env.example" ".env"
-    echo ✓ Created .env from template
-) else (
-    echo ⚠ .env already exists, skipping...
-)
-
-echo.
-echo ============================================================
-echo                    Next Steps
-echo ============================================================
 echo.
 echo 1. Edit the following files with your API keys:
-echo    - backend/.env (OpenWeatherMap, WAQI, Google Earth Engine)
-echo    - frontend/.env.local (Mapbox token)
+echo    - backend/.env
+echo    - space/.env.local
 echo.
-echo 2. See docs/API_KEYS_SETUP.md for detailed setup instructions
+echo 2. See docs/API_KEYS_SETUP.md for provider setup details.
 echo.
-echo 3. Start the development servers:
-echo    scripts/start-dev.bat
+echo 3. Start the development servers with scripts/start-dev.bat
 echo.
-echo ============================================================
-
 pause

@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# `/space` Frontend
 
-## Getting Started
+`/space` is the canonical frontend for AI Satellite Monitor. It contains the production Next.js app, the active design tokens, and the reusable UI primitives that define the project’s visual language.
 
-First, run the development server:
+## What lives here
+
+- `src/app/`: App Router routes such as `/dashboard`, `/monitor`, `/analytics`, `/alerts`, and `/settings`
+- `src/components/`: navigation, shell, globe, panel, and shared UI primitives
+- `src/hooks/`: API and websocket hooks for backend-backed state
+- `src/app/globals.css`: token definitions and project-level utility classes
+
+## Design System Rules
+
+- Use `/space` as the only source of truth for frontend styling.
+- Reuse existing primitives such as `AppShell`, `GlassPanel`, `PerspectiveCard`, `TextReveal`, and the shadcn-style `ui/` components.
+- Extend existing tokens instead of inventing parallel CSS variables or utility systems.
+- Keep the black/red mission-control aesthetic, glass surfaces, uppercase telemetry labels, and motion patterns already used across the app.
+
+## Core Tokens
+
+- Background: `#0E0E0E`
+- Card surface: `#161616`
+- Accent: `#FF0000`
+- Typography: `Plus Jakarta Sans` for body, `Space Grotesk` for headings
+- Radius: `0.625rem` base with larger glass-card radii in panels
+
+## Commands
+
+Install dependencies:
+
+```bash
+npm install --legacy-peer-deps
+```
+
+Run development:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run lint:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run lint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run typecheck:
 
-## Learn More
+```bash
+npm run typecheck
+```
 
-To learn more about Next.js, take a look at the following resources:
+Build production output:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Extending the UI
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Start with existing tokens in `src/app/globals.css`.
+2. Compose from existing panels and shell primitives before adding new wrappers.
+3. Match existing loading, error, and empty-state patterns.
+4. Keep API access inside hooks under `src/hooks/` and helpers in `src/lib/api.ts`.
+5. If a new screen needs navigation, route it through `AppShell` so it feels native to the rest of the product.

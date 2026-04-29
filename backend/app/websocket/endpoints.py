@@ -202,43 +202,37 @@ async def timelapse_progress_websocket(
 async def monitor_timelapse_progress(request_id: str, connection_id: str, db: AsyncSession):
     """Monitor progress of a specific time-lapse generation"""
     try:
-        # Simulate time-lapse processing stages
-        stages = [
-            ("Initializing", 5),
-            ("Querying satellite imagery", 15),
-            ("Downloading images", 25),
-            ("Processing and alignment", 45),
-            ("Generating frames", 65),
-            ("Creating video", 80),
-            ("Finalizing", 95),
-            ("Complete", 100)
-        ]
-        
-        for stage_name, progress in stages:
-            await connection_manager.send_personal_message({
-                'type': 'timelapse_progress',
-                'request_id': request_id,
-                'stage': stage_name,
-                'progress': progress,
-                'timestamp': datetime.utcnow().isoformat() + 'Z'
-            }, connection_id)
-            
-            # Simulate processing time
-            await asyncio.sleep(5)
-            
-            # Break if connection is closed
-            if connection_id not in connection_manager.active_connections:
-                break
-        
-        # Send completion message
+        from app.services.timelapse import TimelapseService
+
+        service = TimelapseService(db)
+        status = await service.get_timelapse_status(request_id)
+
+        await connection_manager.send_personal_message({
+            'type': 'timelapse_progress',
+            'request_id': request_id,
+            'stage': 'Status check',
+            'progress': status.get('progress', 0),
+            'timestamp': datetime.utcnow().isoformat() + 'Z'
+        }, connection_id)
+
         if connection_id in connection_manager.active_connections:
-            await connection_manager.send_personal_message({
-                'type': 'timelapse_complete',
-                'request_id': request_id,
-                'video_url': f'https://storage.example.com/timelapses/{request_id}.mp4',
-                'thumbnail_url': f'https://storage.example.com/timelapses/{request_id}_thumb.jpg'
-            }, connection_id)
-        
+            if status.get('status') == 'completed':
+                await connection_manager.send_personal_message({
+                    'type': 'timelapse_complete',
+                    'request_id': request_id,
+                    'gif_url': status.get('gif_url'),
+                    'video_url': status.get('video_url'),
+                    'thumbnail_url': status.get('thumbnail_url'),
+                    'metadata': status.get('metadata'),
+                    'analysis_insights': status.get('analysis_insights'),
+                }, connection_id)
+            elif status.get('status') == 'unknown':
+                await connection_manager.send_personal_message({
+                    'type': 'timelapse_error',
+                    'request_id': request_id,
+                    'error': status.get('note', 'Unknown timelapse request'),
+                }, connection_id)
+
     except Exception as e:
         logger.error(f"Error monitoring time-lapse progress: {e}")
         if connection_id in connection_manager.active_connections:

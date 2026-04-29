@@ -1,0 +1,29 @@
+# Docker build context hygiene for the FastAPI backend and canonical /space frontend.
+# Added in Phase 4 to keep local caches, generated artifacts, and stale folders out
+# of image builds.
+
+.git
+.github
+.pytest_cache
+node_modules
+frontend
+space/node_modules
+space/.next
+space/.orchids
+backend/.venv
+backend/__pycache__
+backend/tests/__pycache__
+backend/app/**/__pycache__
+backend/env_intel.db
+backend/logs
+**/__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite
+*.log
+.DS_Store
+.vscode
+.idea
+

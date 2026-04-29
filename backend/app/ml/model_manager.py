@@ -92,6 +92,16 @@ class ModelManager:
         self.prediction_counts["landslide"] += 1
         return result
 
+    async def predict(self, model_type: str, features: Dict[str, Any]) -> Dict[str, Any]:
+        """Dispatch prediction requests to the correct hazard model."""
+        if model_type == "wildfire":
+            return await self.predict_wildfire(features)
+        if model_type == "flood":
+            return await self.predict_flood(features)
+        if model_type == "landslide":
+            return await self.predict_landslide(features)
+        raise MLModelError(model_type, f"Unknown model type: {model_type}")
+
     def get_status(self) -> Dict[str, Any]:
         return {
             "models_loaded": self.model_status,

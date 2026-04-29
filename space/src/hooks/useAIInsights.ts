@@ -1,5 +1,12 @@
+/*
+  React Query hooks for AI insight generation.
+  Updated in Phase 4 to normalize AOI payloads and match the backend's
+  structured anomaly/causal/fusion response contract.
+*/
+
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
+import { buildAOIPayload, getApiBase, unwrapApiData } from '@/lib/api'
 
 interface AOI {
   type: 'Polygon'
@@ -40,6 +47,9 @@ interface AIInsightsResponse {
   anomaly: AIInsight
   causal: CausalInsight
   fusion: DataFusionStatus
+  summary: string
+  key_finding: string
+  recommendations: string[]
   predictions: {
     short_term: string
     long_term: string
@@ -73,16 +83,8 @@ interface AnomalyDetectionResponse {
 export function useAIInsights() {
   const mutation = useMutation({
     mutationFn: async (aoi: AOI): Promise<AIInsightsResponse> => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/ai-insights/analyze`, {
-        geometry: aoi
-      })
-      
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to generate AI insights')
-      }
-      
-      return response.data.data
+      const response = await axios.post(`${getApiBase()}/api/v1/ai-insights/analyze`, buildAOIPayload(aoi))
+      return unwrapApiData<AIInsightsResponse>(response.data)
     },
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
@@ -102,16 +104,8 @@ export function useAIInsights() {
 export function useAnomalyDetection() {
   const mutation = useMutation({
     mutationFn: async (aoi: AOI): Promise<AnomalyDetectionResponse> => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/ai-insights/anomaly-detection`, {
-        geometry: aoi
-      })
-      
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to detect anomalies')
-      }
-      
-      return response.data.data
+      const response = await axios.post(`${getApiBase()}/api/v1/ai-insights/anomaly-detection`, buildAOIPayload(aoi))
+      return unwrapApiData<AnomalyDetectionResponse>(response.data)
     },
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)

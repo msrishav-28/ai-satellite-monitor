@@ -1,131 +1,192 @@
 # AI Satellite Monitor
 
-![AI Satellite Monitor](https://user-images.githubusercontent.com/3369400/273909015-a76412c9-a868-4b72-8438-54a72d3f7529.png)
+AI Satellite Monitor is an environmental intelligence platform for area-of-interest monitoring. Operators can draw an AOI on a globe, retrieve satellite and environmental data, assess wildfire/flood/landslide risk, generate impact analysis and AI summaries, and review operational status through a mission-control dashboard built from the canonical `/space` design system.
 
-AI-assisted geospatial monitoring and multi-hazard risk assessment platform with a mock-first, live-upgrade design. This platform ships with working dashboards immediately (using deterministic mock data) and allows for progressive upgrades to live data sources (like weather, air quality, satellite imagery, and models) as you add your API keys.
+## Architecture
 
-## ✨ Features
+- `backend/`: FastAPI API, runtime validation, provider integrations, data services, tests, and database migrations
+- `space/`: canonical Next.js 15 frontend, shared design system, dashboard routes, and monitor experience
+- `docker/`: container definitions for backend, frontend, and Redis-backed local deployment
+- `scripts/`: setup, validation, startup, and deployment helpers
+- `docs/`: provider, runtime, and operational reference material
 
--   **Real-time Environmental Analysis**: Ingest and analyze various environmental data streams.
--   **Multi-Hazard Risk Assessment**: AI-powered predictions for various environmental hazards.
--   **Interactive Map Dashboard**: A rich, interactive, and modern frontend built with Next.js and Mapbox.
--   **Scalable Backend**: A robust backend powered by Python and FastAPI, designed for high performance.
--   **Mock-First Design**: Get up and running instantly with mock data, and switch to live data sources as you need.
--   **Extensible Architecture**: Easily add new data sources, machine learning models, or API endpoints.
+## Tech Stack
 
-## 🚀 Getting Started
+- Frontend: Next.js 15, React 19, TypeScript, Tailwind CSS 4, TanStack Query, Zustand, Framer Motion
+- Mapping and geospatial UI: Mapbox GL, `react-map-gl`, Mapbox Draw, Turf
+- Backend: FastAPI, Pydantic v2, SQLAlchemy async, Alembic
+- Data and ML: pandas, geopandas, rasterio, xarray, scikit-learn, TensorFlow, PyTorch
+- Infrastructure: Docker Compose, Redis, GitHub Actions
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+## Local Development
 
 ### Prerequisites
 
-Make sure you have the following installed on your system:
+- Node.js 20+
+- Python 3.11+
+- `pip`
+- Optional: Docker Desktop for containerized runs
 
--   [Node.js](https://nodejs.org/) (v18 or higher)
--   [Python](https://www.python.org/) (v3.9 or higher)
--   `pip` (Python package installer)
+### Fast setup
 
-### Installation
+Linux or macOS:
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/msrishav-28/ai-satellite-monitor.git
-    cd ai-satellite-monitor
-    ```
-
-2.  **Set up environment variables:**
-
-    The project uses `.env` files for configuration. Example files are provided.
-
-    -   Copy the root `.env.example` to `.env`:
-        ```bash
-        cp .env.example .env
-        ```
-    -   Copy the backend `.env.example` to `.env`:
-        ```bash
-        cp backend/.env.example backend/.env
-        ```
-    -   Copy the frontend `.env.local.example` to `.env.local`:
-        ```bash
-        cp space/.env.example space/.env.local
-        ```
-
-    After copying, you'll need to edit these files to add your own API keys and configuration (e.g., Mapbox access token).
-
-3.  **Install dependencies:**
-
-    **Frontend (`space/`):**
-    ```bash
-    cd space
-    npm install --legacy-peer-deps
-    cd ..
-    ```
-
-    **Backend:**
-    It is recommended to use a Python virtual environment for the backend dependencies.
-    ```bash
-    cd backend
-    python -m venv venv
-    
-    # On Windows:
-    .\venv\Scripts\activate
-    # On macOS/Linux:
-    source venv/bin/activate
-    
-    pip install -r requirements.txt
-    cd ..
-    ```
-4.  **Run the development servers:**
-
-    You can start both the frontend and backend servers concurrently using the provided script.
-
-    -   On macOS/Linux:
-        ```bash
-        ./scripts/start-dev.sh
-        ```
-    -   On Windows:
-        ```bat
-        .\scripts\start-dev.bat
-        ```
-
-    This will start:
-    -   The **Frontend** (Next.js) on `http://localhost:3000`
-    -   The **Backend** (FastAPI) on `http://localhost:8000`
-
-## 🛠️ Tech Stack
-
--   **Frontend**:
-    -   [Next.js](https://nextjs.org/) - React Framework
-    -   [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript
-    -   [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-    -   [Mapbox](https://www.mapbox.com/) - for interactive maps
-    -   [Framer Motion](https://www.framer.com/motion/) - for animations
-
--   **Backend**:
-    -   [Python](https://www.python.org/)
-    -   [FastAPI](https://fastapi.tiangolo.com/) - High-performance web framework
-    -   [Uvicorn](https://www.uvicorn.org/) - ASGI server
-
-## 📂 Project Structure
-
+```bash
+./scripts/setup-dev.sh
 ```
-.
-├── backend/         # FastAPI backend application
-│   ├── app/         # Core application logic
-│   ├── .env.example
-│   └── requirements.txt
-├── space/           # Next.js 15 cinematic frontend (single source of truth)
-│   ├── src/
-│   ├── public/
-│   ├── .env.example
-│   └── package.json
-├── scripts/         # Development scripts
-│   ├── start-dev.sh
-│   └── start-dev.bat
-├── .env.example     # Root environment variables
-└── package.json     # Root package manager for concurrent execution
-``` 
 
-## Contributing
+Windows:
 
-Contributions are welcome! Please feel free to open an issue or submit a pull request.
+```bat
+copy backend\.env.example backend\.env
+copy space\.env.example space\.env.local
+npm install
+npm run install:frontend
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+cd ..
+```
+
+### Manual setup
+
+1. Create environment files:
+
+   ```bash
+   cp backend/.env.example backend/.env
+   cp space/.env.example space/.env.local
+   ```
+
+2. Install root tooling:
+
+   ```bash
+   npm install
+   ```
+
+3. Install frontend dependencies:
+
+   ```bash
+   npm run install:frontend
+   ```
+
+4. Install backend dependencies:
+
+   ```bash
+   cd backend
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   cd ..
+   ```
+
+5. Start both apps:
+
+   ```bash
+   npm run dev:full
+   ```
+
+### Local URLs
+
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- Backend API: [http://localhost:8000](http://localhost:8000)
+- OpenAPI docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+## Validation
+
+Run the full local validation suite:
+
+```bash
+./scripts/build.sh
+```
+
+Or run individual checks:
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+python -m pytest backend/tests
+python -m compileall backend
+```
+
+## Container Deployment
+
+The repo includes a Compose stack for single-host deployment and local ops rehearsal.
+
+1. Create `backend/.env` from `backend/.env.example`.
+2. Review provider keys and runtime flags.
+3. Start the stack:
+
+   ```bash
+   ./scripts/deploy.sh up
+   ```
+
+4. Tail logs if needed:
+
+   ```bash
+   ./scripts/deploy.sh logs
+   ```
+
+5. Stop the stack:
+
+   ```bash
+   ./scripts/deploy.sh down
+   ```
+
+Compose services:
+
+- `frontend`: Next.js standalone server on port `3000`
+- `backend`: FastAPI API on port `8000`
+- `redis`: Redis on port `6379`
+
+## Environment Variables
+
+### Backend core
+
+- `RUNTIME_ENV`: `local`, `staging`, or `production`
+- `DATABASE_URL`: SQLite for local or PostgreSQL/PostGIS for shared environments
+- `REDIS_URL`: Redis connection string
+- `CELERY_BROKER_URL`: Celery broker
+- `CELERY_RESULT_BACKEND`: Celery result backend
+- `ALLOWED_HOSTS`: frontend origins allowed by CORS
+
+### Providers and analysis
+
+- `GEE_PROJECT_ID`
+- `GOOGLE_APPLICATION_CREDENTIALS`
+- `OPENAI_API_KEY`
+- `OPENWEATHER_API_KEY`
+- `WAQI_API_KEY`
+- `SENTINEL_HUB_CLIENT_ID`
+- `SENTINEL_HUB_CLIENT_SECRET`
+- `MAPBOX_ACCESS_TOKEN`
+
+### Frontend
+
+- `NEXT_PUBLIC_API_URL`
+- `NEXT_PUBLIC_WS_URL`
+- `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN`
+
+Full examples live in [backend/.env.example](/C:/Users/user/Documents/GitHub/ai-satellite-monitor/backend/.env.example) and [space/.env.example](/C:/Users/user/Documents/GitHub/ai-satellite-monitor/space/.env.example).
+
+## Canonical Frontend Rule
+
+All frontend work must use the design assets, tokens, and components in `/space`. Do not introduce a second design system. Extend the existing token layer in `space/src/app/globals.css` and compose from the shared panel, shell, and UI primitives already present in `space/src/components`.
+
+## Route Overview
+
+- `/`: product landing page
+- `/dashboard`: operational status dashboard
+- `/monitor`: AOI drawing, live panels, and timelapse flow
+- `/analysis`: deeper product analysis view
+- `/analytics`: runtime and provider telemetry
+- `/alerts`: active alerts and recent hazard updates
+- `/settings`: runtime configuration and deployment posture
+
+## Additional Docs
+
+- [docs/API_KEYS_SETUP.md](/C:/Users/user/Documents/GitHub/ai-satellite-monitor/docs/API_KEYS_SETUP.md)
+- [docs/RUNBOOK.md](/C:/Users/user/Documents/GitHub/ai-satellite-monitor/docs/RUNBOOK.md)
+- [docs/PROVIDER_MATRIX.md](/C:/Users/user/Documents/GitHub/ai-satellite-monitor/docs/PROVIDER_MATRIX.md)
+- [docs/DATA_SOURCES.md](/C:/Users/user/Documents/GitHub/ai-satellite-monitor/docs/DATA_SOURCES.md)

@@ -1,5 +1,12 @@
+/*
+  React Query hooks for impact and carbon analysis.
+  Updated in Phase 4 to normalize AOI payloads and align types with the
+  backend impact response.
+*/
+
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
+import { buildAOIPayload, getApiBase, unwrapApiData } from '@/lib/api'
 
 interface AOI {
   type: 'Polygon'
@@ -57,7 +64,7 @@ interface SocioeconomicImpact {
 
 interface OverallAssessment {
   impact_score: number
-  severity: 'low' | 'moderate' | 'moderate-high' | 'high'
+  severity: 'low' | 'moderate' | 'moderate-high' | 'high' | 'critical'
   urgency: 'low' | 'medium' | 'high'
   reversibility: 'reversible' | 'partially reversible' | 'irreversible'
   mitigation_potential: 'low' | 'medium' | 'high'
@@ -114,16 +121,8 @@ interface CarbonAnalysisResponse {
 export function useImpactAnalysis() {
   const mutation = useMutation({
     mutationFn: async (aoi: AOI): Promise<ComprehensiveImpactResponse> => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/impact/analyze`, {
-        geometry: aoi
-      })
-      
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to analyze impact')
-      }
-      
-      return response.data.data
+      const response = await axios.post(`${getApiBase()}/api/v1/impact/analyze`, buildAOIPayload(aoi))
+      return unwrapApiData<ComprehensiveImpactResponse>(response.data)
     },
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
@@ -143,16 +142,8 @@ export function useImpactAnalysis() {
 export function useCarbonAnalysis() {
   const mutation = useMutation({
     mutationFn: async (aoi: AOI): Promise<CarbonAnalysisResponse> => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/impact/carbon`, {
-        geometry: aoi
-      })
-      
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to analyze carbon impact')
-      }
-      
-      return response.data.data
+      const response = await axios.post(`${getApiBase()}/api/v1/impact/carbon`, buildAOIPayload(aoi))
+      return unwrapApiData<CarbonAnalysisResponse>(response.data)
     },
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)

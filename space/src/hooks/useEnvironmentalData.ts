@@ -1,6 +1,13 @@
+/*
+  Environmental data hooks for weather and AQI.
+  Updated in Phase 4 to normalize the backend's snake_case weather fields into
+  the camelCase shape used by the monitor panels.
+*/
+
 import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import { getApiBase, unwrapApiData } from '@/lib/api'
 
 interface EnvironmentalData {
   weather: {
@@ -46,16 +53,23 @@ export function useEnvironmentalData({ latitude, longitude, enabled = true }: Us
   } = useQuery({
     queryKey: ['environmental-data', latitude, longitude],
     queryFn: async (): Promise<EnvironmentalData> => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.get(`${apiUrl}/api/v1/environmental/data`, {
+      const response = await axios.get(`${getApiBase()}/api/v1/environmental/data`, {
         params: { lat: latitude, lon: longitude }
       })
-
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to fetch environmental data')
+      const data = unwrapApiData<any>(response.data)
+      return {
+        ...data,
+        weather: {
+          temperature: data.weather.temperature,
+          apparentTemperature: data.weather.apparent_temperature,
+          humidity: data.weather.humidity,
+          windSpeed: data.weather.wind_speed,
+          windDirection: data.weather.wind_direction,
+          description: data.weather.description,
+          pressure: data.weather.pressure,
+          visibility: data.weather.visibility,
+        },
       }
-
-      return response.data.data
     },
     enabled: enabled && !!(latitude && longitude),
     refetchInterval: 5 * 60 * 1000, // Refetch every 5 minutes
@@ -82,16 +96,11 @@ export function useWeatherData({ latitude, longitude, enabled = true }: UseEnvir
   } = useQuery({
     queryKey: ['weather-data', latitude, longitude],
     queryFn: async () => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.get(`${apiUrl}/api/v1/environmental/weather`, {
+      const response = await axios.get(`${getApiBase()}/api/v1/environmental/weather`, {
         params: { lat: latitude, lon: longitude }
       })
 
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to fetch weather data')
-      }
-
-      return response.data.data
+      return unwrapApiData(response.data)
     },
     enabled: enabled && !!(latitude && longitude),
     refetchInterval: 10 * 60 * 1000, // Refetch every 10 minutes
@@ -115,16 +124,11 @@ export function useAQIData({ latitude, longitude, enabled = true }: UseEnvironme
   } = useQuery({
     queryKey: ['aqi-data', latitude, longitude],
     queryFn: async () => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.get(`${apiUrl}/api/v1/environmental/aqi`, {
+      const response = await axios.get(`${getApiBase()}/api/v1/environmental/aqi`, {
         params: { lat: latitude, lon: longitude }
       })
 
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to fetch AQI data')
-      }
-
-      return response.data.data
+      return unwrapApiData(response.data)
     },
     enabled: enabled && !!(latitude && longitude),
     refetchInterval: 15 * 60 * 1000, // Refetch every 15 minutes

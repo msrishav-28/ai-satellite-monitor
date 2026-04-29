@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from geojson_pydantic import Polygon
 
 logger = logging.getLogger(__name__)
+_TIMELAPSE_RESULTS: Dict[str, Dict[str, Any]] = {}
 
 
 class TimelapseService:
@@ -157,7 +158,7 @@ class TimelapseService:
         request_id = f"tl_{abs(hash(str(aoi) + start_str + end_str)) % 1_000_000:06d}"
         change_analysis = await self._analyze_changes_gee(aoi, ee_geom, start_str, end_str)
 
-        return {
+        result = {
             "status": "completed",
             "request_id": request_id,
             "gif_url":    thumb_url,
@@ -185,6 +186,8 @@ class TimelapseService:
                 "expiry_note": "GEE thumbnail URLs are valid for ~24 hours",
             },
         }
+        _TIMELAPSE_RESULTS[request_id] = result
+        return result
 
     async def _analyze_changes_gee(
         self,
@@ -275,13 +278,19 @@ class TimelapseService:
         (TimelapseRequest) for GEE task_id and polls ee.data.getOperation().
         Until that DB model is migrated, returns a stateless computed response.
         """
-        # Since generate_timelapse() returns immediately with a GEE thumbURL (synchronous path),
-        # all completed requests have status=completed by definition.
+        result = _TIMELAPSE_RESULTS.get(request_id)
+        if result:
+            return {
+                **result,
+                "progress": 100,
+                "note": "GEE thumbnail URLs are valid for about 24 hours after generation",
+            }
+
         return {
             "request_id": request_id,
-            "status":     "completed",
-            "progress":   100,
-            "note":       "GEE thumbnail URLs are valid for ~24 hours after generation",
+            "status": "unknown",
+            "progress": 0,
+            "note": "No generated timelapse metadata is available for this request ID",
         }
 
     # ------------------------------------------------------------------

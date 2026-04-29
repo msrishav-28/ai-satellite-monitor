@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import { useRef, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float, MeshDistortMaterial, PerspectiveCamera, Stars, Sparkles, Environment } from "@react-three/drei";
 import * as THREE from "three";

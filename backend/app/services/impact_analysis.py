@@ -261,10 +261,19 @@ class ImpactAnalysisService:
             "high" if sm < 0.20 else "moderate" if sm < 0.30 else "low"
         )
         wqi = round(max(30, min(100, 75 + sm_anom * 100 - (flood_risk * 0.1))), 0)
+        elevation = sat.get("elevation", 500.0)
+        temperature = sat.get("land_surface_temperature", 20.0)
+        if elevation > 2500 and temperature < 5:
+            snowpack_level = "high"
+        elif elevation > 1500 and temperature < 10:
+            snowpack_level = "moderate"
+        else:
+            snowpack_level = "low"
 
         return {
             "surface_water_change": surface_water_change,
             "groundwater_impact": gw_impact,
+            "snowpack_level": snowpack_level,
             "drought_risk": drought_risk,
             "water_quality_index": wqi,
             "availability_forecast": (
@@ -304,7 +313,7 @@ class ImpactAnalysisService:
         # Population exposed: rough proxy — 1 person per 4 ha in agricultural/mixed zones
         pop_affected = max(10, round(area_ha / 4.0 * (avg_risk / 100.0)))
         econ_loss = round(area_ha * (avg_risk / 100.0) * _ECONOMIC_LOSS_PER_HA_HIGH_RISK, 0)
-        livelihood = "significant" if avg_risk > 65 else "moderate" if avg_risk > 40 else "minimal"
+        livelihood = "high" if avg_risk > 65 else "moderate" if avg_risk > 40 else "low"
         displacement_risk = "high" if avg_risk > 75 else "moderate" if avg_risk > 55 else "low"
 
         return {

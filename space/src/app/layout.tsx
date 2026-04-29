@@ -1,30 +1,36 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
-import ErrorReporter from "@/components/ErrorReporter";
-import Script from "next/script";
-import { CustomCursor } from "@/components/CustomCursor";
-import { SmoothScroll } from "@/components/SmoothScroll";
-import { SatelliteLoader } from "@/components/SatelliteLoader";
+/*
+  Root application layout for the canonical /space frontend.
+  Updated in Phase 4 to align metadata with the environmental monitoring
+  product and mount the shared client-side data providers.
+*/
+
+import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
+import Script from 'next/script'
+import './globals.css'
+import VisualEditsMessenger from '../visual-edits/VisualEditsMessenger'
+import ErrorReporter from '@/components/ErrorReporter'
+import { CustomCursor } from '@/components/CustomCursor'
+import { SmoothScroll } from '@/components/SmoothScroll'
+import { SatelliteLoader } from '@/components/SatelliteLoader'
+import { AppProviders } from '@/components/providers/AppProviders'
 
 export const metadata: Metadata = {
-  title: "SPACE — AI Satellite Environmental Monitor",
-  description:
-    "Cinematic environmental intelligence platform. Mission Control meets IMAX nature documentary.",
-};
+  title: 'Sentinel - AI Satellite Environmental Monitor',
+  description: 'Cinematic environmental intelligence platform for hazard monitoring, satellite analysis, and operational response.',
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode
 }>) {
   return (
     <html lang="en">
       <body className="antialiased selection:bg-red-500/30">
-        {/* Skip to main content — accessibility */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[10001] focus:px-6 focus:py-3 focus:bg-white focus:text-black focus:rounded-full focus:text-xs focus:font-bold focus:uppercase focus:tracking-widest"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[10001] focus:rounded-full focus:bg-white focus:px-6 focus:py-3 focus:text-xs focus:font-bold focus:uppercase focus:tracking-widest focus:text-black"
         >
           Skip to main content
         </a>
@@ -48,15 +54,17 @@ export default function RootLayout({
           data-include-search-params="true"
           data-only-in-iframe="true"
           data-debug="true"
-          data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
+          data-custom-data='{"appName":"Sentinel","version":"1.0.0","greeting":"hello"}'
         />
 
-        <SmoothScroll>
-          <main id="main-content">{children}</main>
-        </SmoothScroll>
+        <AppProviders>
+          <SmoothScroll>
+            <main id="main-content">{children}</main>
+          </SmoothScroll>
+        </AppProviders>
 
         <VisualEditsMessenger />
       </body>
     </html>
-  );
+  )
 }

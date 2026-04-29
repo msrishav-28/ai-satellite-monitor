@@ -2,18 +2,18 @@
   "name": "environmental-intelligence-platform",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "frontend"
-  ],
   "scripts": {
-    "dev": "npm run dev --workspace=frontend",
+    "dev": "npm --prefix space run dev",
     "dev:backend": "cd backend && python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000",
     "dev:full": "concurrently \"npm run dev:backend\" \"npm run dev\"",
-    "build": "npm run build --workspace=frontend",
-    "start": "npm run start --workspace=frontend",
+    "build": "npm --prefix space run build",
+    "start": "npm --prefix space run start",
     "start:backend": "cd backend && python -m uvicorn main:app --host 0.0.0.0 --port 8000",
-    "lint": "npm run lint --workspace=frontend",
-    "test": "npm run test --workspaces",
+    "lint": "npm --prefix space run lint",
+    "typecheck": "npm --prefix space run typecheck",
+    "install:frontend": "npm --prefix space install --legacy-peer-deps",
+    "test": "echo \"Project tests are split across backend and space\"",
+    "test:backend": "cd backend && python -m pytest tests",
     "install:backend": "cd backend && pip install -r requirements.txt"
   },
   "devDependencies": {

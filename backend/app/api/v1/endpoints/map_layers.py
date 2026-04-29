@@ -48,7 +48,19 @@ async def get_map_layer_data(
 
 async def _get_layer_data(layer_id: str) -> Dict[str, Any]:
     """Generate mock layer data based on layer type"""
-    
+    alias_map = {
+        "wildfire-risk": "wildfire",
+        "flood-zones": "flood",
+        "landslide-risk": "landslide",
+        "air-quality": "aqi",
+        "infrared": "temperature",
+        "deforestation": "vegetation",
+        "heatwave": "temperature",
+        "heat-wave": "temperature",
+        "cyclone": "weather",
+    }
+    layer_id = alias_map.get(layer_id, layer_id)
+
     if layer_id == "weather":
         return _generate_weather_layer()
     elif layer_id == "aqi":

@@ -1,5 +1,12 @@
+/*
+  Satellite data hooks for AOI imagery and timelapse generation.
+  Updated in Phase 4 to normalize AOI payloads and use the backend's
+  canonical timelapse request body.
+*/
+
 import { useMutation, useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import { buildAOIPayload, getApiBase, unwrapApiData } from '@/lib/api'
 
 interface AOI {
   type: 'Polygon'
@@ -51,11 +58,14 @@ interface DownloadOptions {
   formats: string[]
   resolutions: string[]
   frame_rates: number[]
-  expiry_date: string
+  expiry_date?: string
+  expiry_note?: string
+  note?: string
 }
 
 interface TimelapseResponse {
   status: 'completed' | 'processing' | 'failed'
+  request_id?: string
   video_url?: string
   gif_url?: string
   thumbnail_url?: string
@@ -124,18 +134,13 @@ interface SatelliteDataResponse {
 export function useTimelapseGeneration() {
   const mutation = useMutation({
     mutationFn: async ({ aoi, timeRange }: { aoi: AOI; timeRange: TimeRange }): Promise<TimelapseResponse> => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/satellite/timelapse`, {
-        geometry: aoi,
+      const response = await axios.post(`${getApiBase()}/api/v1/satellite/timelapse`, {
+        ...buildAOIPayload(aoi),
         start_date: timeRange.start_date,
         end_date: timeRange.end_date
       })
-      
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to generate timelapse')
-      }
-      
-      return response.data.data
+
+      return unwrapApiData<TimelapseResponse>(response.data)
     },
     retry: 1, // Timelapse generation is expensive, limit retries
     retryDelay: 5000
@@ -155,16 +160,8 @@ export function useTimelapseGeneration() {
 export function useSatelliteData() {
   const mutation = useMutation({
     mutationFn: async (aoi: AOI): Promise<SatelliteDataResponse> => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/satellite/data`, {
-        geometry: aoi
-      })
-      
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to fetch satellite data')
-      }
-      
-      return response.data.data
+      const response = await axios.post(`${getApiBase()}/api/v1/satellite/data`, buildAOIPayload(aoi))
+      return unwrapApiData<SatelliteDataResponse>(response.data)
     },
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
@@ -192,17 +189,9 @@ export function useRealtimeSatelliteData(aoi: AOI | null, enabled: boolean = tru
     queryKey: ['realtime-satellite-data', aoi],
     queryFn: async (): Promise<SatelliteDataResponse> => {
       if (!aoi) throw new Error('AOI is required')
-      
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/satellite/data`, {
-        geometry: aoi
-      })
-      
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Failed to fetch satellite data')
-      }
-      
-      return response.data.data
+
+      const response = await axios.post(`${getApiBase()}/api/v1/satellite/data`, buildAOIPayload(aoi))
+      return unwrapApiData<SatelliteDataResponse>(response.data)
     },
     enabled: enabled && !!aoi,
     refetchInterval: 30 * 60 * 1000, // Refetch every 30 minutes

@@ -77,6 +77,7 @@ class RealtimeDataService:
 
             updates = []
             for alert in alerts:
+                risk_score = self._severity_to_score(alert.severity, alert.risk_level.value)
                 updates.append({
                     "location": {
                         "name": alert.location_name,
@@ -85,8 +86,8 @@ class RealtimeDataService:
                     },
                     "hazard_type": alert.hazard_type.value,
                     "risk_level":  alert.risk_level.value,
-                    "risk_score":  alert.severity,
-                    "trend":       "increasing" if alert.severity and alert.severity > 60 else "stable",
+                    "risk_score":  risk_score,
+                    "trend":       "increasing" if risk_score > 60 else "stable",
                     "update_type": "db_alert",
                     "timestamp":   alert.issued_at.isoformat(),
                 })
@@ -219,3 +220,20 @@ class RealtimeDataService:
             )
         except Exception as e:
             logger.error(f"Error sending custom alert: {e}")
+
+    def _severity_to_score(self, severity: str | None, risk_level: str | None) -> float:
+        """Normalize string alert severity into a numeric score for realtime feeds."""
+        severity_map = {
+            "info": 20.0,
+            "low": 25.0,
+            "moderate": 50.0,
+            "medium": 50.0,
+            "high": 75.0,
+            "critical": 95.0,
+            "extreme": 100.0,
+        }
+        if severity and severity.lower() in severity_map:
+            return severity_map[severity.lower()]
+        if risk_level and risk_level.lower() in severity_map:
+            return severity_map[risk_level.lower()]
+        return 50.0

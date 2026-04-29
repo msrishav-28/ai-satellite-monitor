@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { motion, useScroll, useSpring } from 'framer-motion'
 import { Shield, Brain, Zap, Flame, Droplet, Mountain, Trees, Sun, Wind, ArrowUpRight } from 'lucide-react'
 import { Nav } from '@/components/Nav'

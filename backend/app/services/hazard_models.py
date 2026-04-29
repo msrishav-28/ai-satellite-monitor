@@ -101,7 +101,9 @@ class HazardModelService:
                 'wind_speed': satellite_data.get('wind_speed', 5.0),
                 'humidity': satellite_data.get('humidity', 60.0),
                 'slope': satellite_data.get('slope', 10.0),
-                'fuel_load': satellite_data.get('fuel_load', 0.7)
+                'fuel_load': satellite_data.get('fuel_load', 0.7),
+                'precipitation': satellite_data.get('precipitation', satellite_data.get('precipitation_30day', 5.0)),
+                'fuel_moisture': satellite_data.get('fuel_moisture', 20.0)
             }
             
             # Run wildfire prediction model
@@ -141,12 +143,13 @@ class HazardModelService:
                 satellite_data = await self.satellite_service.get_aoi_data(aoi)
             
             features = {
-                'precipitation': satellite_data.get('precipitation', 50.0),
+                'precipitation': satellite_data.get('precipitation', satellite_data.get('precipitation_30day', 50.0)),
                 'elevation': satellite_data.get('elevation', 100.0),
                 'slope': satellite_data.get('slope', 5.0),
-                'land_cover': satellite_data.get('land_cover', 'urban'),
-                'soil_moisture': satellite_data.get('soil_moisture', 0.3),
-                'drainage_density': satellite_data.get('drainage_density', 0.5)
+                'land_cover': satellite_data.get('land_cover', satellite_data.get('dominant_land_cover', 'urban')),
+                'soil_moisture': satellite_data.get('soil_moisture', satellite_data.get('surface_soil_moisture', 0.3)),
+                'drainage_density': satellite_data.get('drainage_density', max(0.1, satellite_data.get('water_percentage', 5.0) / 20.0)),
+                'urban_percentage': satellite_data.get('urban_percentage', 15.0)
             }
             
             prediction = await self.ml_service.predict_flood_risk(features)
@@ -187,8 +190,8 @@ class HazardModelService:
             features = {
                 'slope_angle': satellite_data.get('slope', 15.0),
                 'soil_type': satellite_data.get('soil_type', 'clay'),
-                'land_cover': satellite_data.get('land_cover', 'forest'),
-                'precipitation': satellite_data.get('precipitation', 100.0),
+                'land_cover': satellite_data.get('land_cover', satellite_data.get('dominant_land_cover', 'forest')),
+                'precipitation': satellite_data.get('precipitation', satellite_data.get('precipitation_30day', 100.0)),
                 'fault_distance': satellite_data.get('fault_distance', 5.0),
                 'road_distance': satellite_data.get('road_distance', 2.0)
             }
@@ -603,3 +606,10 @@ class HazardModelService:
                 'min_elevation': 400.0,
                 'basin_length': 1000.0
             }
+
+    def _get_aoi_centroid(self, aoi: Polygon) -> tuple[float, float]:
+        """Return a simple centroid for helper methods that need point coordinates."""
+        coords = aoi.coordinates[0]
+        lon = sum(point[0] for point in coords) / len(coords)
+        lat = sum(point[1] for point in coords) / len(coords)
+        return lon, lat

@@ -2,9 +2,23 @@
 
 ## Startup
 1. Configure `backend/.env` or secret-managed environment variables.
-2. Verify the runtime tier (`RUNTIME_ENV`).
-3. Start the backend; startup validation will reject staging/production deployments that still enable mock flags or omit PostgreSQL/Redis/Celery wiring.
-4. Check `/health/live`, `/health/ready`, and `/health/dependencies`.
+2. For the canonical frontend, configure `space/.env.local` when running outside Docker.
+3. Verify the runtime tier (`RUNTIME_ENV`).
+4. Start the backend and frontend directly with `npm run dev:full`, or start the container stack with `./scripts/deploy.sh up`.
+5. Startup validation will reject staging/production deployments that still enable mock flags or omit PostgreSQL/Redis/Celery wiring.
+6. Check `/health/live`, `/health/ready`, `/health/dependencies`, and `/api/v1/data-sources/health`.
+
+## Container operations
+- Build only: `./scripts/deploy.sh build`
+- Start or refresh the stack: `./scripts/deploy.sh up`
+- Tail logs: `./scripts/deploy.sh logs`
+- Stop the stack: `./scripts/deploy.sh down`
+
+## Direct local startup
+1. Install root dependencies with `npm install`.
+2. Install frontend dependencies with `npm run install:frontend`.
+3. Create a backend virtual environment and install `backend/requirements.txt`.
+4. Start both services with `npm run dev:full`.
 
 ## Migrations
 - Alembic configuration lives under `backend/alembic.ini` and `backend/migrations/`.
